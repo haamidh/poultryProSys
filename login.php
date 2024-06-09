@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <ul class="navbar-nav align-items-center">
                     <div class="justify-content-center mt-2" style="color:white;">You don't have an account?</div>
                     <li class="nav-item align-items-center mx-4" style="background-color:#8A9A5B;">
-                        <a class="nav-link" href="register.php">Sign In</a>
+                        <a class="nav-link" href="register.php">Sign Up</a>
                     </li>
                 </ul>
             </div>

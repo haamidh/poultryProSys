@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-md-4">
                     <div class="card" style="width:450px;">
                         <div class="card-header" style="background-color: #40826D;color: white;">
-                            <h4>Sign In</h4>
+                            <h4>Sign Up</h4>
                         </div>
                         <div class="card-body"> 
                             <form id="batchForm" action="" method="post">
@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
 
                                 <br>
-                                <input type="submit" class="btn btn-primary" name="submit" value="Sign In" style="margin-left: 150px">
+                                <input type="submit" class="btn btn-primary" name="submit" value="Sign Up" style="margin-left: 150px">
                             </form>
                         </div>
                     </div>
