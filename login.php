@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: farm_dashboard.php?user_id=" . $user->user_id);
                 exit();
             case "customer":
-                header("Location: customer.php");
+                header("Location: customer.php?user_id=" . $user->user_id);
                 exit();
             default:
 
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #40826D;">
-            <a class="navbar-brand mx-5" href="platformUI.html" style="font-weight: bold">
+            <a class="navbar-brand mx-5" href="index.html" style="font-weight: bold">
                 <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
                 PoultryPro
             </a>

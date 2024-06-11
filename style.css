@@ -1,0 +1,164 @@
+.header {
+    background-color: #40826D;
+    height: 60px;
+
+    text-align: center;
+}
+
+
+.raw {
+    display: flex;
+    height: calc(100vh - 60px); 
+
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.sidebar{
+    width: 25%;
+}
+.contentArea{
+    width: 100%;
+    display: block;
+}
+
+.row2{
+    margin-top: 10px;
+    display: flex;
+    text-align: center;
+}
+.row3{
+    margin-top: 50px;
+    text-align: center;
+    width: 60%;
+    background-color: lightcoral;
+    margin-left:50px;
+}
+
+.col1{
+    width: 35%;
+    background-color: green;
+    text-align: center;
+    height: 150px;
+}
+.col2{
+    width: 35%;
+    margin-left: 20px;
+    background-color: blue;
+    text-align: center;
+    height: 150px;
+}
+
+
+
+#sidebar {
+    width: 300px;
+    background-color: #40826D;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
+
+
+
+
+.navbar-nav {
+    padding: 2rem 0;
+    flex: 1;
+    margin-top: -40px;
+}
+
+.nav-item:hover {
+    background-color: #355f4c;
+}
+
+.nav-item {
+    position: relative;
+}
+
+a.nav-link {
+    padding: .625rem 1.625rem;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+}
+
+.nav-link i {
+    font-size: 1.1rem;
+    margin-right: .75rem;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    background-color: #40826D;
+    padding: 0;
+    min-width: 15rem;
+    display: none;
+}
+
+.dropdown-item {
+    color: #FFF;
+}
+
+.dropdown-item:hover {
+    background-color: #355f4c;
+}
+
+.navbar-footer {
+    margin-top: auto;
+    padding-left: 55px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.contentArea {
+    flex: 1;
+    padding: 20px;
+    background-color: #fafbfe;
+    overflow-y: auto;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .header {
+        width: 100vw;
+
+    }
+
+    .sidebar {
+        width: 100vw;
+        text-align: center;
+    }
+    .contentArea{
+        width: 100vw;
+
+    }
+    .raw {
+        display: block;
+        height: calc(100vh - 60px); 
+
+    }
+
+    #sidebar {
+        width: 100vw;
+
+    }
+
+
+    .navbar-footer{
+        text-align: center;
+    }
+
+}

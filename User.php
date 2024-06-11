@@ -48,7 +48,7 @@ class User {
 
 
         if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId();
+            $this->user_id = $this->conn->lastInsertId();
             return true;
         }
         return false;
