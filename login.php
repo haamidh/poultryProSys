@@ -70,8 +70,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             </div>
         </nav>
-
+        
+        <?php
+if(isset($_GET["msg"])){
+  $msg = $_GET["msg"];
+  echo '<div class="card-header card text-white bg-dark mb-3" ><div class="alert alert-warning alert-dismissible fade show" role="alert">
+      ' . $msg . '
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div></div>';
+}
+    ?>
         <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
+        
             <div class="row">
                 <div class="col-md-4">
                     <div class="card" style="width:450px;">
