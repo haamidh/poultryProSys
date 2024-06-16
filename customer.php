@@ -20,6 +20,7 @@ $customer = CheckLogin::checkLoginAndRole($user_id, 'customer');
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,10 +29,11 @@ $customer = CheckLogin::checkLoginAndRole($user_id, 'customer');
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .navbar-nav .nav-item a {
-            font-weight: bold;    
+            font-weight: bold;
         }
     </style>
 </head>
+
 <body>
     <div class="header pt-1 navbar-expand-lg navbar-dark">
         <a class="navbar-brand" href="#" style="font-weight: bold; font-size: 20px;">
@@ -42,6 +44,7 @@ $customer = CheckLogin::checkLoginAndRole($user_id, 'customer');
         </a>
     </div>
 </body>
+
 </html>
 
 <?php

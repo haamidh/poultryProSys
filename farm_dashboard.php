@@ -7,6 +7,7 @@ require_once 'config.php';
 require_once 'checkLogin.php';
 require_once 'frame.php';
 
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();

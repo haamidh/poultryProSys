@@ -1,19 +1,21 @@
 <?php
-class CheckLogin {
+class CheckLogin
+{
 
-    public static function checkLoginAndRole($user_id, $role) {
-        
+    public static function checkLoginAndRole($user_id, $role)
+    {
+
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
-        
+
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== $role) {
             header("Location: login.php");
             exit();
         }
 
-        
+
         $database = new Database();
         $db = $database->getConnection();
 
@@ -24,17 +26,24 @@ class CheckLogin {
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
         if ($user) {
             return $user;
-        } else {
+            exit();
+        }
+
+        //have to check here
+
+        /*
+        else {
             ?>
             <script type="text/javascript">
-                alert("No user found");
+                alert("No user found //this message from check login page");
                 window.location.href = 'login.php';
             </script>
             <?php
             exit();
         }
+        */
     }
 }
-?>

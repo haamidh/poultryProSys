@@ -8,7 +8,7 @@
 
 .raw {
     display: flex;
-    height: calc(100vh - 60px); 
+    height: calc(100vh - 60px);
 
 }
 
@@ -18,34 +18,37 @@
     display: block;
 }
 
-.sidebar{
+.sidebar {
     width: 25%;
 }
-.contentArea{
+
+.contentArea {
     width: 100%;
     display: block;
 }
 
-.row2{
+.row2 {
     margin-top: 10px;
     display: flex;
     text-align: center;
 }
-.row3{
+
+.row3 {
     margin-top: 50px;
     text-align: center;
     width: 60%;
     background-color: lightcoral;
-    margin-left:50px;
+    margin-left: 50px;
 }
 
-.col1{
+.col1 {
     width: 35%;
     background-color: green;
     text-align: center;
     height: 150px;
 }
-.col2{
+
+.col2 {
     width: 35%;
     margin-left: 20px;
     background-color: blue;
@@ -141,13 +144,15 @@ a.nav-link {
         width: 100vw;
         text-align: center;
     }
-    .contentArea{
+
+    .contentArea {
         width: 100vw;
 
     }
+
     .raw {
         display: block;
-        height: calc(100vh - 60px); 
+        height: calc(100vh - 60px);
 
     }
 
@@ -157,7 +162,7 @@ a.nav-link {
     }
 
 
-    .navbar-footer{
+    .navbar-footer {
         text-align: center;
     }
 

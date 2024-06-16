@@ -1,6 +1,7 @@
 <?php
 
-class User {
+class User
+{
 
     private $conn;
     private $table_name = "user";
@@ -14,11 +15,13 @@ class User {
     public $password;
     public $created_at;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function emailExists() {
+    public function emailExists()
+    {
         $query = "SELECT user_id FROM " . $this->table_name . " WHERE email = :email LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $this->email);
@@ -26,7 +29,8 @@ class User {
         return $stmt->rowCount() > 0;
     }
 
-    public function register() {
+    public function register()
+    {
         $query = "INSERT INTO " . $this->table_name . " (username, role, address, city, mobile, email, password) VALUES (:username, :role, :address, :city, :mobile, :email, :password)";
         $stmt = $this->conn->prepare($query);
 
@@ -54,7 +58,8 @@ class User {
         return false;
     }
 
-    public function login() {
+    public function login()
+    {
         $query = "SELECT user_id, username, password,role FROM " . $this->table_name . " WHERE email = :email";
         $stmt = $this->conn->prepare($query);
 
@@ -74,7 +79,4 @@ class User {
         }
         return false;
     }
-
 }
-?>
-
