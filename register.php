@@ -8,6 +8,11 @@ $db = $database->getConnection();
 
 $user = new User($db);
 
+$query = "SELECT city FROM city";
+$stmt = $db->prepare($query);
+$stmt->execute();
+$city = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->username = $_POST['username'];
     $user->role = $_POST['role'];
@@ -127,13 +132,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="row">
                                 <label>City:</label>
                                 <select name="city" required>
-                                    <option value="" disabled selected>Select city</option>
-                                    <option value="hambantota">Hambantota</option>
-                                    <option value="matara">Matara</option>
-                                    <option value="galle">Galle</option>
-                                    <option value="aluthgama">Aluthgama</option>
-                                    <option value="colombo">Colombo</option>
-                                    <option value="gampaha">Gampaha</option>
+                                <?php foreach ($city as $city): ?>
+                                            <option value="<?php echo htmlspecialchars($city['city']); ?>">
+                                                <?php echo htmlspecialchars($city['city']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
                                 </select>
                             </div>
 

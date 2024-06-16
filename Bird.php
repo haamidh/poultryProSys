@@ -119,6 +119,24 @@ class Bird implements crud
     }
 
 
+    public function getNextBatchId($user_id)
+    {
+        $query = "SELECT MAX(batch_id) as max_batch_id FROM " . $this->table_name . " WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row && $row['max_batch_id']) {
+            $max_batch_id = $row['max_batch_id'];
+            $number = intval(substr($max_batch_id, 2)) + 1;
+        } else {
+            $number = 1; // Start from 1 if no batch ID exists for the user
+        }
+
+        return 'B ' . str_pad($number, 3, '0', STR_PAD_LEFT);
+    }
+
     public function create($user_id)
     {
         $query = "INSERT INTO " . $this->table_name . " (user_id, batch_id, sup_id, sup_name, bird_type, unit_price, quantity, total_cost, date) VALUES (:user_id, :batch_id, :sup_id, :sup_name, :bird_type, :unit_price, :quantity, :total_cost, :date)";
