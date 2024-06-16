@@ -29,21 +29,16 @@ class CheckLogin
 
         if ($user) {
             return $user;
+
             exit();
-        }
-
-        //have to check here
-
-        /*
-        else {
-            ?>
+        } else {
+?>
             <script type="text/javascript">
                 alert("No user found //this message from check login page");
                 window.location.href = 'login.php';
             </script>
-            <?php
+<?php
             exit();
         }
-        */
     }
 }

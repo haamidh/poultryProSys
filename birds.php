@@ -84,7 +84,7 @@ $frame->first_part($farm);
 
                                             &nbsp;
                                             <button class="btn btn-danger">
-                                                <a href="delete_birds.php?delete=<?php echo $row['batch_id'] ?>&user_id=<?php echo htmlspecialchars($farm['user_id']); ?>" class="text-light">Delete</a>
+                                                <a href="delete_birds.php?delete=<?php echo htmlspecialchars($row['batch_id']); ?>&user_id=<?php echo htmlspecialchars($_SESSION['user_id']); ?>" class="text-light">Delete</a>
                                             </button>
                                         </td>
                                     </tr>

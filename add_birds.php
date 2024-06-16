@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
     exit();
 }
 
-$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : '';
+$user_id = $_SESSION['user_id'];
 
 
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = htmlspecialchars(strip_tags($_POST['user_id']));
     $batch_id = htmlspecialchars(strip_tags($_POST['batch_id']));
     $sup_id = htmlspecialchars(strip_tags($_POST['sup_id']));
+    $sup_name = htmlspecialchars(strip_tags($_POST['sup_name']));
     $bird_type = htmlspecialchars(strip_tags($_POST['bird_type']));
     $unit_price = htmlspecialchars(strip_tags($_POST['unit_price']));
     $quantity = htmlspecialchars(strip_tags($_POST['quantity']));
@@ -36,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bird->setUserID($user_id);
     $bird->setBatchId($batch_id);
     $bird->setSupId($sup_id);
+    $bird->setSupName($sup_name);
     $bird->setBirdType($bird_type);
     $bird->setUnitPrice($unit_price);
     $bird->setQuantity($quantity);
@@ -114,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <label class="form-check-label">Chick</label>
                                     </div>
                                     <div class="form-check form-check-inline" name="type">
-                                        <input class="form-check-input" type="radio" name="bird_type" value="chicken" required>
+                                        <input class="form-check-input" type="radio" name="bird_type" value="hen" required>
                                         <label class="form-check-label">Hen</label>
                                     </div>
                                 </div>
