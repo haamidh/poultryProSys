@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         switch ($user->role) {
             case "admin":
-                header("Location: admin.php");
+                header("Location: admin_dashboard.php?user_id=" . $user->user_id);
                 exit();
             case "farm":
                 header("Location: farm_dashboard.php?user_id=" . $user->user_id);
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #40826D;">
         <a class="navbar-brand mx-5" href="index.html" style="font-weight: bold">
-            <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%; width: 40px; height: 40px;">
             PoultryPro
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

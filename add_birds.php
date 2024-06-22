@@ -50,6 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bird->setTotalCost($total_cost);
     $bird->setDate($date);
 
+    
+
     if ($bird->create($user_id)) {
         header("Location: birds.php?user_id=" . htmlspecialchars($_SESSION['user_id']));
         exit();

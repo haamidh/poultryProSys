@@ -34,7 +34,7 @@ class CheckLogin
         } else {
 ?>
             <script type="text/javascript">
-                alert("No user found //this message from check login page");
+                alert("No user found");
                 window.location.href = 'login.php';
             </script>
 <?php

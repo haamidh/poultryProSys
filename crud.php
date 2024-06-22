@@ -5,4 +5,5 @@ interface crud
     public function read($user_id);
     public function update($id,$user_id);
     public function delete($id, $user_id);
+    public function readOne();
 }
