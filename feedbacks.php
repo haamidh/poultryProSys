@@ -1,38 +1,3 @@
-<?php
-// Start the session
-session_start();
-
-// Include database configuration and Feedback class
-include 'config.php';
-include 'Feedback.php';
-require_once 'checkLogin.php'; // This should handle checking if the user is logged in
-
-// Initialize database connection
-$database = new Database();
-$db = $database->getConnection();
-
-// Initialize Feedback class
-$feedback = new Feedback($db);
-
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $feedback->setUserId($_SESSION['user_id']);
-    $feedback->setUsername($_SESSION['username']);
-    $feedback->setRating($_POST['rating']);
-    $feedback->setComment($_POST['comment']);
-    $feedback->setCreatedAt(date('Y-m-d'));
-
-    if ($feedback->createFeedback()) {
-        echo "Feedback submitted successfully.";
-    } else {
-        echo "Failed to submit feedback.";
-    }
-}
-
-// Fetch feedback for display
-$feedbacks = $feedback->readFeedback();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,6 +6,9 @@ $feedbacks = $feedback->readFeedback();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
         .navbar-nav .nav-item a {
             font-weight: bold;
@@ -71,8 +39,6 @@ $feedbacks = $feedback->readFeedback();
         .navbar-brand {
             font-weight: bold;
         }
-
-
 
         .solid-hr {
             border: 5px solid white;
@@ -118,11 +84,15 @@ $feedbacks = $feedback->readFeedback();
             color: white;
         }
 
-        #thead{
+        table thead.custom-thead {
             background-color: #40826D !important;
             color: white;
         }
 
+        .custom-thead th {
+            background-color: #40826D !important;
+            color: white !important;
+        }
     </style>
 
 </head>
@@ -161,25 +131,68 @@ $feedbacks = $feedback->readFeedback();
     </nav>
 
     <?php
-    // Check if the user is logged in
-    if (!isset($_SESSION['user_id'])) {
-        echo "You must be logged in to submit feedback.";
-        exit;
+    // Start the session
+    session_start();
+
+    // Include database configuration and Feedback class
+    include 'config.php';
+    include 'Feedback.php';
+    require_once 'checkLogin.php'; // This should handle checking if the user is logged in
+
+    // Initialize database connection
+    $database = new Database();
+    $db = $database->getConnection();
+
+    // Initialize Feedback class
+    $feedback = new Feedback($db);
+
+    // Check if the form is submitted
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_SESSION['user_id'])) {
+            $feedback->setUserId($_SESSION['user_id']);
+            $feedback->setUsername($_SESSION['username']);
+            $feedback->setRating($_POST['rating']);
+            $feedback->setComment($_POST['comment']);
+            $feedback->setCreatedAt(date('Y-m-d'));
+
+            if ($feedback->createFeedback()) { ?>
+                <div class="alert alert-success d-flex align-items-center" role="alert">
+                    <i class="bi bi-check-circle-fill"></i>&nbsp;Feedback submitted successfully.
+                </div>
+            <?php
+            } else { ?>
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>&nbsp;Failed to submit feedback.
+                </div>
+            <?php
+            }
+        } else { ?>
+            <div class='alert alert-danger'><i class="bi bi-exclamation-circle-fill"></i>&nbsp;You must be logged in to submit feedback.</div>";
+    <?php
+        }
     }
+
+    // Fetch feedback for display
+    $feedbacks = $feedback->readFeedback();
     ?>
 
     <div class="container">
+
         <div class="col-sm-4 float-left">
+
+
             <div class="card-header card text-white bg-dark mb-3" id="card-header">
-                <h2 class="display-6 text-center">Feedback</h2>
+                <h2 class="display-6 text-center" style="font-weight: bold;">Feedback</h2>
             </div>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <div class="form-group">
-                    <input class="form-control" type="hidden" value="<?php echo $_SESSION['user_id']; ?>" name="user_id" id="user_id" readonly>
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="hidden" value="<?php echo $_SESSION['username']; ?>" name="username" id="username" readonly>
-                </div>
+                <?php if (isset($_SESSION['user_id'])) : ?>
+                    <div class="form-group">
+                        <input class="form-control" type="hidden" value="<?php echo $_SESSION['user_id']; ?>" name="user_id" id="user_id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="hidden" value="<?php echo $_SESSION['username']; ?>" name="username" id="username" readonly>
+                    </div>
+                <?php endif; ?>
 
                 <div class="form-group">
                     <label for="rating" class="card text-white bg-dark mb-3" id="label">Rating (1-5):</label>
@@ -197,7 +210,7 @@ $feedbacks = $feedback->readFeedback();
 
         <div class="card mt-5">
             <table class="table">
-                <thead class="thead" id="thead">
+                <thead class="custom-thead">
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Rating</th>
@@ -222,6 +235,7 @@ $feedbacks = $feedback->readFeedback();
                 </tbody>
             </table>
         </div>
+
     </div>
 </body>
 
