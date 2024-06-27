@@ -70,7 +70,7 @@ class Frame
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="products.php" class="nav-link">
                                         <i class="bi bi-cart4"></i>
                                         <span>PRODUCT</span>
                                     </a>

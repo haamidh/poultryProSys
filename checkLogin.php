@@ -30,7 +30,7 @@ class CheckLogin
         if ($user) {
             return $user;
 
-            exit();
+            
         } else {
 ?>
             <script type="text/javascript">
