@@ -30,7 +30,7 @@ $frame->first_part($farm);
             <h5 style="background-color: whitesmoke; height: 50px;padding-top: 8px">Content area</h5>
         </div>
         <div class="col2">
-            <h5 style="height: 150px;padding-left: 100px;padding-top: 50px">TOTAL ORDERS</h5>
+            <h5 style="height: 150px;padding-left: 100px;padding-top: 50px">TOTAL INCOME</h5>
             <h5 style="background-color: whitesmoke; height: 50px;padding-top: 8px">Content area</h5>
         </div>
     </div>
@@ -38,7 +38,7 @@ $frame->first_part($farm);
     <hr class="dropdown-divider" style="color:black">
 
     <div class="row3">
-        <h1>I am row 3</h1>
+        <h1>PRICE LIST</h1>
     </div>
 
 </div>

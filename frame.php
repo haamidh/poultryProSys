@@ -76,7 +76,7 @@ class Frame
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="supplier.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>"  class="nav-link">
                                         <i class="bi bi-person-fill-up"></i>
                                         <span>SUPPLIER</span>
                                     </a>
