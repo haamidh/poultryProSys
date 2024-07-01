@@ -52,7 +52,7 @@ class Frame
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="feed.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>" class="nav-link">
                                         <i class="bi bi-backpack4-fill"></i>
                                         <span>FEEDS</span>
                                     </a>
