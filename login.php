@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_id'] = $user->user_id;
         $_SESSION['username'] = $user->username;
         $_SESSION['role'] = $user->role;
+        $_SESSION['status'] = $user->status;
 
         switch ($user->role) {
             case "admin":
@@ -57,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #40826D;">
         <a class="navbar-brand mx-5" href="index.html" style="font-weight: bold">
-        <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%; width: 40px; height: 40px;">
+            <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%; width: 40px; height: 40px;">
             PoultryPro
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +73,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </ul>
         </div>
     </nav>
-
+    <?php
+    if (isset($_GET['status']) && $_GET['status'] === 'blocked') {
+        //$blocked_message = "Your account is currently blocked by admin.";
+    ?> <div class='alert alert-danger' role='alert'>
+            Your account was temporarily blocked by admin. Contact admin via this <a href='https://mail.google.com/mail' class='alert-link'> arahmandulapandan@gmail.com</a> mail.
+        </div><?php
+            }
+                ?>
     <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
         <div class="row">
             <div class="col-md-4">

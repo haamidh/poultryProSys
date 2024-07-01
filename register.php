@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->email = $_POST['email'];
     $user->password = $_POST['password'];
 
-    $user->role = $_POST['role'];
+    $user->status = 1;
 
     if ($user->emailExists()) {
 ?>
@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user->user_id;
             $_SESSION['username'] = $user->username;
             $_SESSION['role'] = $user->role;
+            $_SESSION['status'] = $user->status;
 
             switch ($user->role) {
                 case "farm":
@@ -82,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #40826D;">
         <a class="navbar-brand mx-5" href="index.html" style="font-weight: bold">
-        <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%; width: 40px; height: 40px;">
+            <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%; width: 40px; height: 40px;">
             PoultryPro
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,11 +133,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="row">
                                 <label>City:</label>
                                 <select name="city" required>
-                                <?php foreach ($city as $city): ?>
-                                            <option value="<?php echo htmlspecialchars($city['city']); ?>">
-                                                <?php echo htmlspecialchars($city['city']); ?>
-                                            </option>
-                                        <?php endforeach; ?>
+                                    <?php foreach ($city as $city) : ?>
+                                        <option value="<?php echo htmlspecialchars($city['city']); ?>">
+                                            <?php echo htmlspecialchars($city['city']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
 

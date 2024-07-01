@@ -13,6 +13,7 @@ class User
     public $mobile;
     public $email;
     public $password;
+    public $status;
     public $created_at;
 
     public function __construct($db)
@@ -31,7 +32,7 @@ class User
 
     public function register()
     {
-        $query = "INSERT INTO " . $this->table_name . " (username, role, address, city, mobile, email, password) VALUES (:username, :role, :address, :city, :mobile, :email, :password)";
+        $query = "INSERT INTO " . $this->table_name . " (username, role, address, city, mobile, email, password,status) VALUES (:username, :role, :address, :city, :mobile, :email, :password, :status)";
         $stmt = $this->conn->prepare($query);
 
         $this->username = htmlspecialchars(strip_tags($this->username));
@@ -40,6 +41,7 @@ class User
         $this->city = htmlspecialchars(strip_tags($this->city));
         $this->mobile = htmlspecialchars(strip_tags($this->mobile));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->status = htmlspecialchars(strip_tags($this->status));
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 
         $stmt->bindParam(":username", $this->username);
@@ -49,6 +51,7 @@ class User
         $stmt->bindParam(":mobile", $this->mobile);
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":password", $this->password);
+        $stmt->bindParam(":status", $this->status);
 
 
         if ($stmt->execute()) {
@@ -60,7 +63,7 @@ class User
 
     public function login()
     {
-        $query = "SELECT user_id, username, password,role FROM " . $this->table_name . " WHERE email = :email";
+        $query = "SELECT user_id, username, password,role,status FROM " . $this->table_name . " WHERE email = :email";
         $stmt = $this->conn->prepare($query);
 
         $this->email = htmlspecialchars(strip_tags($this->email));
@@ -74,6 +77,7 @@ class User
             $this->user_id = $row['user_id'];
             $this->username = $row['username'];
             $this->role = $row['role'];
+            $this->status = $row['status'];
 
             return true;
         }

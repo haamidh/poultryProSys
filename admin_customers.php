@@ -7,32 +7,28 @@ require_once 'config.php';
 require_once 'checkLogin.php';
 require_once 'admin_frame.php';
 
-
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
-
 
 $database = new Database();
 $db = $database->getConnection();
 
 $query = "SELECT * FROM user WHERE role = :role";
 $stmt = $db->prepare($query);
-$stmt->bindParam(':role', $role);
 $role = 'customer';
+$stmt->bindParam(':role', $role, PDO::PARAM_STR);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : '';
+$user_id = isset($_GET['user_id']) ? htmlspecialchars($_GET['user_id']) : '';
 
 $admin = CheckLogin::checkLoginAndRole($user_id, 'admin');
 
 $adminframe = new AdminFrame();
 $adminframe->first_part($admin);
-
 ?>
-
 
 <div class="contentArea">
     <div class="container py-4">
@@ -63,18 +59,24 @@ $adminframe->first_part($admin);
                                 foreach ($users as $user) {
                                 ?>
                                     <tr>
-                                        <td><?php echo $uid ?></td>
-                                        <!--<td><?php echo htmlspecialchars($user['user_id']) ?></td>-->
-                                        <td><?php echo htmlspecialchars($user['username']) ?></td>
-                                        <td><?php echo htmlspecialchars($user['address']) ?></td>
-                                        <td><?php echo htmlspecialchars($user['city']) ?></td>
-                                        <td><?php echo htmlspecialchars($user['mobile']) ?></td>
-                                        <td><?php echo htmlspecialchars($user['email']) ?></td>
-                                        <td><?php echo htmlspecialchars($user['CREATED_AT']) ?></td>
+                                        <td><?php echo $uid; ?></td>
+                                        <!--<td><?php echo htmlspecialchars($user['user_id']); ?></td>-->
+                                        <td><?php echo htmlspecialchars($user['username']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['address']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['city']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['mobile']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['email']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['CREATED_AT']); ?></td>
                                         <td>
-                                            <button class="btn btn-danger">
-                                                <a href="block_farm.php?delete=<?php echo htmlspecialchars($user['user_id']); ?>" class="text-light">Block</a>
-                                            </button>
+                                            <?php if ($user['status'] == 0) { ?>
+                                                <button class="btn btn-success">
+                                                    <a href="unblock_user.php?unblock=<?php echo urlencode($user['user_id']); ?>&role=customer" class="text-light">Unblock</a>
+                                                </button>
+                                            <?php } else { ?>
+                                                <button class="btn btn-danger">
+                                                    <a href="block_user.php?block=<?php echo urlencode($user['user_id']); ?>&role=customer" class="text-light">Block</a>
+                                                </button>
+                                            <?php } ?>
                                         </td>
                                     </tr>
                                 <?php
@@ -89,7 +91,6 @@ $adminframe->first_part($admin);
         </div>
     </div>
 </div>
-
 
 <?php
 $adminframe->last_part();
