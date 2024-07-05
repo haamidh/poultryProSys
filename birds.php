@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
 
 
 // Retrieve the id from the URL
-$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : '';
+$user_id = $_SESSION["user_id"];
 
 // Check login and fetch farm data
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');

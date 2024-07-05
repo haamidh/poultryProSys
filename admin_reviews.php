@@ -25,7 +25,7 @@ $feedback = new Feedback($db);
 $feedbacks = $feedback->readFeedback();
 
 // Check admin access using CheckLogin class
-$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
+$user_id = $_SESSION['user_id'];
 $admin = CheckLogin::checkLoginAndRole($user_id, 'admin');
 
 // Create AdminFrame object

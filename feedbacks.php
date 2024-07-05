@@ -167,7 +167,9 @@
             <?php
             }
         } else { ?>
-            <div class='alert alert-danger'><i class="bi bi-exclamation-circle-fill"></i>&nbsp;You must be logged in to submit feedback.</div>";
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>&nbsp;You must be logged in to submit feedback.
+            </div>;
     <?php
         }
     }

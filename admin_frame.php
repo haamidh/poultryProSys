@@ -35,20 +35,20 @@ class AdminFrame
                         <nav class="navbar navbar-dark">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="admin_dashboard.php?user_id=<?php echo htmlspecialchars($admin['user_id']); ?>">
+                                    <a class="nav-link" href="admin_dashboard.php">
                                         <i class="bi bi-window-dash"></i>
                                         <span>DASHBOARD</span>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="admin_farms.php?user_id=<?php echo htmlspecialchars($admin['user_id']); ?>" class="nav-link">
+                                    <a href="admin_farms.php" class="nav-link">
                                         <i class="bi bi-house-check-fill"></i>
                                         <span>FARMS</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="admin_customers.php?user_id=<?php echo htmlspecialchars($admin['user_id']); ?>" class="nav-link">
+                                    <a href="admin_customers.php" class="nav-link">
                                         <i class="bi bi-person-fill-check"></i>
                                         <span>CUSTOMERS</span>
                                     </a>
@@ -60,7 +60,7 @@ class AdminFrame
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="admin_reviews.php?user_id=<?php echo htmlspecialchars($admin['user_id']); ?>" class="nav-link">
+                                    <a href="admin_reviews.php" class="nav-link">
                                         <i class="bi bi-box2-fill"></i>
                                         <span>REVIEWS</span>
                                     </a>

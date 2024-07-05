@@ -11,54 +11,80 @@ $user = new User($db);
 $query = "SELECT city FROM city";
 $stmt = $db->prepare($query);
 $stmt->execute();
-$city = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$cities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$mobileErr = $emailErr = "";
+$errors = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $user->username = $_POST['username'];
     $user->role = $_POST['role'];
     $user->address = $_POST['address'];
     $user->city = $_POST['city'];
-    $user->mobile = $_POST['mobile'];
-    $user->email = $_POST['email'];
-    $user->password = $_POST['password'];
 
+    if (empty($_POST['mobile'])) {
+        $mobileErr = '*Required field';
+        $errors = true;
+    } else {
+        $pattern = "/^[0]{1}[0-9]{9}/";
+        if (preg_match($pattern, $_POST['mobile'])) {
+            $user->mobile = $_POST['mobile'];
+        } else {
+            $mobileErr = '*Enter the correct mobile number';
+            $errors = true;
+        }
+    }
+
+    if (empty($_POST['email'])) {
+        $emailErr = '*Required field';
+        $errors = true;
+    } else {
+        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            $user->email = $_POST['email'];
+        } else {
+            $emailErr = '*Enter the correct email format';
+            $errors = true;
+        }
+    }
+
+    $user->password = $_POST['password'];
     $user->status = 1;
 
-    if ($user->emailExists()) {
+    if (!$errors) {
+        if ($user->emailExists()) {
 ?>
-        <script type="text/javascript">
-            alert("<?php echo "Email already exists.Please login using mail and password"; ?>");
-            window.location.href = 'login.php';
-        </script>
-        <?php
-    } else {
-        if ($user->register()) {
-            $_SESSION['user_id'] = $user->user_id;
-            $_SESSION['username'] = $user->username;
-            $_SESSION['role'] = $user->role;
-            $_SESSION['status'] = $user->status;
-
-            switch ($user->role) {
-                case "farm":
-
-                    header("Location: farm_dashboard.php?user_id=" . $_SESSION['user_id']);
-
-                    exit();
-                case "customer":
-                    header("Location: customer.php?user_id=" . $_SESSION['user_id']);
-                    exit();
-                default:
-
-                    header("Location: login.php");
-                    exit();
-            }
-        } else {
-        ?>
             <script type="text/javascript">
-                alert("<?php echo "Something Gone wrong."; ?>");
-                window.location.href = 'regiter.php';
+                alert("<?php echo "Email already exists. Please login using your email and password."; ?>");
+                window.location.href = 'login.php';
             </script>
 <?php
+        } else {
+            if ($user->register()) {
+                $_SESSION['user_id'] = $user->user_id;
+                $_SESSION['username'] = $user->username;
+                $_SESSION['role'] = $user->role;
+                $_SESSION['status'] = $user->status;
+
+                switch ($user->role) {
+                    case "farm":
+                        header("Location: farm_dashboard.php?user_id=" . $_SESSION['user_id']);
+                        exit();
+                    case "customer":
+                        header("Location: customer.php?user_id=" . $_SESSION['user_id']);
+                        exit();
+                    default:
+                        header("Location: login.php");
+                        exit();
+                }
+            } else {
+?>
+                <script type="text/javascript">
+                    alert("<?php echo "Something went wrong."; ?>");
+                    window.location.href = 'register.php';
+                </script>
+<?php
+            }
         }
     }
 }
@@ -70,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in form</title>
+    <title>Sign Up Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <style>
@@ -91,12 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav align-items-center">
-                <div class="justify-content-center mt-2" style="color:white;">Already you have an account?</div>
+                <div class="justify-content-center mt-2" style="color:white;">Already have an account?</div>
                 <li class="nav-item align-items-center mx-4" style="background-color:#8A9A5B;">
                     <a class="nav-link" href="login.php">Log In</a>
                 </li>
-
-
             </ul>
         </div>
     </nav>
@@ -109,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <h4>Sign Up</h4>
                     </div>
                     <div class="card-body">
-                        <form id="batchForm" action="" method="post">
+                        <form id="batchForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
                             <div class="row">
                                 <label>Name:</label>
@@ -133,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="row">
                                 <label>City:</label>
                                 <select name="city" required>
-                                    <?php foreach ($city as $city) : ?>
+                                    <?php foreach ($cities as $city) : ?>
                                         <option value="<?php echo htmlspecialchars($city['city']); ?>">
                                             <?php echo htmlspecialchars($city['city']); ?>
                                         </option>
@@ -142,18 +166,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
 
                             <div class="row">
-                                <label>Mobile:</label>
+                                <label>Mobile:<span style="color: red;"><?php echo $mobileErr ?></span></label>
                                 <input type="text" class="form-control" name="mobile" required>
                             </div>
 
                             <div class="row">
-                                <label>Email:</label>
+                                <label>Email:<span style="color: red;"><?php echo $emailErr ?></span></label>
                                 <input type="email" class="form-control" name="email" placeholder="abc123@gmail.com" required>
                             </div>
 
                             <div class="row">
                                 <label>Password:</label>
-                                <input type="text" class="form-control" name="password" required>
+                                <input type="password" class="form-control" name="password" required>
                             </div>
 
                             <br>

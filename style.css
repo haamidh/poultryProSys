@@ -78,6 +78,7 @@
 
 .nav-item:hover {
     background-color: #355f4c;
+    color: white;
 }
 
 .nav-item {
@@ -109,6 +110,7 @@ a.nav-link {
     min-width: 15rem;
     display: none;
 }
+
 
 .dropdown-item {
     color: #FFF;

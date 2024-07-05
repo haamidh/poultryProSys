@@ -34,13 +34,13 @@ class Frame
                         <nav class="navbar navbar-dark">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="farm_dashboard.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>">
+                                    <a class="nav-link" href="farm_dashboard.php">
                                         <i class="bi bi-window-dash"></i>
                                         <span>DASHBOARD</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="birds.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>">
+                                    <a class="nav-link" href="birds.php">
                                         <i class="bi bi-twitter"></i>
                                         <span>BIRDS</span>
                                     </a>
@@ -52,13 +52,13 @@ class Frame
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="feed.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>" class="nav-link">
+                                    <a href="feed.php" class="nav-link">
                                         <i class="bi bi-backpack4-fill"></i>
                                         <span>FEEDS</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="medicine.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>" class="nav-link">
+                                    <a href="medicine.php" class="nav-link">
                                         <i class="bi bi-capsule-pill"></i>
                                         <span>MEDICINE</span>
                                     </a>
@@ -76,7 +76,7 @@ class Frame
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="supplier.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>"  class="nav-link">
+                                    <a href="supplier.php"  class="nav-link">
                                         <i class="bi bi-person-fill-up"></i>
                                         <span>SUPPLIER</span>
                                     </a>
@@ -91,11 +91,11 @@ class Frame
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li><a class="dropdown-item" href="#">Income Report</a></li>
+                                        <li><a class="dropdown-item" href="farm_incomes.php">Income Report</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li><a class="dropdown-item" href="#">Expenses Report</a></li>
+                                        <li><a class="dropdown-item" href="farm_expenses.php">Expenses Report</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>

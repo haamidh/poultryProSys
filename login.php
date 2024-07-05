@@ -22,13 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         switch ($user->role) {
             case "admin":
-                header("Location: admin_dashboard.php?user_id=" . $user->user_id);
+                header("Location: admin_dashboard.php");
                 exit();
             case "farm":
-                header("Location: farm_dashboard.php?user_id=" . $user->user_id);
+                header("Location: farm_dashboard.php");
                 exit();
             case "customer":
-                header("Location: customer.php?user_id=" . $user->user_id);
+                header("Location: customer.php");
                 exit();
             default:
 
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
     <?php
     if (isset($_GET['status']) && $_GET['status'] === 'blocked') {
-        //$blocked_message = "Your account is currently blocked by admin.";
+        
     ?> <div class='alert alert-danger' role='alert'>
             Your account was temporarily blocked by admin. Contact admin via this <a href='https://mail.google.com/mail' class='alert-link'> arahmandulapandan@gmail.com</a> mail.
         </div><?php

@@ -22,7 +22,7 @@ $stmt->bindParam(':role', $role, PDO::PARAM_STR);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$user_id = isset($_GET['user_id']) ? htmlspecialchars($_GET['user_id']) : '';
+$user_id = $_SESSION['user_id'];
 
 $admin = CheckLogin::checkLoginAndRole($user_id, 'admin');
 
