@@ -65,7 +65,7 @@ $html = '<!DOCTYPE html>
         <p>From&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;' . htmlspecialchars($from_date) . '</p>
         <p>To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;' . htmlspecialchars($to_date) . '</p>
     </div>
-    <h2 style="text-align:center;">Expenses Report</h2>
+    <h2 style="text-align:center;">Incomes Report</h2>
     <table>
         <thead>
             <tr>
