@@ -61,10 +61,7 @@ $frame->first_part($farm);
                         <label for="">Name</label>
                         <input type="text" required name="name" placeholder="Enter product name"class="form-control">
                     </div>
-                    <div class="col-md-6 mb-1">
-                        <label for="">Slug</label>
-                        <input type="text" required name="slug" placeholder="Enter slug" class="form-control">
-                    </div>
+                    
                     <div class="col-md-12 mb-1">
                         <label for="">Small Description</label>
                         <textarea rows="3" required name="small_description" placeholder="Enter small description"class="form-control"></textarea>
@@ -95,18 +92,9 @@ $frame->first_part($farm);
                             <input type="checkbox" name="popular">
                         </div>
                     </div>
-                    <div class="col-md-12 mb-1">
-                        <label for="">Meta Title</label>
-                        <input type="test" required name="meta_title" placeholder="Enter meta title" class="form-control">
-                    </div>
-                    <div class="col-md-12 mb-1">
-                        <label for="">Meta Description</label>
-                        <textarea rows="3" required name="meta_description" placeholder="Enter meta description" class="form-control"></textarea>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                        <label for="">Meta Keywords</label>
-                        <textarea rows="3" required name="meta_keywords" placeholder="Enter meta keywords" class="form-control"></textarea>
-                    </div>
+                    
+                    
+                    
                     <div class="col-md-12 mb-1">
                         <button input type="submit" class="btn btn-primary mt-1"  name="add_product_btn">Save</button>
                     </div>
