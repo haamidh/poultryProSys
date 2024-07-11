@@ -83,11 +83,14 @@ $frame->first_part($farm);
                             <label for="">Quantity</label>
                             <input type="number" required name="qty" placeholder="Enter Quantity"class="form-control">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-1 ">
+                            
+                        </div>
+                        <div class="col-md-2 mt-1"><br>
                             <label for="">Status</label>
                             <input type="checkbox" name="status">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 mt-1"><br>
                             <label for="">Popular</label>
                             <input type="checkbox" name="popular">
                         </div>
