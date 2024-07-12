@@ -6,6 +6,7 @@ ob_start(); // Start output buffering
 require_once 'config.php';
 require_once 'checkLogin.php';
 require_once 'frame.php';
+require_once 'delete_medicine.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php?msg=Please Login before Proceeding");
@@ -19,6 +20,8 @@ $con = $database->getConnection();
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 $frame = new Frame();
 $frame->first_part($farm);
+$deleteMedicine = new Delete_medicine();
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $med_name = $_POST['med_name'];
@@ -121,7 +124,7 @@ function getAllMedicines($con, $user_id)
                         </div>
                         <input class="form-control" type="text" name="med_name" id="med_name" required>
                     </div>
-                    <div class="form-group mb-3 col-sm">
+                    <div class="form-group mb-3 col-sm"><br>
                         <div class="card mb-3 bg-dark bg-gradient">
                             <div class="card-header text-white">Description</div>
                         </div>
@@ -134,8 +137,8 @@ function getAllMedicines($con, $user_id)
             </form>
         </div>
     </div>
-    <div>
-        <div class="container float-left">
+    <div class="col-sm">
+        <div class="container float-left ">
             <div class="col">
                 <br>
             <table class="table table-striped">
@@ -161,7 +164,7 @@ function getAllMedicines($con, $user_id)
                             <td><?php echo $medicine['med_id']; ?></td>
                             <td><?php echo $medicine['med_name']; ?></td>
                             <td><?php echo $medicine['description']; ?></td>
-                            <td><a href="edit_medicine.php?id=<?php echo $medicine['med_id']; ?>" class="btn btn-primary">Edit</a></td>
+                            <td><a href="edit_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-primary">Edit</a></td>
                             <td><a href="delete_medicine.php" class="btn btn-danger">Delete</a></td>
                         </tr>
                     <?php
