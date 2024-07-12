@@ -23,14 +23,14 @@ $frame->first_part($farm);
 
 
 
-class Delete_medicine implements crud {
-    public function delete($con, $user_id,$id){
+// class Delete_medicine implements crud {
+//     public function delete($con, $user_id,$id){
         
-        $sql = "DELETE FROM medicines WHERE id = ? AND user_id = ?";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param("ii", $id, $user_id);
-        $stmt->execute();
-        $stmt->close();
+//         $sql = "DELETE FROM medicines WHERE id = ? AND user_id = ?";
+//         $stmt = $con->prepare($sql);
+//         $stmt->bind_param("ii", $id, $user_id);
+//         $stmt->execute();
+//         $stmt->close();
         
-    }
-}
+//     }
+// }
