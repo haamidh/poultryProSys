@@ -36,7 +36,7 @@ $frame->first_part($farm);
                     <div class="card-body">
                         <!-- Add the submit button -->
                         <button class="btn btn-primary">
-                            <a href="add_birds.php?user_id=<?php echo htmlspecialchars($farm['user_id']); ?>" class="text-light">Add Batch</a>
+                            <a href="add_birds.php" class="text-light">Add Batch</a>
                         </button>
                         <table class="table">
                             <thead>
@@ -84,7 +84,7 @@ $frame->first_part($farm);
 
                                             &nbsp;
                                             <button class="btn btn-danger">
-                                                <a href="delete_birds.php?delete=<?php echo htmlspecialchars($row['batch_id']); ?>&user_id=<?php echo htmlspecialchars($_SESSION['user_id']); ?>" class="text-light">Delete</a>
+                                                <a href="delete_birds.php?delete=<?php echo htmlspecialchars($row['batch_id']); ?>" class="text-light">Delete</a>
                                             </button>
                                         </td>
                                     </tr>

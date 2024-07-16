@@ -63,15 +63,16 @@ $total_amount = $income->getTotalAmount();
                                 </div>
                                 <div class="col" style="padding-top:20px;">
                                     <button type="submit" class="btn btn-primary">Filter</button>
+                                    <button class="btn btn-danger">
+                                        <a href="farm_incomesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light">Export PDF</a>
+                                    </button>
                                 </div>
                             </div>
                         </form>
-                        <br>
+                        
                         <!-- Add the submit button -->
-                        <button class="btn btn-danger">
-                            <a href="farm_incomesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light">Export PDF</a>
-                        </button>
-                        <table class="table">
+
+                        <table class="table" style="margin-top: -50px;">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -88,27 +89,27 @@ $total_amount = $income->getTotalAmount();
                                     $uid = 1;
                                     foreach ($all_data as $data) {
                                 ?>
-                                    <tr>
-                                        <td><?php echo $uid ?></td>
-                                        <td><?php echo htmlspecialchars(substr($data['date'], 0, 10)) ?></td>
-                                        <td><?php echo htmlspecialchars($data['detail']) ?></td>
-                                        <td><?php echo htmlspecialchars($data['received_from']) ?></td>
-                                        <td style="text-align: right; padding-right: 20px;"><?php echo number_format($data['amount'], 2) ?></td>
-                                    </tr>
-                                <?php
+                                        <tr>
+                                            <td><?php echo $uid ?></td>
+                                            <td><?php echo htmlspecialchars(substr($data['date'], 0, 10)) ?></td>
+                                            <td><?php echo htmlspecialchars($data['detail']) ?></td>
+                                            <td><?php echo htmlspecialchars($data['received_from']) ?></td>
+                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($data['amount'], 2) ?></td>
+                                        </tr>
+                                    <?php
                                         $uid++;
                                     }
-                                ?>
-                                
-                                <!-- Total amount row -->
-                                <tr>
-                                    <td colspan="4" style="text-align: right; padding-right: 80px;"><strong>Total Amount</strong></td>
-                                    <td style="text-align: right; padding-right: 20px;"><strong><?php echo number_format($total_amount, 2); ?></strong></td>
-                                </tr>
+                                    ?>
+
+                                    <!-- Total amount row -->
+                                    <tr>
+                                        <td colspan="4" style="text-align: right; padding-right: 80px;"><strong>Total Amount</strong></td>
+                                        <td style="text-align: right; padding-right: 20px;"><strong><?php echo number_format($total_amount, 2); ?></strong></td>
+                                    </tr>
                                 <?php } else { ?>
-                                <tr>
-                                    <td colspan="5" style="text-align: center;">No data found</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="5" style="text-align: center;">No data found</td>
+                                    </tr>
                                 <?php } ?>
                             </tbody>
                         </table>

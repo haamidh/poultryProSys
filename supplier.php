@@ -82,11 +82,10 @@ function getAllSupplier($con, $user_id)
                 <h2 class="display-6 text-center" style="font-size: 30px; font-weight:500;">Supplier Details</h2>
             </div>
             <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                <div class="col-md-6">
-                    <label for="user_id" class="form-label">User Id:</label>
-                    <input type="text" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
-                </div>
-                <div class="col-md-6">
+
+                <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
+
+                <div class="col-md-12">
                     <label for="sup_id" class="form-label">Supplier id:</label>
                     <input type="text" class="form-control" value="<?php echo getLastSupplierId($con, $user_id); ?>" id="sup_id" name="sup_id" readonly>
                 </div>
@@ -110,13 +109,13 @@ function getAllSupplier($con, $user_id)
                     <label for="email" class="form-label">Email:</label>
                     <input type="text" class="form-control" id="email" name="email" required>
                 </div>
-                <div class="col-12">
+                <div class="col-12" style="text-align: center;">
                     <button type="submit" class="btn btn-primary" name="add_supplier" value="Add supplier">Submit</button>
                 </div>
             </form>
         </div>
 
-        
+
         <div class="col5" style="margin-right: 10px;">
             <br>
             <table class="table table-striped">

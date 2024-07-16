@@ -11,7 +11,7 @@ class Expenses {
         $this->from_date = $from_date;
         $this->to_date = $to_date;
     }
-
+    
     public function getBirdData() {
         $query = "SELECT * FROM birds WHERE user_id = :user_id";
         if ($this->from_date && $this->to_date) {
@@ -34,7 +34,7 @@ class Expenses {
         }
         return $results;
     }
-
+    
     public function getMedicineData() {
         $query = "SELECT * FROM buy_medicine WHERE user_id = :user_id";
         if ($this->from_date && $this->to_date) {
@@ -105,29 +105,32 @@ class Expenses {
     }
 
     public function getAllData() {
-        $all_data = array_merge(
-            $this->getBirdData(),
-            $this->getMedicineData(),
-            $this->getFeedData(),
-            $this->getMiscData()
-        );
+        $bird_data = $this->getBirdData();
+        $medicine_data = $this->getMedicineData();
+        $feed_data = $this->getFeedData();
+        $misc_data = $this->getMiscData();
 
-        usort($all_data, function ($a, $b) {
+        $all_data = array_merge($bird_data, $medicine_data, $feed_data, $misc_data);
+
+        // Sort data by date
+        usort($all_data, function($a, $b) {
             return strtotime($a['date']) - strtotime($b['date']);
         });
 
         return $all_data;
     }
 
+    public function getAllDataCategorized() {
+        return [
+            'total_birds' => array_sum(array_column($this->getBirdData(), 'amount')),
+            'total_medicine' => array_sum(array_column($this->getMedicineData(), 'amount')),
+            'total_feeds' => array_sum(array_column($this->getFeedData(), 'amount')),
+            'total_miscellaneous' => array_sum(array_column($this->getMiscData(), 'amount')),
+        ];
+    }
+
     public function getTotalAmount() {
-        $total_amount = 0;
-        $all_data = $this->getAllData();
-
-        foreach ($all_data as $data) {
-            $total_amount += $data['amount'];
-        }
-
-        return $total_amount;
+        return array_sum(array_column($this->getAllData(), 'amount'));
     }
 }
 ?>

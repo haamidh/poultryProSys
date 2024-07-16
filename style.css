@@ -1,15 +1,12 @@
 .header {
     background-color: #40826D;
     height: 60px;
-
     text-align: center;
 }
-
 
 .raw {
     display: flex;
     height: calc(100vh - 60px);
-
 }
 
 .row::after {
@@ -23,13 +20,14 @@
 }
 
 .contentArea {
-    width: 100%;
+    width: 75%;
     display: block;
 }
 
 .row2 {
     margin-top: 10px;
     display: flex;
+    flex-wrap: wrap;
     text-align: center;
 }
 
@@ -42,24 +40,12 @@
     margin-left: 50px;
 }
 
-.col1 {
-    width: 35%;
-    background-color: #9B59B6;
-    color: white;
+.col {
+    width: 30%;
     text-align: center;
     height: 150px;
+    margin-bottom: 10px;
 }
-
-.col2 {
-    width: 35%;
-    margin-left: 20px;
-    background-color: #1E8449;
-    color: white;
-    text-align: center;
-    height: 150px;
-}
-
-
 
 #sidebar {
     width: 300px;
@@ -68,7 +54,6 @@
     flex-direction: column;
     height: 100%;
 }
-
 
 .navbar-nav {
     padding: 2rem 0;
@@ -111,7 +96,6 @@ a.nav-link {
     display: none;
 }
 
-
 .dropdown-item {
     color: #FFF;
 }
@@ -126,7 +110,6 @@ a.nav-link {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-
 .contentArea {
     flex: 1;
     padding: 20px;
@@ -134,11 +117,9 @@ a.nav-link {
     overflow-y: auto;
 }
 
-@media only screen and (max-width: 600px) {
-
+@media only screen and (max-width: 768px) {
     .header {
         width: 100vw;
-
     }
 
     .sidebar {
@@ -148,23 +129,82 @@ a.nav-link {
 
     .contentArea {
         width: 100vw;
+    }
 
+    .row2 {
+        width: 100%;
+        display: block;
+    }
+
+    .row3 {
+        width: 90%;
+        margin-top: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .col {
+        margin-left: 20px;
+        width: 90%;
+        margin-bottom: 70px;
     }
 
     .raw {
         display: block;
         height: calc(100vh - 60px);
-
     }
 
     #sidebar {
         width: 100vw;
-
     }
-
 
     .navbar-footer {
         text-align: center;
     }
+}
 
+@media only screen and (max-width: 480px) {
+    .header {
+        width: 100vw;
+    }
+
+    .sidebar {
+        width: 100vw;
+        text-align: center;
+    }
+
+    .contentArea {
+        width: 100vw;
+    }
+
+    .row2 {
+        width: 100%;
+        display: block;
+    }
+
+    .row3 {
+        width: 90%;
+        margin-top: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .col {
+        margin-left: 20px;
+        width: 90%;
+        margin-bottom: 70px;
+    }
+
+    .raw {
+        display: block;
+        height: calc(100vh - 60px);
+    }
+
+    #sidebar {
+        width: 100vw;
+    }
+
+    .navbar-footer {
+        text-align: center;
+    }
 }
