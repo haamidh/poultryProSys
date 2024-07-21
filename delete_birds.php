@@ -23,12 +23,10 @@ $bird = new Bird($db);
 if (isset($_GET['delete'])) {
     $batch_id = $_GET['delete'];
     
-    // Debugging output
-    echo "Received batch_id: " . htmlspecialchars($batch_id) . "<br>";
-    
+   
     if ($bird->delete($batch_id, $user_id)) {
         echo"hiufishgg112121";
-        header("Location: birds.php?user_id=" . htmlspecialchars($_SESSION['user_id']));
+        header("Location: birds.php");
         echo"hiufishgg";
     } else {
         echo "Failed to delete batch.";

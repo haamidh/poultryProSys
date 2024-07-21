@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once 'config.php';
 require_once 'checkLogin.php';
 require_once 'Expenses.php';
-require_once __DIR__ . '/vendor/autoload.php'; // Path to mPDF autoload.php
+require_once __DIR__ . '/vendor/autoload.php';
 
 // Ensure the user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -45,7 +45,6 @@ $html = '<!DOCTYPE html>
     <title>Expenses Report</title>
     <style>
         body { font-family: sans-serif; }
-               
         table { width: 100%; border-collapse: collapse; }
         th, td { border: 1px solid #000; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }

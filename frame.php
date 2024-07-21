@@ -87,7 +87,7 @@ class Frame
                                         <span>REPORTS</span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Stock Report</a></li>
+                                        <li><a class="dropdown-item" href="farm_stock.php">Stock Report</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
@@ -99,7 +99,7 @@ class Frame
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li><a class="dropdown-item" href="#">Profit Report</a></li>
+                                        <li><a class="dropdown-item" href="farm_profit.php">Profit Report</a></li>
                                     </ul>
                                 </li>
                             </ul>
