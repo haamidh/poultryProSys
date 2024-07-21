@@ -6,7 +6,7 @@ ob_start(); // Start output buffering
 require_once 'config.php';
 require_once 'checkLogin.php';
 require_once 'frame.php';
-// require_once 'delete_medicine.php';
+require_once 'delete_medicine.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php?msg=Please Login before Proceeding");
@@ -20,7 +20,7 @@ $con = $database->getConnection();
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 $frame = new Frame();
 $frame->first_part($farm);
-// $deleteMedicine = new Delete_medicine();
+$deleteMedicine = new DeleteMedicine();
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Record not added";
     }
 }
+
 
 function getLastMedicineId($con, $user_id)
 {
@@ -95,7 +96,9 @@ function getAllMedicines($con, $user_id)
 </head>
 
 <body>
+    
     <div class="container contentArea">
+        
         <div class="col float-left">
             <div class="card-header card text-white bg-success bg-gradient mb-3">
                 <h2 class="display-6 text-center">Medicine Details</h2>
@@ -165,7 +168,7 @@ function getAllMedicines($con, $user_id)
                             <td><?php echo $medicine['med_name']; ?></td>
                             <td><?php echo $medicine['description']; ?></td>
                             <td><a href="edit_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-primary">Edit</a></td>
-                            <td><a href="delete_medicine.php" class="btn btn-danger">Delete</a></td>
+                            <td><a href="delete_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-danger">Delete</a></td>
                         </tr>
                     <?php
                     }
