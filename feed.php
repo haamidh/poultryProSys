@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Start output buffering
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -8,6 +9,7 @@ require_once 'frame.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php?msg=Please Login before Proceeding");
+    ob_end_flush(); // Flush the buffer
     exit();
 }
 $user_id = $_SESSION["user_id"];
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (addNewFeed($con, $user_id, $feed_id, $feed_name)) {
-        header('Location: medicine.php?msg=Data Updated Successfully&user_id=' . $user_id);
+        header('Location: feed.php?msg=Data Updated Successfully&user_id=' . $user_id);
         ob_end_flush(); // Flush the buffer
         exit();
     } else {
@@ -56,7 +58,7 @@ function getLastFeedId($con, $user_id){
     }
 }
 function addNewFeed($con, $user_id, $feed_id, $feed_name){
-    $query = $con->prepare('INSERT INTO feed (user_id, feed_id, feed_name,) VALUES (:user_id, :feed_id, :feed_name,)');
+    $query = $con->prepare('INSERT INTO feed (user_id, feed_id, feed_name) VALUES (:user_id, :feed_id, :feed_name)');
     $query->bindParam(':user_id', $user_id);
     $query->bindParam(':feed_id', $feed_id);
     $query->bindParam(':feed_name', $feed_name);
@@ -96,7 +98,7 @@ function getAllFeed($con, $user_id)
                <input type="text" class="form-control" value="<?php echo $user_id; ?>"  name="user_id" id="user_id" placeholder="User Id" readonly >
           </div>
           <div class="input-group mb-3" >
-               <input type="text" class="form-control" value="<?php echo getLastFeedId($con, $user_id); ?>" name="user_id" id="user_id"  placeholder="Feed Id" readonly >
+               <input type="text" class="form-control" value="<?php echo getLastFeedId($con, $user_id); ?>" name="feed_id" id="feed_id"  placeholder="Feed Id" readonly >
           </div>
           <div class="input-group mb-5" >              
                <input type="text" class="form-control" name="feed_name" id="formFeedName" placeholder="Feed Name" required>
@@ -142,8 +144,8 @@ function getAllFeed($con, $user_id)
                     ?>
                         <tr>
                             <th><?php echo $serialnum; ?></th>
-                            <td><?php echo $medicine['feed_id']; ?></td>
-                            <td><?php echo $medicine['feed_name']; ?></td>
+                            <td><?php echo $feed['feed_id']; ?></td>
+                            <td><?php echo $feed['feed_name']; ?></td>
                             <td><a href="edit_feed.php?id=<?php echo $feed['feed_id']; ?>" class="btn btn-primary">Edit</a></td>
                             <td><a href="delete_feed.php" class="btn btn-danger">Delete</a></td>
                         </tr>
