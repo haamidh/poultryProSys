@@ -21,22 +21,26 @@ $frame = new Frame();
 $frame->first_part($farm);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $sup_name = $_POST['sup_name'];
-    $address = $_POST['address'];
-    $city = $_POST['city'];
-    $mobile = $_POST['mobile'];
-    $email = $_POST['email'];
-    $sup_id = $_POST['sup_id'];
+    if (isset($_POST['add_supplier'])) {
+        $sup_name = $_POST['sup_name'];
+        $address = $_POST['address'];
+        $city = $_POST['city'];
+        $mobile = $_POST['mobile'];
+        $email = $_POST['email'];
+        $sup_id = getLastSupplierId($con, $user_id);
 
-    addNewSupplier($con, $user_id, $sup_id, $sup_name, $address, $city, $mobile, $email);
+        if (addNewSupplier($con, $user_id, $sup_id, $sup_name, $address, $city, $mobile, $email)) {
+            header('Location: supplier.php?msg=Data Updated Successfully&user_id=' . $user_id);
+            exit();
+        } else {
+            echo "Record not added";
+        }
+    }
 }
 
 function getLastSupplierId($con, $user_id)
 {
     $query = $con->prepare("SELECT sup_id FROM supplier WHERE user_id=? ORDER BY sup_id DESC LIMIT 1");
-    if (!$query) {
-        die("Running Query failed: " . $con->errorInfo()[2]);
-    }
     $query->bindParam(1, $user_id, PDO::PARAM_INT);
     $query->execute();
     $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -73,10 +77,9 @@ function getAllSupplier($con, $user_id)
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
-
-
 <div class="container contentArea" style="margin-left: -30px;margin-right:10px">
-    <div class="row2">
+
+    <div class="row2" style="margin-left: -20px;">
         <div class="col4 mx-5 my-4" style="text-align: left; width:300px;">
             <div class="card-header card text-white" style="background-color: #40826D;">
                 <h2 class="display-6 text-center" style="font-size: 30px; font-weight:500;">Supplier Details</h2>
@@ -86,7 +89,7 @@ function getAllSupplier($con, $user_id)
                 <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
 
                 <div class="col-md-12">
-                    <label for="sup_id" class="form-label">Supplier id:</label>
+                    <label for="sup_id" class="form-label">Supplier ID:</label>
                     <input type="text" class="form-control" value="<?php echo getLastSupplierId($con, $user_id); ?>" id="sup_id" name="sup_id" readonly>
                 </div>
                 <div class="col-md-12">
@@ -110,23 +113,21 @@ function getAllSupplier($con, $user_id)
                     <input type="text" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="col-12" style="text-align: center;">
-                    <button type="submit" class="btn btn-primary" name="add_supplier" value="Add supplier">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="add_supplier" value="Add Supplier">Submit</button>
                 </div>
             </form>
         </div>
 
-
         <div class="col5" style="margin-right: 10px;">
             <br>
-            <table class="table table-striped">
+            <table class="table table-striped" style="width: 550px;">
                 <thead class="table">
                     <tr>
                         <th scope="col" style="background-color: #40826D;">#</th>
                         <th scope="col" style="background-color: #40826D;">Supplier ID</th>
                         <th scope="col" style="background-color: #40826D;">Supplier Name</th>
                         <th scope="col" style="background-color: #40826D;">Mobile</th>
-                        <th scope="col" style="background-color: #40826D;">Edit</th>
-                        <th scope="col" style="background-color: #40826D;">Delete</th>
+                        <th scope="col" colspan="2" style="background-color: #40826D;">Option</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -149,10 +150,7 @@ function getAllSupplier($con, $user_id)
             </table>
         </div>
     </div>
-
 </div>
-
-
 <?php
 $frame->last_part();
 ?>

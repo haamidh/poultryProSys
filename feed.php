@@ -1,18 +1,19 @@
 <?php
-ob_start(); // Start output buffering
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
 require_once 'config.php';
 require_once 'checkLogin.php';
 require_once 'frame.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php?msg=Please Login before Proceeding");
-    ob_end_flush(); // Flush the buffer
+// Check if user is logged in and has the correct role
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
+    header("Location: login.php");
     exit();
 }
-$user_id = $_SESSION["user_id"];
+
+$user_id = $_SESSION['user_id'];
 $database = new Database();
 $con = $database->getConnection();
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
@@ -20,30 +21,26 @@ $frame = new Frame();
 $frame->first_part($farm);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_id = $_POST['user_id'];
-    $feed_id = getLastFeedId($con, $user_id);
-    $feed_name = $_POST['feed_name'];
+    if (isset($_POST['add_feed'])) {
+        $feed_name = $_POST['feed_name'];
+        $feed_id = getLastFeedId($con, $user_id);
 
-    if ($con == false) {
-        die("Error Establishing Connection: " . $con->errorInfo());
+        if (addNewFeed($con, $user_id, $feed_id, $feed_name)) {
+            // Redirect after successful operation
+            $addmessage = "Record added";
+        } else {
+            echo "Record not added";
+        }
+    } elseif (isset($_POST['buy_feed'])) {
+        // Handle "Buy Feed" logic here
+    } elseif (isset($_POST['use_feed'])) {
+        // Handle "Use Feed" logic here
     }
-
-    if (addNewFeed($con, $user_id, $feed_id, $feed_name)) {
-        header('Location: feed.php?msg=Data Updated Successfully&user_id=' . $user_id);
-        ob_end_flush(); // Flush the buffer
-        exit();
-    } else {
-        echo "Record not added";
-    }
-    
 }
-function getLastFeedId($con, $user_id){
+
+function getLastFeedId($con, $user_id)
+{
     $query = $con->prepare("SELECT feed_id FROM feed WHERE user_id=? ORDER BY feed_id DESC LIMIT 1");
-
-    if (!$query) {
-        die("Running Query failed: " . $con->errorInfo()[2]);
-    }
-
     $query->bindParam(1, $user_id, PDO::PARAM_INT);
     $query->execute();
     $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -57,7 +54,9 @@ function getLastFeedId($con, $user_id){
         return 'F' . $updatedId;
     }
 }
-function addNewFeed($con, $user_id, $feed_id, $feed_name){
+
+function addNewFeed($con, $user_id, $feed_id, $feed_name)
+{
     $query = $con->prepare('INSERT INTO feed (user_id, feed_id, feed_name) VALUES (:user_id, :feed_id, :feed_name)');
     $query->bindParam(':user_id', $user_id);
     $query->bindParam(':feed_id', $feed_id);
@@ -65,6 +64,7 @@ function addNewFeed($con, $user_id, $feed_id, $feed_name){
 
     return $query->execute();
 }
+
 function getAllFeed($con, $user_id)
 {
     $query = $con->prepare('SELECT * FROM feed WHERE user_id = :user_id');
@@ -72,67 +72,56 @@ function getAllFeed($con, $user_id)
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
-
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-          <div class="container contentArea">
-          <div class="col float-left">
-            
-          <div class="card-header card text-white bg-success bg-gradient mb-3 col-lg-8">
-                <h2 class="display-9 text-center">Feed Details</h2>
-            </div>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
-        <div class = "form-group row">
-            <div class ="mb-3 col-8">
-          <div class="input-group mb-3" >         
-               <input type="text" class="form-control" value="<?php echo $user_id; ?>"  name="user_id" id="user_id" placeholder="User Id" readonly >
-          </div>
-          <div class="input-group mb-3" >
-               <input type="text" class="form-control" value="<?php echo getLastFeedId($con, $user_id); ?>" name="feed_id" id="feed_id"  placeholder="Feed Id" readonly >
-          </div>
-          <div class="input-group mb-5" >              
-               <input type="text" class="form-control" name="feed_name" id="formFeedName" placeholder="Feed Name" required>
-          </div>
-          <div class="d-grid mb-3">
-              <input type="submit" class="btn btn-success" name="add_feed" value="Add Feed">
-          </div>
-          <div class="d-grid mb-3">
-              <button type="button" class="btn btn-success">Buy feed</button>
-          </div>
-          <div class="d-grid mb-3">
-              <button type="button" class="btn btn-success">Use feed</button>
-          </div>
-          </div>
-    </div>
-    </form>
-    
-    </div>
-    </div>
+<div class="container contentArea" style="margin-left: -30px;margin-right:10px">
+    <?php if (isset($addmessage)) {
+        echo $addmessage;
+    }
+    ?>
+    <div class="row2">
+        <div class="col4 mx-5 my-4" style="text-align: left; width:300px;">
+            <div class="col-md-12" style="text-align: center;margin-bottom:10px">
+                <div class="card-header card text-white" style="background-color: #40826D;">
 
-   <div>
-   
-        <div class="container float-left">
-        <div class="col">
-                <br>
-                    
-            <table class="table table-striped">
-                <thead class="table-dark">
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                        <button type="submit" class="btn btn-warning" name="buy_feed" style="margin-right: 20px;">Buy Feed</button>
+                        <button type="submit" class="btn btn-info" name="use_feed">Use Feed</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="card-header card text-white" style="background-color: #40826D;">
+                <h2 class="display-6 text-center" style="font-size: 30px; font-weight:500;">Feed Details</h2>
+            </div>
+            <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+
+                <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
+
+                <div class="col-md-12">
+                    <label for="feed_id" class="form-label">Feed ID:</label>
+                    <input type="text" class="form-control" value="<?php echo getLastFeedId($con, $user_id); ?>" id="feed_id" name="feed_id" readonly>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="feed_name" class="form-label">Feed Name:</label>
+                    <input type="text" class="form-control" id="feed_name" name="feed_name" required>
+                </div>
+                <div class="col-md-12" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary" name="add_feed">Add Feed</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col5" style="margin-right: 10px;">
+            <br>
+            <table class="table table-striped" style="width: 550px;">
+                <thead class="table">
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Feed ID</th>
-                        <th scope="col">Feed Name</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col" style="background-color: #40826D;">#</th>
+                        <th scope="col" style="background-color: #40826D;">Feed ID</th>
+                        <th scope="col" style="background-color: #40826D;">Feed Name</th>
+                        <th scope="col" style="background-color: #40826D;">Option</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -146,17 +135,17 @@ function getAllFeed($con, $user_id)
                             <th><?php echo $serialnum; ?></th>
                             <td><?php echo $feed['feed_id']; ?></td>
                             <td><?php echo $feed['feed_name']; ?></td>
-                            <td><a href="edit_feed.php?id=<?php echo $feed['feed_id']; ?>" class="btn btn-primary">Edit</a></td>
-                            <td><a href="delete_feed.php" class="btn btn-danger">Delete</a></td>
+                            <td><a href="edit_feed.php?id=<?php echo $feed['feed_id']; ?>" class="btn btn-primary">Edit</a>
+                                &nbsp;&nbsp;
+                                <a href="delete_feed.php?id=<?php echo $feed['feed_id']; ?>" class="btn btn-danger">Delete</a>
+                            </td>
                         </tr>
-                    <?php
-                    }
-                    ?>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
     </div>
-    </div>
-    
-    </body>
-</html>
+</div>
+<?php
+$frame->last_part();
+?>

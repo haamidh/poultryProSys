@@ -20,92 +20,61 @@ $frame->first_part($farm);
 
 ?>
 
-<!DOCTYPE html>
-<html>
+<div class="container contentArea" style="margin-left: -30px;margin-right:10px">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css">
-    
-</head>
+    <div class="row2">
+        <div class="col4 mx-5 my-4" style="text-align: left; width:500px;">
 
-<body>
-    <div class="container contentArea">
-        <div class="col float-left">
-            <div class="card-header card text-white bg-success bg-gradient mb-3">
-                <h3 class="display-6 text-left">Add Product</h3>
+            <div class="card-header card text-white" style="background-color: #40826D;">
+                <h2 class="display-6 text-center" style="font-size: 30px; font-weight:500;">Product Details</h2>
             </div>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <div class="form-group row">
-                    <div class="mb-1 col-sm">
-                        <div class="card-body">
-                            <div class="card mb-3 bg-success bg-gradient">
-                                <div class="card-header mb-0 text-white">Farm Name</div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                        <select class="form-select">
-                            <option selected>Select Category</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-1">
-                        <label for="">Name</label>
-                        <input type="text" required name="name" placeholder="Enter product name"class="form-control">
-                    </div>
-                    
-                    <div class="col-md-12 mb-1">
-                        <label for="">Small Description</label>
-                        <textarea rows="3" required name="small_description" placeholder="Enter small description"class="form-control"></textarea>
-                    </div>
-                    <div class="col-md-6 mb-1">
-                        <label for="">Original Price</label>
-                        <input type="text" required name="original_price" placeholder="Enter Original Price"class="form-control">
-                    </div>
-                    <div class="col-md-6 mb-1">
-                        <label for="">Selling Price</label>
-                        <input type="text" required name="selling_price" placeholder="Enter Selling Price" class="form-control">
-                    </div>
-                    <div class="col-md-12 mb-1">
-                        <label for="">Upload Image</label>
-                        <input type="file" required name="image" class="form-control">
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-md-6">
-                            <label for="">Quantity</label>
-                            <input type="number" required name="qty" placeholder="Enter Quantity"class="form-control">
-                        </div>
-                        <div class="col-md-1 ">
-                            
-                        </div>
-                        <div class="col-md-2 mt-1"><br>
-                            <label for="">Status</label>
-                            <input type="checkbox" name="status">
-                        </div>
-                        <div class="col-md-3 mt-1"><br>
-                            <label for="">Popular</label>
-                            <input type="checkbox" name="popular">
-                        </div>
-                    </div>
-                    
-                    
-                    
-                    <div class="col-md-12 mb-1">
-                        <button input type="submit" class="btn btn-primary mt-1"  name="add_product_btn">Save</button>
-                    </div>
+            <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+
+                <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
+                <div class="col-md-12">
+                    <label for="feed_id" class="form-label">Product ID:</label>
+                    <input class="form-control" type="text" name="med_id" id="med_id" readonly>
+                </div>
+                <div class="col-md-12">
+                    <label for="feed_id" class="form-label">Select Category:</label>
+                    <select class="form-select">
+                        <option disabled>Select Category</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="product_name" class="form-label">Product Name:</label>
+                    <input class="form-control" type="text" name="product_name" id="product_name" required>
+                </div>
+
+
+                <div class="col-md-12">
+                    <label for="selling_price" class="form-label">Selling Price:</label>
+                    <input class="form-control" type="text" name="selling_price" id="selling_price" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="product_img" class="form-label">Product Image:</label>
+                    <input class="form-control" type="file" name="product_img" id="product_img" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="product_description" class="form-label">Description:</label>
+                    <textarea class="form-control" id="product_description" name="product_description" rows="3" required></textarea>
+                </div>
+
+                <div class="col-md-12" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary" name="add_medicine">Add Medicine</button>
                 </div>
             </form>
         </div>
+
     </div>
 
-</body>
-
-</html>
+</div>
+<?php
+$frame->last_part();
+?>

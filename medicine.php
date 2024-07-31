@@ -84,75 +84,69 @@ function getAllMedicines($con, $user_id)
 }
 ?>
 
-<!DOCTYPE html>
-<html>
+<div class="container contentArea" style="margin-left: -30px;margin-right:10px">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <div class="row2">
+        <div class="col4 mx-5 my-4" style="text-align: left; width:500px;">
 
-<body>
-    
-    <div class="container contentArea">
-        
-        <div class="col float-left">
-            <div class="card-header card text-white bg-success bg-gradient mb-3">
-                <h2 class="display-6 text-center">Medicine Details</h2>
+            <div class="card-header card text-white" style="background-color: #40826D;">
+                <h2 class="display-6 text-center" style="font-size: 30px; font-weight:500;">Medicine Details</h2>
             </div>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <div class="form-group row">
-                    <div class="mb-3 col-sm">
-                        <div class="card-body">
-                            <div class="card mb-3 bg-success bg-gradient">
-                                <div class="card-header text-white">Farm Name</div>
-                            </div>
-                            <input class="form-control" type="text" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
-                        </div>
-                    </div>
-                    <div class="mb-3 col-sm">
-                        <div class="card-body">
-                            <div class="card mb-3 bg-success bg-gradient">
-                                <div class="card-header text-white">Medicine ID</div>
-                            </div>
-                            <input class="form-control" type="text" value="<?php echo getLastMedicineId($con, $user_id); ?>" name="med_id" id="med_id" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="card mb-3 bg-dark bg-gradient">
-                            <div class="card-header text-white">Medicine Name</div>
-                        </div>
-                        <input class="form-control" type="text" name="med_name" id="med_name" required>
-                    </div>
-                    <div class="form-group mb-3 col-sm"><br>
-                        <div class="card mb-3 bg-dark bg-gradient">
-                            <div class="card-header text-white">Description</div>
-                        </div>
-                        <textarea class="form-control" id="med_description" name="med_description" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" class="btn btn-success bg-gradient" name="add_medicine" value="Add Medicine">
-                    </div>
+            <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+
+                <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
+
+                <div class="col-md-12">
+                    <label for="med_id" class="form-label">Medicine ID:</label>
+                    <input class="form-control" type="text" value="<?php echo getLastMedicineId($con, $user_id); ?>" name="med_id" id="med_id" readonly>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="med_name" class="form-label">Medicine Name:</label>
+                    <input class="form-control" type="text" name="med_name" id="med_name" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="med_description" class="form-label">Description:</label>
+                    <textarea class="form-control" id="med_description" name="med_description" rows="3" required></textarea>
+                </div>
+                <div class="col-md-12" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary" name="add_medicine">Add Medicine</button>
                 </div>
             </form>
         </div>
+
+        <div class="col5" style="margin-right: 10px;">
+            <div class="col-md-12" style="text-align: center;margin-bottom:10px">
+                <div class="card-header card text-white" style="background-color: #40826D;margin-top:150px;margin-left:20px">
+
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                        <button type="submit" class="btn btn-warning" name="buy_medicine" style="margin-right: 20px;">Buy Medicine</button>
+                        <button type="submit" class="btn btn-info" name="use_medicine">Use Medicine</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
     </div>
-    <div class="col-sm">
-        <div class="container float-left ">
-            <div class="col">
-                <br>
+
+
+
+
+    <div class="row2">
+
+        <div class="col5" style="margin-right: 10px;">
+            <br>
             <table class="table table-striped">
-                <thead class="table-dark">
+                <thead class="table">
+
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Medicine ID</th>
-                        <th scope="col">Medicine Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col" style="background-color: #40826D;">#</th>
+                        <th scope="col" style="background-color: #40826D;">MedID</th>
+                        <th scope="col" style="background-color: #40826D;">Medicine Name</th>
+                        <th scope="col" style="background-color: #40826D;">Description</th>
+                        <th scope="col" colspan="2" style="background-color: #40826D;">Option</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -177,7 +171,7 @@ function getAllMedicines($con, $user_id)
             </table>
         </div>
     </div>
-    </div>
-</body>
-
-</html>
+</div>
+<?php
+$frame->last_part();
+?>

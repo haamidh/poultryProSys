@@ -1,3 +1,18 @@
+<?php
+// Start the session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include database configuration and Feedback class
+include 'config.php';
+include 'Feedback.php';
+require_once 'checkLogin.php'; // This should handle checking if the user is logged in
+
+// Initialize database connection
+$database = new Database();
+$db = $database->getConnection();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -93,6 +108,123 @@
             background-color: #40826D !important;
             color: white !important;
         }
+
+        .navbar-nav .nav-item a {
+            font-weight: bold;
+        }
+
+        .navbar {
+            background-color: #356854;
+        }
+
+        .navbar .nav-link {
+            color: white !important;
+        }
+
+        .navbar .nav-link:hover {
+            color: #ddd !important;
+        }
+
+        .navbar .nav-item.active .nav-link {
+            color: #fff !important;
+            text-decoration: underline;
+        }
+
+        .navbar-brand img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+
+
+        .solid-hr {
+            border: 5px solid white;
+            border-radius: 5px;
+
+            margin-left: 250px;
+            margin-right: 250px;
+        }
+
+        .solid-hr1 {
+            border: 5px solid black;
+            border-radius: 5px;
+
+            margin-left: 250px;
+            margin-right: 250px;
+            margin-top: 100px;
+        }
+
+        .sign-in-btn {
+            background-color: #B7BF4A !important;
+            color: white !important;
+        }
+
+        .contentArea {
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+
+        .contentArea h1 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0);
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .text-container {
+            position: relative;
+            z-index: 2;
+            padding: 150px 70px;
+        }
+
+        .footer {
+            background-color: #356854;
+            color: white;
+            padding: 20px 0;
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .footer-icons {
+            font-size: 28px;
+            margin-top: 10px;
+        }
+
+        .footer-icons a {
+            color: white;
+            margin: 0 10px;
+        }
+
+        .footer-icons a:hover {
+            color: #ddd;
+        }
     </style>
 
 </head>
@@ -115,7 +247,7 @@
                     <a class="nav-link" href="#">Market Place</a>
                 </li>
                 <li class="nav-item mx-4">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link" href="contact_us.php">Contact Us</a>
                 </li>
                 <li class="nav-item mx-4">
                     <a class="nav-link" href="feedbacks.php">Review</a>
@@ -131,17 +263,7 @@
     </nav>
 
     <?php
-    // Start the session
-    session_start();
 
-    // Include database configuration and Feedback class
-    include 'config.php';
-    include 'Feedback.php';
-    require_once 'checkLogin.php'; // This should handle checking if the user is logged in
-
-    // Initialize database connection
-    $database = new Database();
-    $db = $database->getConnection();
 
     // Initialize Feedback class
     $feedback = new Feedback($db);
@@ -238,7 +360,48 @@
             </table>
         </div>
 
+
+
     </div>
+    <br>
+    <br>
+
+    <footer class="footer">
+        <div style="align-items: center; text-align: center;">
+            <a href="index.html" style="color: white;">About Us</a>&nbsp;&nbsp;
+            <a href="#" style="color: white;">Market Place</a>&nbsp;&nbsp;
+            <a href="contact_us.php" style="color: white;">Contact Us</a>&nbsp;&nbsp;
+            <a href="feedbacks.php" style="color: white;">Review</a>&nbsp;&nbsp;
+            <a href="login.php" style="color: white;">Log In</a>&nbsp;&nbsp;
+            <a href="register.php" style="color: white;">Sign Up</a>
+        </div>
+        <div style="align-items: center; text-align: center;">
+            <hr style="border: 1px solid white; border-radius: 5px;  margin-left: 50px; margin-right: 50px;">
+        </div>
+        <div style="display: flex; align-items: center;">
+            <div style="flex: 1; text-align: center;">
+                <p>&copy; 2024 PoultryPro. All Rights Reserved.</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <a class="navbar-brand mx-5" href="index.html">
+                    <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%;">
+                    PoultryPro
+                </a>
+            </div>
+            <div style="flex: 1; text-align: center; font-size: 28px;">
+                <a href="login.php" style="color: white;"><i class="bi bi-instagram"></i></a>&nbsp;
+                <a href="https://www.facebook.com/abdulrahman.dulapandan?mibextid=JRoKGi"><i class="bi bi-facebook"></i></a>
+                &nbsp;
+                <a href="https://wa.me/+94768821356?text=I'm%20interested%20in%20your%20car%20for%20sale"><i class="bi bi-whatsapp"></i></a>
+                &nbsp;
+
+
+
+            </div>
+
+        </div>
+    </footer>
+
 </body>
 
 </html>

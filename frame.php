@@ -25,12 +25,30 @@ class Frame
 
         <body>
             <div class="header pt-1 navbar-expand-lg navbar-dark">
-                <a class="navbar-brand" href="#" style="font-weight: bold; font-size: 20px;"><?php echo strtoupper(htmlspecialchars($farm['username'])); ?></a><br>
-                <a style="font-weight: bold;"><?php echo strtoupper(htmlspecialchars($farm['address']) . " - " . htmlspecialchars($farm['city'])); ?></a>
+                <div class="d-flex justify-content-between align-items-center w-100" style="padding-left: 250px;">
+                    <div class="mx-auto text-center">
+                        <a class="navbar-brand" href="#" style="font-weight: bold; font-size: 20px;">
+                            <?php echo strtoupper(htmlspecialchars($farm['username'])); ?>
+                        </a><br>
+                        <a style="font-weight: bold;">
+                            <?php echo strtoupper(htmlspecialchars($farm['address']) . " - " . htmlspecialchars($farm['city'])); ?>
+                        </a>
+                    </div>
+                    <div class="navbar-footer">
+                        <a href="logout.php" class="nav-link" style="color: white;font-weight:bold;">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="raw">
                 <div class="sidebar show justify-content-center">
-                    <aside class="sideNew" id="sidebar">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <aside class="sideNew collapse" id="sidebar">
                         <nav class="navbar navbar-dark">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
@@ -65,7 +83,7 @@ class Frame
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="bi bi-cart4"></i>
+                                        <i class="bi bi-cash-coin"></i>
                                         <span>ORDER</span>
                                     </a>
                                 </li>
@@ -76,17 +94,17 @@ class Frame
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="supplier.php"  class="nav-link">
+                                    <a href="supplier.php" class="nav-link">
                                         <i class="bi bi-person-fill-up"></i>
                                         <span>SUPPLIER</span>
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-caret-down-fill"></i>
+                                        <i class="bi bi-clipboard-data-fill"></i>
                                         <span>REPORTS</span>
                                     </a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" href="farm_stock.php">Stock Report</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
@@ -104,12 +122,6 @@ class Frame
                                 </li>
                             </ul>
                         </nav>
-                        <div class="navbar-footer">
-                            <a href="logout.php" class="nav-link">
-                                <i class="bi bi-box-arrow-left"></i>
-                                <span>Logout</span>
-                            </a>
-                        </div>
                     </aside>
                 </div>
             <?php

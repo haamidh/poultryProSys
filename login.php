@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['role'] = $user->role;
         $_SESSION['status'] = $user->status;
 
-        switch ($user->role) {
+        switch ($_SESSION['role']) {
             case "admin":
                 header("Location: admin_dashboard.php");
                 exit();
@@ -51,7 +51,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Log in form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        .footer {
+            background-color: #356854;
+            color: white;
+            padding: 20px 0;
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .footer-icons {
+            font-size: 28px;
+            margin-top: 10px;
+        }
+
+        .footer-icons a {
+            color: white;
+            margin: 0 10px;
+        }
+
+        .footer-icons a:hover {
+            color: #ddd;
+        }
+    </style>
 </head>
 
 <body>
@@ -67,15 +107,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav align-items-center">
                 <div class="justify-content-center mt-2" style="color:white;">You don't have an account?</div>
-                <li class="nav-item align-items-center mx-4" style="background-color:#8A9A5B;">
-                    <a class="nav-link" href="register.php">Sign Up</a>
+                <li class="nav-item align-items-center mx-4" style="background-color:#B7BF4A;">
+                    <a class="nav-link" href="register.php" style="font-weight: bold; color:white;">Sign Up</a>
                 </li>
             </ul>
         </div>
     </nav>
     <?php
     if (isset($_GET['status']) && $_GET['status'] === 'blocked') {
-        
+
     ?> <div class='alert alert-danger' role='alert'>
             Your account was temporarily blocked by admin. Contact admin via this <a href='https://mail.google.com/mail' class='alert-link'> arahmandulapandan@gmail.com</a> mail.
         </div><?php
@@ -116,6 +156,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <div style="align-items: center; text-align: center;">
+            <a href="index.html" style="color: white;">About Us</a>&nbsp;&nbsp;
+            <a href="#" style="color: white;">Market Place</a>&nbsp;&nbsp;
+            <a href="contact_us.php" style="color: white;">Contact Us</a>&nbsp;&nbsp;
+            <a href="feedbacks.php" style="color: white;">Review</a>&nbsp;&nbsp;
+            <a href="login.php" style="color: white;">Log In</a>&nbsp;&nbsp;
+            <a href="register.php" style="color: white;">Sign Up</a>
+        </div>
+        <div style="align-items: center; text-align: center;">
+            <hr style="border: 1px solid white; border-radius: 5px;  margin-left: 50px; margin-right: 50px;">
+        </div>
+        <div style="display: flex; align-items: center;">
+            <div style="flex: 1; text-align: center;">
+                <p>&copy; 2024 PoultryPro. All Rights Reserved.</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <a class="navbar-brand mx-5" href="index.html">
+                    <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%;">
+                    PoultryPro
+                </a>
+            </div>
+            <div style="flex: 1; text-align: center; font-size: 28px;">
+                <a href="login.php" style="color: white;"><i class="bi bi-instagram"></i></a>&nbsp;
+                <a href="https://www.facebook.com/abdulrahman.dulapandan?mibextid=JRoKGi"><i class="bi bi-facebook"></i></a>
+                &nbsp;
+                <a href="https://wa.me/+94768821356?text=I'm%20interested%20in%20your%20car%20for%20sale"><i class="bi bi-whatsapp"></i></a>
+                &nbsp;
+
+
+
+            </div>
+
+        </div>
+    </footer>
 
 </body>
 

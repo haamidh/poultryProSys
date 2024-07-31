@@ -48,11 +48,16 @@
 }
 
 #sidebar {
-    width: 300px;
     background-color: #40826D;
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 300px;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    overflow-y: auto;
+    z-index: 1000;
 }
 
 .navbar-nav {
@@ -105,9 +110,7 @@ a.nav-link {
 }
 
 .navbar-footer {
-    margin-top: auto;
-    padding-left: 55px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: right;
 }
 
 .contentArea {
@@ -125,6 +128,10 @@ a.nav-link {
     .sidebar {
         width: 100vw;
         text-align: center;
+    }
+    #sidebar {
+        position: static; 
+        width: 100vw; 
     }
 
     .contentArea {
@@ -154,10 +161,7 @@ a.nav-link {
         height: calc(100vh - 60px);
     }
 
-    #sidebar {
-        width: 100vw;
-    }
-
+    
     .navbar-footer {
         text-align: center;
     }
@@ -201,7 +205,8 @@ a.nav-link {
     }
 
     #sidebar {
-        width: 100vw;
+        position: static; 
+        width: 100vw; 
     }
 
     .navbar-footer {

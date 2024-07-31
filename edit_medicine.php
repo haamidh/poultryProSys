@@ -61,54 +61,43 @@ $med_description = $medicine['description'];
 
 ?>
 
-<div class="container contentArea">
-    <div class="col float-left">
-        <div class="card-header card text-white bg-success bg-gradient mb-3">
-            <h2 class="display-6 text-center">Medicine Details</h2>
-        </div>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?med_id=" . $med_id); ?>" method="post">
-            <div class="form-group row">
-                <div class="mb-3 col-sm">
-                    <div class="card-body">
-                        <div class="card mb-3 bg-success bg-gradient">
-                            <div class="card-header text-white">Farm Name</div>
-                        </div>
-                        <input class="form-control" type="text" value="<?php echo htmlspecialchars($user_id); ?>" name="user_id" id="user_id" readonly>
-                    </div>
+<div class="container contentArea" style="margin-left: -30px;margin-right:10px">
+
+    <div class="row2" >
+        <div class="col4 mx-5 my-4" style="text-align: left; width:500px;">
+
+            <div class="card-header card text-white" style="background-color: #40826D;">
+                <h2 class="display-6 text-center" style="font-size: 30px; font-weight:500;">Medicine Details</h2>
+            </div>
+            <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+
+                <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
+
+                <div class="col-md-12">
+                    <label for="feed_id" class="form-label">Medicine ID:</label>
+                    <input class="form-control" type="text" value="<?php echo htmlspecialchars($med_id); ?>" name="med_id" id="med_id" readonly>
                 </div>
-                <div class="mb-3 col-sm">
-                    <div class="card-body">
-                        <div class="card mb-3 bg-success bg-gradient">
-                            <div class="card-header text-white">Medicine ID</div>
-                        </div>
-                        <input class="form-control" type="text" value="<?php echo htmlspecialchars($med_id); ?>" name="med_id" id="med_id" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="card mb-3 bg-dark bg-gradient">
-                        <div class="card-header text-white">Medicine Name</div>
-                    </div>
+
+                <div class="col-md-12">
+                    <label for="feed_name" class="form-label">Medicine Name:</label>
                     <input class="form-control" type="text" name="med_name" id="med_name" value="<?php echo htmlspecialchars($med_name); ?>" required>
                 </div>
-                <div class="form-group mb-3 col-sm"><br>
-                    <div class="card mb-3 bg-dark bg-gradient">
-                        <div class="card-header text-white">Description</div>
-                    </div>
+
+                <div class="col-md-12">
+                    <label for="feed_name" class="form-label">Description:</label>
                     <textarea class="form-control" id="med_description" name="med_description" rows="3" required><?php echo htmlspecialchars($med_description); ?></textarea>
                 </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-success bg-gradient" name="Update" value="Update">
+                <div class="col-md-12" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary" name="Update">Update Medicine</button>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
+
+
     </div>
-</div>
-<div>
 
 </div>
-</div>
-
 <?php
 $frame->last_part();
-ob_end_flush(); // End output buffering and flush the output
+ob_end_flush();
 ?>
