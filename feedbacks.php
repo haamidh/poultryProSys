@@ -23,6 +23,7 @@ $db = $database->getConnection();
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
         .navbar-nav .nav-item a {
@@ -167,6 +168,7 @@ $db = $database->getConnection();
             position: relative;
             text-align: center;
             color: white;
+
         }
 
         .contentArea h1 {
@@ -300,9 +302,9 @@ $db = $database->getConnection();
     $feedbacks = $feedback->readFeedback();
     ?>
 
-    <div class="container">
+    <div class="container" style="margin-bottom: 200px;">
 
-        <div class="col-sm-4 float-left">
+        <div class="col-sm-4 float-left" style="margin-right: 50px;">
 
 
             <div class="card-header card text-white bg-dark mb-3" id="card-header">
@@ -332,35 +334,37 @@ $db = $database->getConnection();
             </form>
         </div>
 
-        <div class="card mt-5">
-            <table class="table">
-                <thead class="custom-thead">
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Rating</th>
-                        <th scope="col">Comment</th>
-                        <th scope="col">Submitted At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($feedbacks as $feedback) : ?>
+        <div class="col">
+
+            <div class="card mt-5">
+                <table class="table">
+                    <thead class="custom-thead">
                         <tr>
-                            <td><?php echo htmlspecialchars($feedback['username']); ?></td>
-                            <td><?php echo htmlspecialchars($feedback['rating']); ?></td>
-                            <td><?php echo htmlspecialchars($feedback['comment']); ?></td>
-                            <td><?php echo htmlspecialchars($feedback['created_at']); ?></td>
+                            <th scope="col">Name</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Submitted At</th>
                         </tr>
-                    <?php endforeach; ?>
-                    <?php if (empty($feedbacks)) : ?>
-                        <tr>
-                            <td colspan="5">No feedback found.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($feedbacks as $feedback) : ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($feedback['username']); ?></td>
+                                <td><?php echo htmlspecialchars($feedback['rating']); ?></td>
+                                <td><?php echo htmlspecialchars($feedback['comment']); ?></td>
+                                <td><?php echo htmlspecialchars($feedback['created_at']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php if (empty($feedbacks)) : ?>
+                            <tr>
+                                <td colspan="5">No feedback found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
-
-
 
     </div>
     <br>

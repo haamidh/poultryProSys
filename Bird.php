@@ -196,36 +196,38 @@ class Bird implements crud
     // Method to update a batch of birds
     public function update($batch_id, $user_id)
     {
-        $query = "UPDATE " . $this->table_name . " SET sup_id = :sup_id, bird_type = :bird_type, unit_price = :unit_price, quantity = :quantity, total_cost = :total_cost, date = :date WHERE batch_id = :batch_id AND user_id = :user_id";
-    
+        $query = "UPDATE " . $this->table_name . " SET sup_id = :sup_id, sup_name = :sup_name, bird_type = :bird_type, unit_price = :unit_price, quantity = :quantity, total_cost = :total_cost, date = :date WHERE batch_id = :batch_id AND user_id = :user_id";
+
         $stmt = $this->conn->prepare($query);
-    
+
         // Sanitize input
         $this->user_id = htmlspecialchars(strip_tags($this->user_id));
         $this->batch_id = htmlspecialchars(strip_tags($this->batch_id));
         $this->sup_id = htmlspecialchars(strip_tags($this->sup_id));
+        $this->sup_name = htmlspecialchars(strip_tags($this->sup_name));
         $this->bird_type = htmlspecialchars(strip_tags($this->bird_type));
         $this->unit_price = htmlspecialchars(strip_tags($this->unit_price));
         $this->quantity = htmlspecialchars(strip_tags($this->quantity));
         $this->total_cost = htmlspecialchars(strip_tags($this->total_cost));
         $this->date = htmlspecialchars(strip_tags($this->date));
-    
+
         // Bind new values
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':batch_id', $this->batch_id);
         $stmt->bindParam(':sup_id', $this->sup_id);
+        $stmt->bindParam(':sup_name', $this->sup_name);
         $stmt->bindParam(':bird_type', $this->bird_type);
         $stmt->bindParam(':unit_price', $this->unit_price);
         $stmt->bindParam(':quantity', $this->quantity);
         $stmt->bindParam(':total_cost', $this->total_cost);
         $stmt->bindParam(':date', $this->date);
-    
+
         if ($stmt->execute()) {
             return true;
         }
         return false;
     }
-    
+
 
 
     public function delete($batch_id, $user_id)
@@ -241,8 +243,6 @@ class Bird implements crud
         if ($stmt->execute()) {
             return true;
         } else {
-            // Debugging output
-            print_r($stmt->errorInfo());
             return false;
         }
     }

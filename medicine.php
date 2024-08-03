@@ -120,10 +120,12 @@ function getAllMedicines($con, $user_id)
             <div class="col-md-12" style="text-align: center;margin-bottom:10px">
                 <div class="card-header card text-white" style="background-color: #40826D;margin-top:150px;margin-left:20px">
 
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                        <button type="submit" class="btn btn-warning" name="buy_medicine" style="margin-right: 20px;">Buy Medicine</button>
-                        <button type="submit" class="btn btn-info" name="use_medicine">Use Medicine</button>
-                    </form>
+                    <a href="buy_medicine.php" class="btn btn-warning" style="margin-right: 20px;">Buy Medicine</a>
+                    <br>
+                    <a href="buy_medicine.php" class="btn btn-info" style="margin-right: 20px;">Use Medicine</a>
+                    <!--<button type="submit" class="btn btn-warning" name="buy_medicine" style="margin-right: 20px;">Buy Medicine</button>
+                    <button type="submit" class="btn btn-info" name="use_medicine">Use Medicine</button>-->
+
                 </div>
 
             </div>

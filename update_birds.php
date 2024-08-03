@@ -24,7 +24,7 @@ $bird = new Bird($db);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $batch_id = htmlspecialchars(strip_tags($_POST['batch_id']));
     $sup_id = htmlspecialchars(strip_tags($_POST['sup_id']));
-    $sup_id = htmlspecialchars(strip_tags($_POST['sup_name']));
+    $sup_name = htmlspecialchars(strip_tags($_POST['sup_name']));
     $bird_type = htmlspecialchars(strip_tags($_POST['bird_type']));
     $unit_price = htmlspecialchars(strip_tags($_POST['unit_price']));
     $quantity = htmlspecialchars(strip_tags($_POST['quantity']));

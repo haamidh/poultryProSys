@@ -215,7 +215,7 @@ if (isset($_POST["submit"])) {
                     <a class="nav-link" href="index.html">About Us</a>
                 </li>
                 <li class="nav-item mx-4">
-                    <a class="nav-link" href="#">Market Place</a>
+                    <a class="nav-link" href="marketplace.php">Market Place</a>
                 </li>
                 <li class="nav-item mx-4">
                     <a class="nav-link" href="contact_us.php">Contact</a>
@@ -252,8 +252,8 @@ if (isset($_POST["submit"])) {
                         </a>
                     </div>
                     <div>
-                        <h4>Live Chat</h4>
-                        <a href="chatbot.php">
+                        <h4>FAQ Chat</h4>
+                        <a href="chatFAQ.php">
                             <i class="bi bi-wechat" style="font-size: 24px;"></i> Start a chat
                         </a>
                     </div>
