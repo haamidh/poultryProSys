@@ -38,6 +38,9 @@ $frame->first_part($farm);
                         <button class="btn btn-primary">
                             <a href="add_birds.php" class="text-light">Add Batch</a>
                         </button>
+                        <button class="btn btn-primary">
+                            <a href="birds_health.php" class="text-light">Add Health Problems</a>
+                        </button>
                         <table class="table">
                             <thead>
                                 <tr>
