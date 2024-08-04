@@ -30,8 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sup_id = getLastSupplierId($con, $user_id);
 
         if (addNewSupplier($con, $user_id, $sup_id, $sup_name, $address, $city, $mobile, $email)) {
-            header('Location: supplier.php?msg=Data Updated Successfully&user_id=' . $user_id);
-            exit();
+            echo'<script type="text/javascript">window.location.href="supplier.php";</script>';
         } else {
             echo "Record not added";
         }
@@ -142,8 +141,8 @@ function getAllSupplier($con, $user_id)
                             <td><?php echo $supplier['sup_id']; ?></td>
                             <td><?php echo $supplier['sup_name']; ?></td>
                             <td><?php echo $supplier['mobile']; ?></td>
-                            <td><a href="edit_supplier.php?id=<?php echo $supplier['sup_id']; ?>" class="btn btn-primary">Edit</a></td>
-                            <td><a href="delete_supplier.php?id=<?php echo $supplier['sup_id']; ?>" class="btn btn-danger">Delete</a></td>
+                            <td><a href="edit_supplier.php?sup_id=<?php echo $supplier['sup_id']; ?>" class="btn btn-primary">Edit</a></td>
+                            <td><a href="delete_supplier.php?sup_id=<?php echo $supplier['sup_id']; ?>" class="btn btn-danger">Delete</a></td>
                         </tr>
                     <?php } ?>
                 </tbody>

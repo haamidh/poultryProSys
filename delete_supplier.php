@@ -1,6 +1,6 @@
 <?php
 
-if(session_status()== PHP_SESSION_NONE){
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
@@ -9,7 +9,7 @@ require_once 'checkLogin.php';
 require_once 'crud.php';
 
 
-if(!isset($_SESSION['user_id'])){
+if (!isset($_SESSION['user_id'])) {
     header('Location: login.php?msg=Please Login before Proceeding');
     exit();
 }
@@ -21,8 +21,10 @@ $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 
 
 
-class DeleteSupplier implements crud {
-    public function delete($user_id,$sup_id){
+class DeleteSupplier implements crud
+{
+    public function delete($user_id, $sup_id)
+    {
         global $con;
         $sup_id = $_GET['sup_id'];
         $query = $con->prepare('DELETE FROM supplier WHERE user_id = :user_id AND sup_id = :sup_id');
@@ -30,21 +32,24 @@ class DeleteSupplier implements crud {
         $query->bindParam(':sup_id', $sup_id);
         $query->execute();
     }
-    public function create($user_id){
+    public function create($user_id)
+    {
         throw new Exception("Cannot be used here");
     }
-    public function read($user_id){
+    public function read($user_id)
+    {
         throw new Exception("Cannot be used here");
     }
-    public function update($user_id, $id){
+    public function update($user_id, $id)
+    {
         throw new Exception("Cannot be used here");
     }
-    public function readOne(){
+    public function readOne()
+    {
         throw new Exception("Cannot be used here");
     }
-
 }
-if(isset($_GET['sup_id'])){
+if (isset($_GET['sup_id'])) {
     $sup_id = $_GET['sup_id'];
     $deleter = new DeleteSupplier();
     $deleter->delete($user_id, $sup_id);
