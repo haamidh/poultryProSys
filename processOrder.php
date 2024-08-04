@@ -10,6 +10,7 @@
     $product_id = $marketPlaceCRUD->getProductId();
     $row = $marketPlaceCRUD->viewProduct($product_id);
     $quantity = $_POST["quantity"];
+    $total = $quantity * $row['product_price'];
 ?>
 <!doctype HTML>
 <html>
@@ -44,15 +45,15 @@
                 </div>
                 <p class="about"><?php echo $row['description']; ?></p>
                 <div class="sizes mt-5">
-                  <h6 class="text">Available Stock : <?php echo $row["quantity"] . " " . (isset($row["unit"]) ? $row["unit"] : ""); ?></h6>
+                  <h6 class="text">Total Price : <?php echo 'Rs. '.$total."/="; ?></h6>
                 </div>
-                <form action="processOrder.php" method="post"> <div class="form-group">
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" min="1" max="<?php echo $row["quantity"]; ?>" class="form-control col-2" id="quantity" name="quantity" required>
+                <form action="checkout.php" method="post"> <div class="form-group">
+                    
+
                   </div>
                   
                   <div class="cart mt-4 align-items-center">
-                    <button type="submit" class="btn btn-danger text-uppercase mr-2 px-4">Buy</button>
+                    <button type="submit" class="btn btn-danger text-uppercase mr-2 px-4">Confirm Order</button>
                     <i class="fa fa-heart text-muted"></i>
                     <i class="fa fa-share-alt text-muted"></i>
                   </div>
