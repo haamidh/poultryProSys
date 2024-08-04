@@ -135,9 +135,9 @@ function getAllFeed($con, $user_id)
                             <th><?php echo $serialnum; ?></th>
                             <td><?php echo $feed['feed_id']; ?></td>
                             <td><?php echo $feed['feed_name']; ?></td>
-                            <td><a href="edit_feed.php?id=<?php echo $feed['feed_id']; ?>" class="btn btn-primary">Edit</a>
+                            <td><a href="edit_feed.php?feed_id=<?php echo $feed['feed_id']; ?>" class="btn btn-primary">Edit</a>
                                 &nbsp;&nbsp;
-                                <a href="delete_feed.php?id=<?php echo $feed['feed_id']; ?>" class="btn btn-danger">Delete</a>
+                                <a href="delete_feed.php?feed_id=<?php echo $feed['feed_id']; ?>" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     <?php } ?>
