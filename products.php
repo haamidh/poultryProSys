@@ -32,11 +32,11 @@ $frame->first_part($farm);
 
                 <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id" readonly>
                 <div class="col-md-12">
-                    <label for="feed_id" class="form-label">Product ID:</label>
-                    <input class="form-control" type="text" name="med_id" id="med_id" readonly>
+                    <label for="product_id" class="form-label">Product ID:</label>
+                    <input class="form-control" type="text" name="product_id" id="_id" readonly>
                 </div>
                 <div class="col-md-12">
-                    <label for="feed_id" class="form-label">Select Category:</label>
+                    <label for="product_category" class="form-label">Select Category:</label>
                     <select class="form-select">
                         <option disabled>Select Category</option>
                         <option value="1">One</option>
@@ -67,7 +67,7 @@ $frame->first_part($farm);
                 </div>
 
                 <div class="col-md-12" style="text-align: center;">
-                    <button type="submit" class="btn btn-primary" name="add_medicine">Add Medicine</button>
+                    <button type="submit" class="btn btn-primary" name="add_medicine">Add Product</button>
                 </div>
             </form>
         </div>

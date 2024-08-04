@@ -131,7 +131,7 @@ class Bird implements crud
             $max_batch_id = $row['max_batch_id'];
             $number = intval(substr($max_batch_id, 2)) + 1;
         } else {
-            $number = 1; // Start from 1 if no batch ID exists for the user
+            $number = 1; 
         }
 
         return 'B ' . str_pad($number, 3, '0', STR_PAD_LEFT);
