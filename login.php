@@ -2,44 +2,63 @@
 session_start();
 require 'config.php';
 require 'User.php';
+require 'Validation.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $user = new User($db);
+$emailErr = $passwordErr = "";
+$email = $password = "";
+$errors = false;
 
 // Check when form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user->email = $_POST['email'];
-    $user->password = $_POST['password'];
-
-    if ($user->login()) {
-        // Successful login
-        $_SESSION['user_id'] = $user->user_id;
-        $_SESSION['username'] = $user->username;
-        $_SESSION['role'] = $user->role;
-        $_SESSION['status'] = $user->status;
-
-        switch ($_SESSION['role']) {
-            case "admin":
-                header("Location: admin_dashboard.php");
-                exit();
-            case "farm":
-                header("Location: farm_dashboard.php");
-                exit();
-            case "customer":
-                header("Location: customer.php");
-                exit();
-            default:
-
-                header("Location: login.php");
-                exit();
-        }
+    // Validate email
+    if (!Validation::validateEmail($_POST['email'], $emailErr)) {
+        $errors = true;
     } else {
-        // Invalid email or password
-        $_SESSION['error_message'] = "Invalid email or password";
-        header("Location: login.php");
-        exit();
+        $user->email = $_POST['email'];
+        $email = $_POST['email'];
+    }
+
+    // Validate password
+    if (!Validation::validatePasswordField($_POST['password'], $passwordErr)) {
+        $errors = true;
+    } else {
+        $user->password = $_POST['password'];
+        $password = $_POST['password'];
+    }
+    if (!$errors) {
+        if ($user->login()) {
+            // Successful login
+            $_SESSION['user_id'] = $user->user_id;
+            $_SESSION['username'] = $user->username;
+            $_SESSION['role'] = $user->role;
+            $_SESSION['status'] = $user->status;
+
+            switch ($_SESSION['role']) {
+                case "admin":
+                    header("Location: admin_dashboard.php");
+                    exit();
+                case "farm":
+                    header("Location: farm_dashboard.php");
+                    exit();
+                case "customer":
+                    header("Location: customer.php");
+                    exit();
+                default:
+                    header("Location: login.php");
+                    exit();
+            }
+        } else {
+            // Invalid email or password
+            if (!$errors) {
+                $_SESSION['error_message'] = "Invalid email or password";
+            }
+            header("Location: login.php");
+            exit();
+        }
     }
 }
 ?>
@@ -115,12 +134,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
     <?php
     if (isset($_GET['status']) && $_GET['status'] === 'blocked') {
-
-    ?> <div class='alert alert-danger' role='alert'>
-            Your account was temporarily blocked by admin. Contact admin via this <a href='https://mail.google.com/mail' class='alert-link'> arahmandulapandan@gmail.com</a> mail.
-        </div><?php
-            }
-                ?>
+    ?>
+        <div class='alert alert-danger' role='alert'>
+            Your account was temporarily blocked by admin. Contact admin via this <a href='mailto:arahmandulapandan@gmail.com' class='alert-link'>arahmandulapandan@gmail.com</a> mail.
+        </div>
+    <?php
+    }
+    ?>
     <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
         <div class="row">
             <div class="col-md-4">
@@ -138,16 +158,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php endif; ?>
 
                         <form id="batchForm" action="login.php" method="post">
-                            <div class="row">
-                                <label>Email:</label>
-                                <input type="text" class="form-control" name="email" placeholder="abc123@gmail.com" required="">
+                            <div class="row mb-3">
+                                <label>Email:<span style="color: red;"><?php echo $emailErr ?></span></label>
+                                <input type="text" class="form-control" name="email" placeholder="abc123@gmail.com" value="<?php echo htmlspecialchars($email); ?>" required>
                             </div>
-                            <br>
-                            <div class="row">
-                                <label>Password:</label>
-                                <input type="password" class="form-control" name="password" required="">
+                            <div class="row mb-3">
+                                <label>Password:<span style="color: red;"><?php echo $passwordErr ?></span></label>
+                                <input type="password" class="form-control" name="password" value="<?php echo htmlspecialchars($password); ?>" required>
                             </div>
-                            <br>
                             <input type="submit" class="btn btn-primary" name="submit" value="Log In" style="margin-left:100px">
                             <a class='mx-5' href="">Forget Password</a>
                         </form>
@@ -185,11 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 &nbsp;
                 <a href="https://wa.me/+94768821356?text=I'm%20interested%20in%20your%20car%20for%20sale"><i class="bi bi-whatsapp"></i></a>
                 &nbsp;
-
-
-
             </div>
-
         </div>
     </footer>
 

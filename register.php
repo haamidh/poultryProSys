@@ -2,6 +2,7 @@
 session_start();
 require 'config.php';
 require 'User.php';
+require 'Validation.php'; // Include the Validation class
 
 $database = new Database();
 $db = $database->getConnection();
@@ -13,42 +14,58 @@ $stmt = $db->prepare($query);
 $stmt->execute();
 $cities = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$mobileErr = $emailErr = "";
+$mobileErr = $emailErr = $textErr = $passwordErr =$roleErr = $cityErr = $addressErr = "";
 $errors = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $user->username = $_POST['username'];
-    $user->role = $_POST['role'];
-    $user->address = $_POST['address'];
-    $user->city = $_POST['city'];
-
-    if (empty($_POST['mobile'])) {
-        $mobileErr = '*Required field';
+    // Validate mobile
+    if (!Validation::validateMobile($_POST['mobile'], $mobileErr)) {
         $errors = true;
     } else {
-        $pattern = "/^[0]{1}[0-9]{9}/";
-        if (preg_match($pattern, $_POST['mobile'])) {
-            $user->mobile = $_POST['mobile'];
-        } else {
-            $mobileErr = '*Enter the correct mobile number';
-            $errors = true;
-        }
+        $user->mobile = $_POST['mobile'];
     }
 
-    if (empty($_POST['email'])) {
-        $emailErr = '*Required field';
+    // Validate email
+    if (!Validation::validateEmail($_POST['email'], $emailErr)) {
         $errors = true;
     } else {
-        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            $user->email = $_POST['email'];
-        } else {
-            $emailErr = '*Enter the correct email format';
-            $errors = true;
-        }
+        $user->email = $_POST['email'];
     }
 
-    $user->password = $_POST['password'];
+    // Validate name
+    if (!Validation::validateTextField($_POST['username'], $textErr)) {
+        $errors = true;
+    } else {
+        $user->username = $_POST['username'];
+    }
+
+    // Validate password
+    if (!Validation::validatePasswordField($_POST['password'], $passwordErr)) {
+        $errors = true;
+    } else {
+        $user->username = $_POST['password'];
+    }
+
+    if (isset($_POST['role'])) {
+        $user->role = $_POST['role'];
+    } else {
+        $roleErr = "*Please select your role";
+    }
+    if (isset($_POST['city'])) {
+        $user->city = $_POST['city'];
+    } else {
+        $cityErr = "*Please select city";
+    }
+
+    // Validate address
+    if (!Validation::validateAddressField($_POST['address'], $addressErr)) {
+        $errors = true;
+    } else {
+        $user->username = $_POST['address'];
+    }
+
+
     $user->status = 1;
 
     if (!$errors) {
@@ -175,12 +192,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <form id="batchForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
                             <div class="row">
-                                <label>Name:</label>
+                                <label>Name:<span style="color: red;"><?php echo $textErr ?></label>
                                 <input type="text" class="form-control" name="username" placeholder="Business name/Your name" required>
                             </div>
 
                             <div class="row">
-                                <label>Role:</label>
+                                <label>Role:<span style="color: red;"><?php echo $roleErr ?></label>
                                 <select name="role" required>
                                     <option value="" disabled selected>Select role</option>
                                     <option value="farm">Farm</option>
@@ -189,12 +206,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
 
                             <div class="row">
-                                <label>Address:</label>
+                                <label>Address:<span style="color: red;"><?php echo $addressErr ?></label>
                                 <input type="text" class="form-control" name="address" required>
                             </div>
 
                             <div class="row">
-                                <label>City:</label>
+                                <label>City:<span style="color: red;"><?php echo $cityErr ?></label>
                                 <select name="city" required>
                                     <option value="" disabled selected>Select city</option>
                                     <?php foreach ($cities as $city) : ?>
@@ -207,7 +224,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <div class="row">
                                 <label>Mobile:<span style="color: red;"><?php echo $mobileErr ?></span></label>
-                                <input type="text" class="form-control" name="mobile" required>
+                                <input type="text" class="form-control" name="mobile" placeholder="0777777777" required>
                             </div>
 
                             <div class="row">
@@ -216,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
 
                             <div class="row">
-                                <label>Password:</label>
+                                <label>Password:<span style="color: red;"><?php echo $passwordErr ?></label>
                                 <input type="password" class="form-control" name="password" required>
                             </div>
 
