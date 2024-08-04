@@ -85,8 +85,8 @@ function getAllFeed($con, $user_id)
                 <div class="card-header card text-white" style="background-color: #40826D;">
 
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                        <button type="submit" class="btn btn-warning" name="buy_feed" style="margin-right: 20px;">Buy Feed</button>
-                        <button type="submit" class="btn btn-info" name="use_feed">Use Feed</button>
+                        <button type="submit" class="btn btn-warning" name="buy_feed" style="margin-right: 20px;"><a href="buy_feed.php" style="text-decoration: none;">Buy Feed</a></button>
+                        <button type="submit" class="btn btn-info" name="use_feed"><a href="use_feed.php" style="text-decoration:none">Use Feed</a></button>
                     </form>
                 </div>
 
