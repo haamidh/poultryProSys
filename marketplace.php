@@ -50,7 +50,7 @@ $conn = $db->getConnection();
 <div class="container mt-5">
     <div class="row">
         <?php
-        $sql = "SELECT product_name, quantity, category_id, product_price, product_img, description FROM products";
+        $sql = "SELECT product_id,product_name, quantity, category_id, product_price, product_img, description FROM products";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 
@@ -64,7 +64,7 @@ $conn = $db->getConnection();
                             <h5 class="card-title">'.htmlspecialchars($row["product_name"]).'</h5>
                             <p class="card-text">'.htmlspecialchars($row["description"]).'</p>
                             <h5 class="card-text">Rs. '.htmlspecialchars($row["product_price"]).'</h5>
-                            <a href="#" class="btn btn-primary">Buy</a>
+                            <a href="viewProduct.php?product_id='.htmlspecialchars($row["product_id"]).'" class="btn btn-primary">Buy</a>
                         </div>
                     </div>
                 </div>
