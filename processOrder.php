@@ -1,16 +1,15 @@
 <?php
-require_once 'marketplaceFrame.php';
-require 'config.php';
-require 'marketPlaceCRUD.php';
-
-$marketPlaceFrame = new marketPlaceFrame();
-$marketPlaceFrame->navbar();
-
-$marketPlaceCRUD = new MarketPlaceCRUD();
-$product_id = $marketPlaceCRUD->getProductId();
-$row = $marketPlaceCRUD->viewProduct($product_id);
-
-if (!empty($row)) { // Check if product found
+    require_once 'marketplaceFrame.php';
+    require 'config.php';
+    require 'marketPlaceCRUD.php';
+    
+    $marketPlaceFrame = new marketPlaceFrame();
+    $marketPlaceFrame->navbar();
+    
+    $marketPlaceCRUD = new MarketPlaceCRUD();
+    $product_id = $marketPlaceCRUD->getProductId();
+    $row = $marketPlaceCRUD->viewProduct($product_id);
+    $quantity = $_POST["quantity"];
 ?>
 <!doctype HTML>
 <html>
@@ -47,11 +46,11 @@ if (!empty($row)) { // Check if product found
                 <div class="sizes mt-5">
                   <h6 class="text">Available Stock : <?php echo $row["quantity"] . " " . (isset($row["unit"]) ? $row["unit"] : ""); ?></h6>
                 </div>
-                <form action="processOrder.php?product_id=<?php echo $row["product_id"]?>" method="post"> <div class="form-group">
+                <form action="processOrder.php" method="post"> <div class="form-group">
                     <label for="quantity">Quantity:</label>
                     <input type="number" min="1" max="<?php echo $row["quantity"]; ?>" class="form-control col-2" id="quantity" name="quantity" required>
                   </div>
-
+                  
                   <div class="cart mt-4 align-items-center">
                     <button type="submit" class="btn btn-danger text-uppercase mr-2 px-4">Buy</button>
                     <i class="fa fa-heart text-muted"></i>
@@ -67,6 +66,3 @@ if (!empty($row)) { // Check if product found
   </div>
 </body>
 </html>
-<?php } else {
-  echo 'Product not found.';
-} ?>
