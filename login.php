@@ -166,8 +166,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label>Password:<span style="color: red;"><?php echo $passwordErr ?></span></label>
                                 <input type="password" class="form-control" name="password" value="<?php echo htmlspecialchars($password); ?>" required>
                             </div>
-                            <input type="submit" class="btn btn-primary" name="submit" value="Log In" style="margin-left:100px">
-                            <a class='mx-5' href="">Forget Password</a>
+                            <div class="row mb-3" style="align-items: center;text-align:center;margin:auto;">
+                            <input type="submit" class="btn btn-primary" name="submit" value="Log In" >
+                            </div>
                         </form>
                     </div>
                 </div>
