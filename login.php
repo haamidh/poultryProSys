@@ -9,26 +9,24 @@ $db = $database->getConnection();
 
 $user = new User($db);
 $emailErr = $passwordErr = "";
-$email = $password = "";
 $errors = false;
-
 // Check when form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validate email
-    if (!Validation::validateEmail($_POST['email'], $emailErr)) {
-        $errors = true;
-    } else {
-        $user->email = $_POST['email'];
-        $email = $_POST['email'];
-    }
 
     // Validate password
     if (!Validation::validatePasswordField($_POST['password'], $passwordErr)) {
         $errors = true;
     } else {
         $user->password = $_POST['password'];
-        $password = $_POST['password'];
     }
+
+    // Validate email
+    if (!Validation::validateEmail($_POST['email'], $emailErr)) {
+        $errors = true;
+    } else {
+        $user->email = $_POST['email'];
+    }
+
     if (!$errors) {
         if ($user->login()) {
             // Successful login
@@ -48,14 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: customer.php");
                     exit();
                 default:
+
                     header("Location: login.php");
                     exit();
             }
         } else {
             // Invalid email or password
-            if (!$errors) {
-                $_SESSION['error_message'] = "Invalid email or password";
-            }
+            $_SESSION['error_message'] = "Invalid email or password";
             header("Location: login.php");
             exit();
         }
@@ -134,13 +131,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
     <?php
     if (isset($_GET['status']) && $_GET['status'] === 'blocked') {
-    ?>
-        <div class='alert alert-danger' role='alert'>
-            Your account was temporarily blocked by admin. Contact admin via this <a href='mailto:arahmandulapandan@gmail.com' class='alert-link'>arahmandulapandan@gmail.com</a> mail.
-        </div>
-    <?php
-    }
-    ?>
+
+    ?> <div class='alert alert-danger' role='alert'>
+            Your account was temporarily blocked by admin. Contact admin via this <a href='https://mail.google.com/mail' class='alert-link'> arahmandulapandan@gmail.com</a> mail.
+        </div><?php
+            }
+                ?>
     <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
         <div class="row">
             <div class="col-md-4">
@@ -158,17 +154,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php endif; ?>
 
                         <form id="batchForm" action="login.php" method="post">
-                            <div class="row mb-3">
+                            <div class="row">
                                 <label>Email:<span style="color: red;"><?php echo $emailErr ?></span></label>
-                                <input type="text" class="form-control" name="email" placeholder="abc123@gmail.com" value="<?php echo htmlspecialchars($email); ?>" required>
+                                <input type="text" class="form-control" name="email" placeholder="abc123@gmail.com">
                             </div>
-                            <div class="row mb-3">
+                            <br>
+                            <div class="row">
                                 <label>Password:<span style="color: red;"><?php echo $passwordErr ?></span></label>
-                                <input type="password" class="form-control" name="password" value="<?php echo htmlspecialchars($password); ?>" required>
+                                <input type="password" class="form-control" name="password">
                             </div>
-                            <div class="row mb-3" style="align-items: center;text-align:center;margin:auto;">
-                            <input type="submit" class="btn btn-primary" name="submit" value="Log In" >
-                            </div>
+                            <br>
+                            <input type="submit" class="btn btn-primary" name="submit" value="Log In" style="margin-left:100px">
+                            <a class='mx-5' href="">Forget Password</a>
                         </form>
                     </div>
                 </div>
@@ -204,7 +201,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 &nbsp;
                 <a href="https://wa.me/+94768821356?text=I'm%20interested%20in%20your%20car%20for%20sale"><i class="bi bi-whatsapp"></i></a>
                 &nbsp;
+
+
+
             </div>
+
         </div>
     </footer>
 

@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (addNewSupplier($con, $user_id, $sup_id, $sup_name, $address, $city, $mobile, $email)) {
             echo'<script type="text/javascript">window.location.href="supplier.php";</script>';
+            exit();
         } else {
             echo "Record not added";
         }

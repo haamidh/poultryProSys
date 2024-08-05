@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product_id = getLastProductId($con, $farm_id);
     $product_name = $_POST['product_name'];
     $quantity = $_POST['quantity'];
-    $unit = $_POST['unit']; 
+    $unit = $_POST['unit'];
     $category_id = $_POST['category_id'];
     $product_price = $_POST['selling_price'];
     $product_img = $_FILES['product_img'];
@@ -38,15 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (addNewProduct($con, $product_id, $farm_id, $product_name, $quantity, $unit, $category_id, $product_price, $target_file, $description)) {
-        header('Location: products.php?msg=Data Updated Successfully&user_id=' . $farm_id);
-        ob_end_flush(); // Flush the buffer
+        echo '<script type="text/javascript">window.location.href="supplier.php";</script>';
         exit();
     } else {
         echo "Record not added";
     }
 }
 
-function getLastProductId($con, $farm_id){
+function getLastProductId($con, $farm_id)
+{
     $query = $con->prepare("SELECT product_id FROM products WHERE farm_id=? ORDER BY product_id DESC LIMIT 1");
 
     if (!$query) {
@@ -84,7 +84,8 @@ function addNewProduct($con, $product_id, $farm_id, $product_name, $quantity, $u
     return $query->execute();
 }
 
-function fetchCategories($con) {
+function fetchCategories($con)
+{
     $query = $con->prepare('SELECT * FROM product_categories');
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -108,13 +109,13 @@ function fetchCategories($con) {
                 </div>
                 <div class="col-md-12">
                     <label for="product_category" class="form-label">Select Category:</label>
-                    
+
                     <select class="form-select" name="category_id">
-                    <?php  
-                    $categories = fetchCategories($con); 
-                    foreach($categories as $category) {?>
-                        <option value="<?php echo $category["category_id"] ?>"><?php echo $category["category_name"]; ?></option> 
-                    <?php } ?>
+                        <?php
+                        $categories = fetchCategories($con);
+                        foreach ($categories as $category) { ?>
+                            <option value="<?php echo $category["category_id"] ?>"><?php echo $category["category_name"]; ?></option>
+                        <?php } ?>
                     </select>
                 </div>
 

@@ -2,7 +2,7 @@
 session_start();
 require 'config.php';
 require 'User.php';
-require 'Validation.php'; // Include the Validation class
+require 'Validation.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -14,7 +14,7 @@ $stmt = $db->prepare($query);
 $stmt->execute();
 $cities = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$mobileErr = $emailErr = $textErr = $passwordErr =$roleErr = $cityErr = $addressErr = "";
+$mobileErr = $emailErr = $textErr = $passwordErr = $roleErr = $cityErr = $addressErr = "";
 $errors = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!Validation::validatePasswordField($_POST['password'], $passwordErr)) {
         $errors = true;
     } else {
-        $user->username = $_POST['password'];
+        $user->password = $_POST['password'];
     }
 
     if (isset($_POST['role'])) {
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!Validation::validateAddressField($_POST['address'], $addressErr)) {
         $errors = true;
     } else {
-        $user->username = $_POST['address'];
+        $user->address = $_POST['address'];
     }
 
 

@@ -68,7 +68,7 @@ class Validation
             $error = '*This field is required';
             return false;
         } else {
-            if (preg_match("/^[a-zA-Z\s\-]+$/", $text)) {
+            if (preg_match("/^[a-zA-Z0-9\s\-]+$/", $text)) {
                 return $text;
             } else {
                 $error = '*Please enter the input in correct format';
@@ -98,7 +98,7 @@ class Validation
             $error = '*This field is required';
             return false;
         } else {
-            if (preg_match("/^[a-zA-Z0-9\s\-/]+$/", $address)) { 
+            if (preg_match("/^[a-zA-Z0-9\s\-,\/]+$/", $address)) { 
                 return $address;
             } else {
                 $error = '*Please enter the Address in correct format';
