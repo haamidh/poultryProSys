@@ -13,21 +13,7 @@
     $quantity = $_POST["quantity"];
     $total = $quantity * $row['product_price'];
 
-    $merchant_id = 1227852;
-    $merchant_secret = "NDE3MzE4NTEzODM0ODM2NDUzMjkyNzI5NzcwMjM5MjA3MDA2MjQzOQ==";
-    $amount = 1000;
-    $currency = "LKR";
-
-    $order_id = 12345;
-    $hash = strtoupper(
-        md5(
-            $merchant_id . 
-            $order_id . 
-            number_format($amount, 2, '.', '') . 
-            $currency .  
-            strtoupper(md5($merchant_secret)) 
-        ) 
-    );
+    
 ?>
 <!doctype HTML>
 <html>
@@ -64,15 +50,15 @@
                 <div class="sizes mt-5">
                   <h6 class="text">Total Price : <?php echo 'Rs. '.$total."/="; ?></h6>
                 </div>
-                <form action="https://sandbox.payhere.lk/pay/checkout" method="post"> <div class="form-group">
-                  <input type="hidden" name="merchant_id" value="<?php echo $merchant_id; ?>">
+                <form action="checkout.php" method="post"> <div class="form-group">
+                  
                     
 
                   </div>
                   
                   <div class="cart mt-4 align-items-center">
                   <input type="hidden" name="hash" value="<?php echo $hash  ?>">  
-                    <button type="submit" class="btn btn-danger text-uppercase mr-2 px-4">Confirm Order</button>
+                    <button type="submit" value="Buy Now" class="btn btn-danger text-uppercase mr-2 px-4">Confirm Order</button>
                     <i class="fa fa-heart text-muted"></i>
                     <i class="fa fa-share-alt text-muted"></i>
                   </div>
