@@ -2,7 +2,8 @@
 
 require_once 'crud.php';
 
-class ProductStock implements crud {
+class ProductStock implements crud
+{
 
     private $conn;
     private $table_name = "product_stock";
@@ -13,62 +14,76 @@ class ProductStock implements crud {
     private $unit_price;
     private $total;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
     // Getters
-    function getUser_id() {
+    function getUser_id()
+    {
         return $this->user_id;
     }
 
-    function getProduct_id() {
+    function getProduct_id()
+    {
         return $this->product_id;
     }
 
-    function getBatch_id() {
+    function getBatch_id()
+    {
         return $this->batch_id;
     }
 
-    function getQuantity() {
+    function getQuantity()
+    {
         return $this->quantity;
     }
 
-    function getUnit_price() {
+    function getUnit_price()
+    {
         return $this->unit_price;
     }
 
-    function getTotal() {
+    function getTotal()
+    {
         return $this->total;
     }
 
     // Setters
-    function setUser_id($user_id) {
+    function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
 
-    function setProduct_id($product_id) {
+    function setProduct_id($product_id)
+    {
         $this->product_id = $product_id;
     }
 
-    function setBatch_id($batch_id) {
+    function setBatch_id($batch_id)
+    {
         $this->batch_id = $batch_id;
     }
 
-    function setQuantity($quantity) {
+    function setQuantity($quantity)
+    {
         $this->quantity = $quantity;
     }
 
-    function setUnit_price($unit_price) {
+    function setUnit_price($unit_price)
+    {
         $this->unit_price = $unit_price;
     }
 
-    function setTotal($total) {
+    function setTotal($total)
+    {
         $this->total = $total;
     }
 
     // CRUD methods
-    public function create($user_id) {
+    public function create($user_id)
+    {
         $query = "INSERT INTO " . $this->table_name . " (user_id, product_id, batch_id,  quantity, unit_price, total) 
                   VALUES (:user_id, :product_id, :batch_id, :quantity, :unit_price, :total)";
         $stmt = $this->conn->prepare($query);
@@ -84,7 +99,37 @@ class ProductStock implements crud {
         return $stmt->execute();
     }
 
-    public function read($user_id) {
+    public function getDBQuantity(){
+        $query = "SELECT quantity FROM ".$this->table_name ."
+        WHERE product_id = :product_id";
+        try{
+            $stmt = $this->conn->prepare($query);
+            
+        } catch(PDOException $e){
+
+        }
+
+    }
+
+    public function addStock()
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET quantity = :quantity, unit_price = :unit_price, total = :total 
+                  WHERE product_id = :product_id AND batch_id = :batch_id AND user_id = :user_id";
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $this->user_id);
+            $stmt->bindParam(':product_id', $this->product_id);
+            $stmt->bindParam(':batch_id', $this->batch_id);
+            $stmt->bindParam(':quantity', $this->quantity);
+            $stmt->bindParam(':unit_price', $this->unit_price);
+            $stmt->bindParam(':total', $this->total);
+        } catch (PDOException $e) {
+        }
+    }
+
+    public function read($user_id)
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -92,7 +137,8 @@ class ProductStock implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function readOne($ps_id) {
+    public function readOne($ps_id)
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE ps_id = :ps_id LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':ps_id', $ps_id);
@@ -112,7 +158,8 @@ class ProductStock implements crud {
         return $row;
     }
 
-    public function update($ps_id) {
+    public function update($ps_id)
+    {
         $query = "UPDATE " . $this->table_name . " 
                   SET product_id = :product_id, batch_id = :batch_id,  quantity = :quantity, unit_price = :unit_price, total = :total 
                   WHERE ps_id = :ps_id";
@@ -130,7 +177,10 @@ class ProductStock implements crud {
         return $stmt->execute();
     }
 
-    public function delete($ps_id) {
+
+
+    public function delete($ps_id)
+    {
         $query = "DELETE FROM " . $this->table_name . " WHERE ps_id = :ps_id";
         $stmt = $this->conn->prepare($query);
 
@@ -139,9 +189,4 @@ class ProductStock implements crud {
 
         return $stmt->execute();
     }
-
-    
-
 }
-
-?>

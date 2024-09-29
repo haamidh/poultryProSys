@@ -9,6 +9,7 @@ $marketPlaceFrame->navbar();
 $marketPlaceCRUD = new MarketPlaceCRUD();
 $product_id = $marketPlaceCRUD->getProductId();
 $row = $marketPlaceCRUD->viewProduct($product_id);
+$productStock = $marketPlaceCRUD->productStockDisplay($product_id);
 
 if (!empty($row)) { // Check if product found
 ?>
@@ -45,11 +46,11 @@ if (!empty($row)) { // Check if product found
                 </div>
                 <p class="about"><?php echo $row['description']; ?></p>
                 <div class="sizes mt-5">
-                  <h6 class="text">Available Stock : <?php echo $row["quantity"] . " " . (isset($row["unit"]) ? $row["unit"] : ""); ?></h6>
+                  <h6 class="text">Available Stock : <?php echo $productStock["quantity"]; ?></h6>
                 </div>
                 <form action="processOrder.php?product_id=<?php echo $row["product_id"]?>" method="post"> <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" min="1" max="<?php echo $row["quantity"]; ?>" class="form-control col-2" id="quantity" name="quantity" required>
+                    <input type="number" min="1" max="<?php echo $productStock["quantity"]; ?>" class="form-control col-2" id="quantity" name="quantity" required>
                   </div>
 
                   <div class="cart mt-4 align-items-center">
