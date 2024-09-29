@@ -20,17 +20,18 @@ $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 $frame = new Frame();
 $frame->first_part($farm);
 
-// Instantiate the Feed class
+// Make medicine class object
 $medicine = new Medicine($con);
 
-// Assuming you get the feed_id from a GET request
+// Get the med_id from a GET request
 $med_id = isset($_GET['med_id']) ? $_GET['med_id'] : '';
 
 if ($med_id) {
-    // Get feed details
+    // Get med details
     $med_details = $medicine->readOne($med_id);
     if ($med_details) {
         $med_name = $med_details['med_name'];
+        $least_quantity = $med_details['least_quantity'];
         $description = $med_details['description'];
     } else {
         echo "No medicine found with the provided ID.";
@@ -44,6 +45,7 @@ if ($med_id) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set medicine properties
     $medicine->setMed_name($_POST['med_name']);
+    $medicine->setLeastQuantity($_POST['least_quantity']);
     $medicine->setDescription($_POST['description']);
 
     // Update Medicine details
@@ -73,6 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="col-sm-4 col-form-label">Medicine Name:</label>
                                         <div class="col-sm-8">
                                             <input class="form-control" type="text" name="med_name" id="med_name" value="<?php echo htmlspecialchars($med_name); ?>" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Notification Threshold:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity" value="<?php echo htmlspecialchars($least_quantity); ?>">
                                         </div>
                                     </div>
                                 </div>

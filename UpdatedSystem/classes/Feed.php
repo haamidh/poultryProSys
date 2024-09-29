@@ -2,63 +2,87 @@
 
 require_once 'crud.php';
 
-class Feed implements crud {
+class Feed implements crud
+{
 
     private $conn;
     private $table_name = "feed";
     private $user_id;
     private $feed_name;
+    private $least_quantity;
     private $description;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-// Getters
-    function getUser_id() {
+    // Getters
+    function getUser_id()
+    {
         return $this->user_id;
     }
 
-    function getFeed_name() {
+    function getFeed_name()
+    {
         return $this->feed_name;
     }
 
-    function getDescription() {
+    function getLeastQuantity()
+    {
+        return $this->least_quantity;
+    }
+
+    function getDescription()
+    {
         return $this->description;
     }
 
-// Setters
-    function setUser_id($user_id) {
+
+
+    // Setters
+    function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
 
-    function setFeed_name($feed_name) {
+    function setFeed_name($feed_name)
+    {
         $this->feed_name = $feed_name;
     }
+    function setLeastQuantity($least_quantity)
+    {
+        $this->least_quantity = $least_quantity;
+    }
 
-    function setDescription($description) {
+    function setDescription($description)
+    {
         $this->description = $description;
     }
 
-// Create a new feed
-    public function create($user_id) {
-        $query = "INSERT INTO " . $this->table_name . " (user_id, feed_name, description) VALUES (:user_id, :feed_name, :description)";
+    // Create a new feed
+    public function create($user_id)
+    {
+        $query = "INSERT INTO " . $this->table_name . " (user_id, feed_name,least_quantity, description) VALUES (:user_id, :feed_name,:least_quantity, :description)";
         $stmt = $this->conn->prepare($query);
 
-// Sanitize input
+        // Sanitize input
         $this->feed_name = htmlspecialchars(strip_tags($this->feed_name));
+        $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-// Bind parameters
+        // Bind parameters
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':feed_name', $this->feed_name);
+        $stmt->bindParam(':least_quantity', $this->least_quantity);
         $stmt->bindParam(':description', $this->description);
 
         return $stmt->execute();
     }
 
-// Read feeds by user ID
-    public function read($user_id) {
+    // Read feeds by user ID
+    public function read($user_id)
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -66,9 +90,10 @@ class Feed implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-// Read a single feed by ID
-    public function readOne($feed_id) {
-        $query = "SELECT feed_name, description FROM " . $this->table_name . " WHERE feed_id = :feed_id";
+    // Read a single feed by ID
+    public function readOne($feed_id)
+    {
+        $query = "SELECT feed_name,least_quantity, description FROM " . $this->table_name . " WHERE feed_id = :feed_id";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':feed_id', $feed_id);
@@ -78,57 +103,63 @@ class Feed implements crud {
 
         if ($row) {
             $this->feed_name = $row['feed_name'];
+            $this->least_quantity = $row['least_quantity'];
             $this->description = $row['description'];
         }
 
         return $row;
     }
 
-// Update a feed
-    public function update($feed_id) {
-        $query = "UPDATE " . $this->table_name . " SET feed_name = :feed_name, description = :description WHERE feed_id = :feed_id";
+    // Update a feed
+    public function update($feed_id)
+    {
+        $query = "UPDATE " . $this->table_name . " SET feed_name = :feed_name,least_quantity=:least_quantity, description = :description WHERE feed_id = :feed_id";
 
         $stmt = $this->conn->prepare($query);
 
-// Sanitize input
+        // Sanitize input
         $this->feed_name = htmlspecialchars(strip_tags($this->feed_name));
+        $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-// Bind values
+        // Bind values
         $stmt->bindParam(':feed_id', $feed_id);
         $stmt->bindParam(':feed_name', $this->feed_name);
+        $stmt->bindParam(':least_quantity', $this->least_quantity);
         $stmt->bindParam(':description', $this->description);
 
         return $stmt->execute();
     }
 
-// Delete a feed
-    public function delete($feed_id) {
+    // Delete a feed
+    public function delete($feed_id)
+    {
         $query = "DELETE FROM " . $this->table_name . " WHERE feed_id = :feed_id";
         $stmt = $this->conn->prepare($query);
 
-// Bind the feed_id parameter
+        // Bind the feed_id parameter
         $stmt->bindParam(':feed_id', $feed_id);
 
-// Execute the query
+        // Execute the query
         return $stmt->execute();
     }
 
-// Get the name of a feed by ID
-    public function getFeedName($feed_id) {
-// Prepare the SQL query
+    // Get the name of a feed by ID
+    public function getFeedName($feed_id)
+    {
+        // Prepare the SQL query
         $query = "SELECT feed_name FROM " . $this->table_name . " WHERE feed_id = :feed_id";
         $stmt = $this->conn->prepare($query);
 
-// Bind the parameters
+        // Bind the parameters
         $stmt->bindParam(':feed_id', $feed_id);
 
-// Execute the query
+        // Execute the query
         if ($stmt->execute()) {
-// Fetch the result
+            // Fetch the result
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Check if a result was returned
+            // Check if a result was returned
             if ($result) {
                 return $result['feed_name'];
             } else {
@@ -139,8 +170,9 @@ class Feed implements crud {
         }
     }
 
-    public function getAllSuppliers($user_id) {
-// Prepare the SQL query
+    public function getAllSuppliers($user_id)
+    {
+        // Prepare the SQL query
         $query = "SELECT sup_id,sup_name FROM supplier WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -148,7 +180,8 @@ class Feed implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function calculateStock($feed_id, $usage) {
+    public function calculateStock($feed_id, $usage)
+    {
         $buyFeed = new BuyFeed($this->conn);
         $purchases = $buyFeed->getStockSortedByDate($feed_id);
 
@@ -201,7 +234,8 @@ class Feed implements crud {
         ];
     }
 
-    public function feedExists($user_id) {
+    public function feedExists($user_id)
+    {
         // Modify the query to remove spaces and make it case-insensitive
         $query = "SELECT feed_id FROM " . $this->table_name . " 
               WHERE LOWER(REPLACE(feed_name, ' ', '')) = LOWER(REPLACE(:feed_name, ' ', '')) 
@@ -215,5 +249,4 @@ class Feed implements crud {
 
         return $stmt->rowCount() > 0;
     }
-
 }

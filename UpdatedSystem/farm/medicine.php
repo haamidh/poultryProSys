@@ -27,9 +27,11 @@ $med->setUser_id($user_id);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_med'])) {
         $med_name = $_POST['med_name'];
+        $least_quantity = $_POST['least_quantity'];
         $description = $_POST['description'];
 
         $med->setMed_name($med_name);
+        $med->setLeastQuantity($least_quantity);
         $med->setDescription($description);
 
         if ($med->medicineExists($user_id)) {
@@ -88,6 +90,17 @@ $medicines = $med->read($user_id);
                             <div class="row p-2">
                                 <div class="col">
                                     <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Notification Threshold:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row p-2">
+                                <div class="col">
+                                    <div class="row mb-3">
                                         <label class="col-sm-4 col-form-label">Description:</label>
                                         <div class="col-sm-8">
                                             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
@@ -126,7 +139,7 @@ $medicines = $med->read($user_id);
                                     $serialnum = 0;
                                     foreach ($medicines as $medicine) {
                                         $serialnum++;
-                                        ?>
+                                    ?>
                                         <tr>
                                             <th><?php echo $serialnum; ?></th>
                                             <td><?php echo $medicine['med_name']; ?></td>
@@ -160,5 +173,4 @@ $frame->last_part();
             window.location.href = "delete_medicine.php?med_id=" + med_id;
         }
     }
-
 </script>

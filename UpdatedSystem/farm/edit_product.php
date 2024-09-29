@@ -35,6 +35,7 @@ if ($product_id) {
         $unit = $product_details['unit'];
         $product_price = $product_details['product_price'];
         $product_img = $product_details['product_img'];
+        $least_quantity = $product_details['least_quantity'];
         $description = $product_details['description'];
     } else {
         echo "No product found with the provided ID.";
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $unit = $_POST['unit'];
     $category_id = $_POST['category_id'];
     $selling_price = number_format($_POST['selling_price'], 2);
+    $least_quantity = number_format($_POST['least_quantity'], 2);
     $description = $_POST['description'];
 
     // Initialize variables for file upload
@@ -84,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->setCategory_id($category_id);
     $product->setProduct_price($selling_price);
     $product->setProduct_img("./images/ProductImages/" . basename($_FILES["product_img"]["name"]));
+    $product->setLeastQuantity($least_quantity);
     $product->setDescription($description);
 
     // Update the product
@@ -198,7 +201,7 @@ $categories = fetchCategories($con);
                                     <div class="row">
                                         <label class="col-sm-4 col-form-label">Product Image:</label>
                                     </div>
-                                    <div class="row">
+                                    <div class="col-sm-12">
                                         <input type="file" name="product_img" class="form-control">
                                     </div>
                                     <?php if (!empty($product_img)) : ?>
@@ -206,6 +209,17 @@ $categories = fetchCategories($con);
                                             <p class="text-muted">Current Image: <?php echo htmlspecialchars(basename($product_img)); ?></p>
                                         </div>
                                     <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <div class="row p-2">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <label class="col-sm-6 col-form-label">Notification Threshold:</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity" value="<?php echo htmlspecialchars($least_quantity); ?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

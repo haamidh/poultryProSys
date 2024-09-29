@@ -12,6 +12,7 @@ class Product implements crud {
     private $product_price; // Changed from selling_price to product_price
     private $unit;
     private $product_img;
+    private $least_quantity;
     private $description;
 
     public function __construct($db) {
@@ -31,7 +32,7 @@ class Product implements crud {
         return $this->category_id;
     }
 
-    function getProduct_price() { // Changed from getSelling_price to getProduct_price
+    function getProduct_price() {
         return $this->product_price;
     }
 
@@ -43,6 +44,9 @@ class Product implements crud {
         return $this->product_img;
     }
 
+    function getLeastQuantity() {
+        return $this->product_img;
+    }
     function getDescription() {
         return $this->description;
     }
@@ -59,7 +63,7 @@ class Product implements crud {
         $this->category_id = $category_id;
     }
 
-    function setProduct_price($product_price) { // Changed from setSelling_price to setProduct_price
+    function setProduct_price($product_price) {
         $this->product_price = $product_price;
     }
 
@@ -71,14 +75,18 @@ class Product implements crud {
         $this->product_img = $product_img;
     }
 
+    function setLeastQuantity($least_quantity) {
+        $this->least_quantity = $least_quantity;
+    }
+
     function setDescription($description) {
         $this->description = $description;
     }
 
     // Create Product
     public function create($user_id) {
-        $query = "INSERT INTO " . $this->table_name . " (farm_id, product_name, unit, category_id, product_price, product_img, description) 
-              VALUES (:user_id, :product_name, :unit, :category_id, :product_price, :product_img, :description)";
+        $query = "INSERT INTO " . $this->table_name . " (farm_id, product_name, unit, category_id, product_price, product_img, least_quantity, description) 
+              VALUES (:user_id, :product_name, :unit, :category_id, :product_price, :product_img,:least_quantity, :description)";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters using bindValue
@@ -86,8 +94,9 @@ class Product implements crud {
         $stmt->bindValue(':product_name', $this->product_name);
         $stmt->bindValue(':unit', $this->unit);
         $stmt->bindValue(':category_id', $this->category_id);
-        $stmt->bindValue(':product_price', $this->product_price); // Changed from selling_price to product_price
-        $stmt->bindValue(':product_img', $this->product_img); // Use filename directly
+        $stmt->bindValue(':product_price', $this->product_price);
+        $stmt->bindValue(':product_img', $this->product_img);
+        $stmt->bindValue(':least_quantity', $this->least_quantity);
         $stmt->bindValue(':description', $this->description);
 
         return $stmt->execute();
@@ -104,7 +113,7 @@ class Product implements crud {
 
     // Read One Product by ID
     public function readOne($product_id) {
-        $query = "SELECT product_name, unit, category_id, product_price, product_img, description
+        $query = "SELECT product_name, unit, category_id, product_price, product_img,least_quantity, description
                   FROM " . $this->table_name . "
                   WHERE product_id = :product_id";
 
@@ -118,8 +127,9 @@ class Product implements crud {
             $this->product_name = $row['product_name'];
             $this->category_id = $row['category_id'];
             $this->unit = $row['unit'];
-            $this->product_price = $row['product_price']; // Changed from selling_price to product_price
+            $this->product_price = $row['product_price'];
             $this->product_img = $row['product_img'];
+            $this->least_quantity = $row['least_quantity'];
             $this->description = $row['description'];
         }
 
@@ -134,6 +144,7 @@ class Product implements crud {
                   unit = :unit, 
                   product_price = :product_price,
                   product_img = :product_img, 
+                  least_quantity = :least_quantity, 
                   description = :description 
               WHERE product_id = :product_id";
 
@@ -143,16 +154,18 @@ class Product implements crud {
         $this->product_name = htmlspecialchars(strip_tags($this->product_name));
         $this->category_id = htmlspecialchars(strip_tags($this->category_id));
         $this->unit = htmlspecialchars(strip_tags($this->unit));
-        $this->product_price = htmlspecialchars(strip_tags($this->product_price)); // Changed from selling_price to product_price
+        $this->product_price = htmlspecialchars(strip_tags($this->product_price));
         $this->product_img = htmlspecialchars(strip_tags($this->product_img));
+        $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
         // Bind values using bindValue
         $stmt->bindValue(':product_name', $this->product_name);
         $stmt->bindValue(':category_id', $this->category_id);
         $stmt->bindValue(':unit', $this->unit);
-        $stmt->bindValue(':product_price', $this->product_price); // Changed from selling_price to product_price
+        $stmt->bindValue(':product_price', $this->product_price);
         $stmt->bindValue(':product_img', $this->product_img ? $this->product_img : 'default_image.jpg');
+        $stmt->bindValue(':least_quantity', $this->least_quantity);
         $stmt->bindValue(':description', $this->description);
         $stmt->bindValue(':product_id', $product_id);
 

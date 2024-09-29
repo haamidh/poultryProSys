@@ -27,9 +27,11 @@ $feed->setUser_id($user_id);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_feed'])) {
         $feed_name = $_POST['feed_name'];
+        $least_quantity = number_format($_POST['least_quantity'], 2);
         $description = $_POST['description'];
 
         $feed->setFeed_name($feed_name);
+        $feed->setLeastQuantity($least_quantity);
         $feed->setDescription($description);
 
         if ($feed->feedExists($user_id)) {
@@ -87,6 +89,18 @@ $feeds = $feed->read($user_id);
                             <div class="row p-2">
                                 <div class="col">
                                     <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Notification Threshold:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row p-2">
+                                <div class="col">
+                                    <div class="row mb-3">
                                         <label class="col-sm-4 col-form-label">Description:</label>
                                         <div class="col-sm-8">
                                             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
@@ -125,7 +139,7 @@ $feeds = $feed->read($user_id);
                                     $serialnum = 0;
                                     foreach ($feeds as $feed) {
                                         $serialnum++;
-                                        ?>
+                                    ?>
                                         <tr>
                                             <th><?php echo $serialnum; ?></th>
                                             <td><?php echo $feed['feed_name']; ?></td>
@@ -159,5 +173,4 @@ $frame->last_part();
             window.location.href = "delete_feed.php?feed_id=" + feed_id;
         }
     }
-
 </script>

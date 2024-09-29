@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $unit = $_POST['unit'];
     $category_id = $_POST['category_id'];
     $selling_price = number_format($_POST['selling_price'], 2);
+    $least_quantity = number_format($_POST['least_quantity'], 2);
     $description = $_POST['description'];
 
     // Initialize variables for file upload
@@ -67,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->setCategory_id($category_id);
     $product->setProduct_price($selling_price);
     $product->setProduct_img("./images/ProductImages/" . basename($_FILES["product_img"]["name"]));
+    $product->setLeastQuantity($least_quantity);
     $product->setDescription($description);
 
     if ($product->productExists($user_id)) {
@@ -186,8 +188,19 @@ $products = $product->read($user_id);
                                     <div class="row">
                                         <label class="col-sm-4 col-form-label">Product Image:</label>
                                     </div>
-                                    <div class="row">
+                                    <div class="col-sm-12">
                                         <input type="file" name="product_img" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row p-2">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <label class="col-sm-6 col-form-label">Notification Threshold:</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

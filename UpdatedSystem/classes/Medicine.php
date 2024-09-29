@@ -2,63 +2,84 @@
 
 require_once 'crud.php';
 
-class Medicine implements crud {
+class Medicine implements crud
+{
 
     private $conn;
     private $table_name = "medicine";
     private $user_id;
     private $med_name;
+    private $least_quantity;
     private $description;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-// Getters
-    function getUser_id() {
+    // Getters
+    function getUser_id()
+    {
         return $this->user_id;
     }
 
-    function getMed_name() {
+    function getMed_name()
+    {
         return $this->med_name;
     }
+    function getLeastQuantity()
+    {
+        return $this->least_quantity;
+    }
 
-    function getDescription() {
+    function getDescription()
+    {
         return $this->description;
     }
 
-// Setters
-    function setUser_id($user_id) {
+    // Setters
+    function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
 
-    function setMed_name($med_name) {
+    function setMed_name($med_name)
+    {
         $this->med_name = $med_name;
     }
+    function setLeastQuantity($least_quantity)
+    {
+        $this->least_quantity = $least_quantity;
+    }
 
-    function setDescription($description) {
+    function setDescription($description)
+    {
         $this->description = $description;
     }
 
-// Create a new feed
-    public function create($user_id) {
-        $query = "INSERT INTO " . $this->table_name . " (user_id, med_name, description) VALUES (:user_id, :med_name, :description)";
+    // Create a new feed
+    public function create($user_id)
+    {
+        $query = "INSERT INTO " . $this->table_name . " (user_id, med_name,least_quantity, description) VALUES (:user_id, :med_name,:least_quantity, :description)";
         $stmt = $this->conn->prepare($query);
 
-// Sanitize input
+        // Sanitize input
         $this->med_name = htmlspecialchars(strip_tags($this->med_name));
+        $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-// Bind parameters
+        // Bind parameters
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':med_name', $this->med_name);
+        $stmt->bindParam(':least_quantity', $this->least_quantity);
         $stmt->bindParam(':description', $this->description);
 
         return $stmt->execute();
     }
 
-// Read feeds by user ID
-    public function read($user_id) {
+    // Read feeds by user ID
+    public function read($user_id)
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -66,9 +87,10 @@ class Medicine implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-// Read a single feed by ID
-    public function readOne($med_id) {
-        $query = "SELECT med_name, description FROM " . $this->table_name . " WHERE med_id = :med_id";
+    // Read a single feed by ID
+    public function readOne($med_id)
+    {
+        $query = "SELECT med_name,least_quantity, description FROM " . $this->table_name . " WHERE med_id = :med_id";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':med_id', $med_id);
@@ -78,57 +100,63 @@ class Medicine implements crud {
 
         if ($row) {
             $this->med_name = $row['med_name'];
+            $this->least_quantity = $row['least_quantity'];
             $this->description = $row['description'];
         }
 
         return $row;
     }
 
-// Update a feed
-    public function update($feed_id) {
-        $query = "UPDATE " . $this->table_name . " SET med_name = :med_name, description = :description WHERE med_id = :med_id";
+    // Update a feed
+    public function update($feed_id)
+    {
+        $query = "UPDATE " . $this->table_name . " SET med_name = :med_name, least_quantity=:least_quantity, description = :description WHERE med_id = :med_id";
 
         $stmt = $this->conn->prepare($query);
 
-// Sanitize input
+        // Sanitize input
         $this->med_name = htmlspecialchars(strip_tags($this->med_name));
+        $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-// Bind values
+        // Bind values
         $stmt->bindParam(':med_id', $feed_id);
         $stmt->bindParam(':med_name', $this->med_name);
+        $stmt->bindParam(':least_quantity', $this->least_quantity);
         $stmt->bindParam(':description', $this->description);
 
         return $stmt->execute();
     }
 
-// Delete a feed
-    public function delete($med_id) {
+    // Delete a feed
+    public function delete($med_id)
+    {
         $query = "DELETE FROM " . $this->table_name . " WHERE med_id = :med_id";
         $stmt = $this->conn->prepare($query);
 
-// Bind the feed_id parameter
+        // Bind the feed_id parameter
         $stmt->bindParam(':med_id', $med_id);
 
-// Execute the query
+        // Execute the query
         return $stmt->execute();
     }
 
-// Get the name of a feed by ID
-    public function getMedName($med_id) {
-// Prepare the SQL query
+    // Get the name of a feed by ID
+    public function getMedName($med_id)
+    {
+        // Prepare the SQL query
         $query = "SELECT med_name FROM " . $this->table_name . " WHERE med_id = :med_id";
         $stmt = $this->conn->prepare($query);
 
-// Bind the parameters
+        // Bind the parameters
         $stmt->bindParam(':med_id', $med_id);
 
-// Execute the query
+        // Execute the query
         if ($stmt->execute()) {
-// Fetch the result
+            // Fetch the result
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Check if a result was returned
+            // Check if a result was returned
             if ($result) {
                 return $result['med_name'];
             } else {
@@ -139,8 +167,9 @@ class Medicine implements crud {
         }
     }
 
-    public function getAllSuppliers($user_id) {
-// Prepare the SQL query
+    public function getAllSuppliers($user_id)
+    {
+        // Prepare the SQL query
         $query = "SELECT sup_id,sup_name FROM supplier WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -148,7 +177,8 @@ class Medicine implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function calculateStock($med_id, $usage) {
+    public function calculateStock($med_id, $usage)
+    {
         $buyMedi = new BuyMedicine($this->conn);
         $purchases = $buyMedi->getStockSortedByDate($med_id);
 
@@ -201,7 +231,8 @@ class Medicine implements crud {
         ];
     }
 
-    public function medicineExists($user_id) {
+    public function medicineExists($user_id)
+    {
         // Modify the query to remove spaces and make it case-insensitive
         $query = "SELECT med_id FROM " . $this->table_name . " 
               WHERE LOWER(REPLACE(med_name, ' ', '')) = LOWER(REPLACE(:med_name, ' ', '')) 
@@ -215,5 +246,4 @@ class Medicine implements crud {
 
         return $stmt->rowCount() > 0;
     }
-
 }

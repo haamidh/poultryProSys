@@ -31,6 +31,7 @@ if ($feed_id) {
     $feed_details = $feed->readOne($feed_id);
     if ($feed_details) {
         $feed_name = $feed_details['feed_name'];
+        $least_quantity = $feed_details['least_quantity'];
         $description = $feed_details['description'];
     } else {
         echo "No feed found with the provided ID.";
@@ -44,6 +45,7 @@ if ($feed_id) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set feed properties
     $feed->setFeed_name($_POST['feed_name']);
+    $feed->setLeastQuantity(number_format($_POST['least_quantity'], 2));
     $feed->setDescription($_POST['description']);
 
     // Update feed details
@@ -73,6 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="col-sm-4 col-form-label">Feed Name:</label>
                                         <div class="col-sm-8">
                                             <input class="form-control" type="text" name="feed_name" id="feed_name" value="<?php echo htmlspecialchars($feed_name); ?>" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Notification Threshold:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity" value="<?php echo htmlspecialchars($least_quantity); ?>">
                                         </div>
                                     </div>
                                 </div>
