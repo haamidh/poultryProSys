@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             switch ($_SESSION['role']) {
                 case "admin":
-                    header("Location: admin_dashboard.php");
+                    header("Location: admin/dashboard.php");
                     exit();
                 case "farm":
                     header("Location: farm/dashboard.php");
