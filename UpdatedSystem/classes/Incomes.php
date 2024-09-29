@@ -1,4 +1,9 @@
 <?php
+require_once 'Product.php';
+$database = new Database();
+$db = $database->getConnection();
+
+$product = new Product($db);
 
 class Incomes
 {
@@ -6,13 +11,16 @@ class Incomes
     private $user_id;
     private $from_date;
     private $to_date;
+    private $product;
 
-    public function __construct($db, $user_id, $from_date = '', $to_date = '')
+    // Pass the $product object through the constructor
+    public function __construct($db, $user_id, $product, $from_date = '', $to_date = '')
     {
         $this->conn = $db;
         $this->user_id = $user_id;
         $this->from_date = $from_date;
         $this->to_date = $to_date;
+        $this->product = $product; // Store it as a property
     }
 
     public function getOrderData()
@@ -29,13 +37,16 @@ class Incomes
         }
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Use the $this->product to get the product name
         foreach ($results as &$result) {
             $result['type'] = 'order';
             $result['date'] = $result['ordered_date'];
-            $result['detail'] = "Sold " . $result['product_id'];
+            $result['detail'] = "Sold " . $this->product->getProductName($result['product_id']);
             $result['received_from'] = $result['cus_id'];
-            $result['total'] = $result['total'];
+            $result['amount'] = $result['total'];
         }
+
         return $results;
     }
 
@@ -45,7 +56,7 @@ class Incomes
         $all_data = $order_data;
 
         // Sort data by date
-        usort($all_data, function($a, $b) {
+        usort($all_data, function ($a, $b) {
             return strtotime($a['date']) - strtotime($b['date']);
         });
 
@@ -59,4 +70,3 @@ class Incomes
         return $total_amount;
     }
 }
-?>

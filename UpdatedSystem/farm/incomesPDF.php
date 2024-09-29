@@ -30,12 +30,15 @@ $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
 $database = new Database();
 $db = $database->getConnection();
 
-// Instantiate the Expenses class
-$expenses = new Incomes($db, $farm['user_id'], $from_date, $to_date);
+// Instantiate the Product class
+$product = new Product($db);
+
+// Instantiate the Incomes class and pass the Product object
+$incomes = new Incomes($db, $farm['user_id'], $product, $from_date, $to_date);
 
 // Fetch all data and total amount
-$all_data = $expenses->getAllData();
-$total_amount = $expenses->getTotalAmount();
+$all_data = $incomes->getAllData();
+$total_amount = $incomes->getTotalAmount();
 
 // Generate HTML content for PDF
 $html = '<!DOCTYPE html>

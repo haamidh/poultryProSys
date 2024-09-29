@@ -93,7 +93,7 @@ class Expenses {
         foreach ($results as &$result) {
             $result['type'] = 'feed';
             $result['date'] = $result['created_at'];
-            $result['detail'] = "Import " . $feed->getFeedName($result['feed_id']);
+            $result['detail'] = "Import abc " . $feed->getFeedName($result['feed_id']);
             $result['paid_to'] = $bird->getSupplier($result['sup_id'], $this->db);
             $result['amount'] = $result['total'];
         }

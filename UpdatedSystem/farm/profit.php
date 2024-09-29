@@ -36,8 +36,12 @@ $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
 $database = new Database();
 $db = $database->getConnection();
 
+// Instantiate the Product class
+$product = new Product($db);
+
+
 // Instantiate Incomes, Expenses, and Stocks classes
-$incomes = new Incomes($db, $user_id, $from_date, $to_date);
+$incomes = new Incomes($db, $farm['user_id'], $product, $from_date, $to_date);
 $expenses = new Expenses($db, $user_id, $from_date, $to_date);
 $stocks = new Stocks($db, $user_id, $from_date, $to_date);
 
@@ -68,7 +72,8 @@ $profitLoss = $totalIncome + $totalStocks - $totalExpense;  // Profit or loss
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-6">
                                     <label for="from_date">From Date:</label>
-                                    <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">  </div>
+                                    <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">
+                                </div>
                                 <div class="col-lg-4 col-md-6 col-6">
                                     <label for="to_date">To Date:</label>
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
@@ -92,7 +97,7 @@ $profitLoss = $totalIncome + $totalStocks - $totalExpense;  // Profit or loss
                         <div class="row my-4 py-4">
                             <div class="col-12">
 
-                                <table class="table table-bordered border-dark" >
+                                <table class="table table-bordered border-dark">
                                     <thead>
                                         <tr>
                                             <th scope="col" colspan="5" class="table-info">Incomes</th>

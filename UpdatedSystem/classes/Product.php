@@ -290,7 +290,7 @@ class Product implements crud {
         // Modify the query to remove spaces and make it case-insensitive
         $query = "SELECT product_id FROM " . $this->table_name . " 
               WHERE LOWER(REPLACE(product_name, ' ', '')) = LOWER(REPLACE(:product_name, ' ', '')) 
-              AND user_id = :user_id 
+              AND farm_id = :user_id 
               LIMIT 1";
 
         $stmt = $this->conn->prepare($query);

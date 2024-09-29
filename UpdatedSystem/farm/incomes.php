@@ -31,8 +31,12 @@ $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
 $database = new Database();
 $db = $database->getConnection();
 
-// Instantiate the Income class
-$income = new Incomes($db, $farm['user_id'], $from_date, $to_date);
+// Instantiate the Product class
+$product = new Product($db);
+
+// Instantiate the Incomes class and pass the Product object
+$income = new Incomes($db, $farm['user_id'], $product, $from_date, $to_date);
+
 
 // Fetch all data and total amount
 $all_data = $income->getAllData();
@@ -54,7 +58,8 @@ $total_amount = $income->getTotalAmount();
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-6">
                                     <label for="from_date">From Date:</label>
-                                    <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">  </div>
+                                    <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">
+                                </div>
                                 <div class="col-lg-4 col-md-6 col-6">
                                     <label for="to_date">To Date:</label>
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
@@ -84,16 +89,16 @@ $total_amount = $income->getTotalAmount();
                                         <th scope="col">Date</th>
                                         <th scope="col">Income Detail</th>
                                         <th scope="col">Received From</th>
-                                        <th scope="col" >Amount</th>
+                                        <th scope="col">Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-// Display the sorted data
+                                    // Display the sorted data
                                     if (!empty($all_data)) {
                                         $uid = 1;
                                         foreach ($all_data as $data) {
-                                            ?>
+                                    ?>
                                             <tr>
                                                 <td><?php echo $uid ?></td>
                                                 <td><?php echo htmlspecialchars(substr($data['date'], 0, 10)) ?></td>
@@ -101,7 +106,7 @@ $total_amount = $income->getTotalAmount();
                                                 <td><?php echo htmlspecialchars($data['received_from']) ?></td>
                                                 <td style="text-align:right;"><?php echo number_format($data['amount'], 2) ?></td>
                                             </tr>
-                                            <?php
+                                        <?php
                                             $uid++;
                                         }
                                         ?>

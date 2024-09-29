@@ -11,7 +11,7 @@ require_once "../classes/checkLogin.php";
 require_once "../classes/Expenses.php";
 require_once "../classes/Incomes.php";
 require_once "../classes/Stocks.php";
-require_once __DIR__ . '../vendor/autoload.php';
+require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 // Ensure the user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'farm') {
@@ -19,15 +19,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'farm') {
     exit();
 }
 
-// Retrieve user id from session
-$user_id = $_SESSION['user_id'];
+// Get user ID from session
+$user_id = $_SESSION["user_id"];
 
 // Check login and fetch farm data
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
-$farm_name = $farm['username'];
-$address = $farm['address'];
 
-// Get from and to date from the submission if available
+// Get 'from' and 'to' dates from the form submission, if available
 $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
 $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
 
@@ -35,23 +33,32 @@ $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
 $database = new Database();
 $db = $database->getConnection();
 
-// Initialize the incomes, expenses, and stocks classes
-$incomes = new Incomes($db, $user_id, $from_date, $to_date);
+// Instantiate the Product class
+$product = new Product($db);
+
+
+// Instantiate Incomes, Expenses, and Stocks classes
+$incomes = new Incomes($db, $farm['user_id'], $product, $from_date, $to_date);
 $expenses = new Expenses($db, $user_id, $from_date, $to_date);
 $stocks = new Stocks($db, $user_id, $from_date, $to_date);
 
-// Fetch all data from Incomes, Expenses, and Stocks class
-$totalIncomes = $incomes->getTotalAmount();
-$expensesData = $expenses->getAllDataCategorized();
-$totalExpenses = $expenses->getTotalAmount();
-$stocksDataCategorized = $stocks->getAllStockDataCategorized();
-$totalStocks = $stocks->getTotalStockAmount();
+// Fetch data from Incomes, Expenses, and Stocks classes
+$incomeData = $incomes->getAllData();
+$totalIncome = $incomes->getTotalAmount();
 
-$profitLoss = $totalIncomes + $totalStocks - $totalExpenses;  // Profit or loss
+$expensesDataCategorized = $expenses->getAllDataCategorized();
+$totalExpense = $expenses->getTotalAmount();
+
+$stocksDataCategorized = $stocks->getAllDataCategorized($from_date, $to_date);
+$totalStocks = $stocks->getTotalStockValue($from_date, $to_date);
+
+$profitLoss = $totalIncome + $totalStocks - $totalExpense;
+
 
 $html = '
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Profit Report</title>
@@ -59,23 +66,29 @@ $html = '
         body {
             font-family: sans-serif;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #000;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .text-right {
             text-align: right;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="logo" style="text-align: center;">
@@ -164,7 +177,7 @@ $html = '
             </tr>
             <tr>
                 <td colspan="4" style="padding-left:150px;">Total Feeds Stock Value</td>
-                <td class="text-right" >' . number_format($stocksDataCategorized['total_feed_stock_amount'], 2) . '</td>
+                <td class="text-right">' . number_format($stocksDataCategorized['total_feed_stock_amount'], 2) . '</td>
             </tr>
             <tr>
                 <td colspan="4" style="padding-left:150px;"><strong>Total Stocks Value</strong></td>
@@ -195,11 +208,10 @@ $html = '
         </tbody>
     </table>
 </body>
+
 </html>';
 
 // Generate PDF
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML($html);
 $mpdf->Output('expenses_report.pdf', 'I');
-
-?>
