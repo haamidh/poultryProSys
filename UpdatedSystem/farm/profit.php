@@ -55,7 +55,7 @@ $totalExpense = $expenses->getTotalAmount();
 $stocksDataCategorized = $stocks->getAllDataCategorized($from_date, $to_date);
 $totalStocks = $stocks->getTotalStockValue($from_date, $to_date);
 
-$profitLoss = $totalIncome + $totalStocks - $totalExpense;  // Profit or loss
+$profitLoss = $totalIncome + $totalStocks - $totalExpense;
 ?>
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
@@ -79,13 +79,18 @@ $profitLoss = $totalIncome + $totalStocks - $totalExpense;  // Profit or loss
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 pt-4 text-center">
-                                    <div class="row px-5">
-                                        <div class="col-lg-6 col-md-6 col-6">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-6">
                                             <button type="submit" class="btn btn-primary">Filter</button>
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-6">
+                                        <div class="col-lg-4 col-md-4 col-6">
                                             <button class="btn btn-danger">
-                                                <a href="profitPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light" style="text-decoration: none;">Export PDF</a>
+                                                <a href="profitPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>$action=download" class="text-light" style="text-decoration: none;">Downlaod</a>
+                                            </button>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-6">
+                                            <button class="btn btn-success">
+                                                <a href="profitPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light" style="text-decoration: none;">View PDF</a>
                                             </button>
                                         </div>
                                     </div>

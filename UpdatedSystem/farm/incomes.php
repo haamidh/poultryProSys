@@ -65,15 +65,21 @@ $total_amount = $income->getTotalAmount();
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 pt-4 text-center">
-                                    <div class="row px-5">
-                                        <div class="col-lg-6 col-md-6 col-6">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-6">
                                             <button type="submit" class="btn btn-primary">Filter</button>
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-6">
+                                        <div class="col-lg-4 col-md-4 col-6">
                                             <button class="btn btn-danger">
-                                                <a href="incomesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light" style="text-decoration: none;">Export PDF</a>
+                                                <a href="incomesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>&action=download" class="text-light" style="text-decoration: none;">Download</a>
                                             </button>
                                         </div>
+                                        <div class="col-lg-4 col-md-4 col-6">
+                                            <button class="btn btn-success">
+                                                <a href="incomesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light" style="text-decoration: none;">View PDF</a>
+                                            </button>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

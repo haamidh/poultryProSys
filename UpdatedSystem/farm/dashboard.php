@@ -33,9 +33,12 @@ $db = $database->getConnection();
 $from_date = date('Y-m-d');
 $to_date = date('Y-m-d', strtotime('+1 day'));
 
+// Instantiate the Product class
+$product = new Product($db);
+
 $expenses = new Expenses($db, $farm['user_id'], $from_date, $to_date);
 $total_expenses = $expenses->getTotalAmount();
-$incomes = new Incomes($db, $farm['user_id'], $from_date, $to_date);
+$incomes = new Incomes($db, $farm['user_id'], $product, $from_date, $to_date);
 $total_incomes = $incomes->getTotalAmount();
 $stocks = new Stocks($db, $farm['user_id']);
 
@@ -55,18 +58,21 @@ $notifications = $notification->getAllNotifications();
 ?>
 <style>
     .card-title {
-        font-weight: bold; 
+        font-weight: bold;
         font-size: 18px;
     }
-    .card-text{
-        font-size: 20px; 
+
+    .card-text {
+        font-size: 20px;
         font-weight: bold;
     }
+
     #noti_number {
         font-size: 24px;
         position: relative;
         cursor: pointer;
     }
+
     #noti_number::after {
         content: "<?php echo $notificationCount; ?>";
         position: absolute;
@@ -78,6 +84,7 @@ $notifications = $notification->getAllNotifications();
         padding: 2px 6px;
         font-size: 12px;
     }
+
     #notification_list {
         display: none;
         background: black;
@@ -90,18 +97,21 @@ $notifications = $notification->getAllNotifications();
         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
         z-index: 1000;
     }
+
     #notification_list ul {
         list-style: none;
         margin: 0;
         padding: 5px;
     }
+
     #notification_list li {
         padding: 5px;
         border-bottom: 1px solid #ddd;
     }
+
     #notification_list li:last-child {
         border-bottom: none;
-    }    
+    }
 </style>
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
     <div class="container">
@@ -123,7 +133,7 @@ $notifications = $notification->getAllNotifications();
                 <div class="card">
                     <div class="card-body p-4" style="background-color: #9B59B6;">
                         <h5 class="card-title text-white">TODAY ORDERS</h5>
-                        <h6 class="card-text text-white" > <?php echo number_format($today_orders); ?></h6>
+                        <h6 class="card-text text-white"> <?php echo number_format($today_orders); ?></h6>
                     </div>
                     <div class="card-footer" style="background-color: #D4C8DE;">
                         <a href="#" class="text-dark">More Details</a>
@@ -135,7 +145,7 @@ $notifications = $notification->getAllNotifications();
                 <div class="card">
                     <div class="card-body p-4" style="background-color: #989E12;">
                         <h5 class="card-title text-white">TODAY INCOME</h5>
-                        <h6 class="card-text text-white" >RS. <?php echo number_format($total_incomes, 2); ?></h6>
+                        <h6 class="card-text text-white">RS. <?php echo number_format($total_incomes, 2); ?></h6>
                     </div>
                     <div class="card-footer" style="background-color: #F1F4B0;">
                         <a href="incomes.php" class="text-dark">More Details</a>
@@ -147,7 +157,7 @@ $notifications = $notification->getAllNotifications();
                 <div class="card">
                     <div class="card-body p-4" style="background-color: #B71717;">
                         <h5 class="card-title text-white">TODAY EXPENSES</h5>
-                        <h6 class="card-text text-white" >RS. <?php echo number_format($total_expenses, 2); ?></h6>
+                        <h6 class="card-text text-white">RS. <?php echo number_format($total_expenses, 2); ?></h6>
                     </div>
                     <div class="card-footer" style="background-color: #F0A9A9;">
                         <a href="expenses.php" class="text-dark">More Details</a>
@@ -175,7 +185,7 @@ $notifications = $notification->getAllNotifications();
                         <h5 class="card-title text-white mb-0"><strong style="font-size:25px;">Today's Price List</strong></h5>
                     </div>
                     <div class="card-footer p-0">
-                        <div class="table-responsive" >
+                        <div class="table-responsive">
                             <table class="table table-bordered table-hover mb-0">
                                 <thead class="thead-dark text-center">
                                     <tr>
@@ -191,7 +201,7 @@ $notifications = $notification->getAllNotifications();
                                     $serialnum = 0;
                                     foreach ($products as $product) {
                                         $serialnum++;
-                                        ?>
+                                    ?>
                                         <tr>
                                             <th class="text-center"><?php echo $serialnum; ?></th>
                                             <td><?php echo $product['product_name']; ?></td>
@@ -244,7 +254,7 @@ $frame->last_part();
     }
 </script>
 <script>
-    document.getElementById('noti_number').addEventListener('click', function () {
+    document.getElementById('noti_number').addEventListener('click', function() {
         var notificationList = document.getElementById('notification_list');
         if (notificationList.style.display === 'none' || notificationList.style.display === '') {
             notificationList.style.display = 'block';
@@ -253,6 +263,3 @@ $frame->last_part();
         }
     });
 </script>
-
-
-

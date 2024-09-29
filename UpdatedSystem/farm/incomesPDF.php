@@ -36,6 +36,8 @@ $product = new Product($db);
 // Instantiate the Incomes class and pass the Product object
 $incomes = new Incomes($db, $farm['user_id'], $product, $from_date, $to_date);
 
+$action = isset($_GET['action']) && $_GET['action'] === 'download' ? 'D' : 'I';
+
 // Fetch all data and total amount
 $all_data = $incomes->getAllData();
 $total_amount = $incomes->getTotalAmount();
@@ -112,5 +114,5 @@ $html .= '</tbody>
 // Generate PDF
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML($html);
-$mpdf->Output('incomes_report.pdf', 'I');
+$mpdf->Output('incomes_report.pdf', $action);
 ?>

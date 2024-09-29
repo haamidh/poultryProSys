@@ -26,6 +26,9 @@ $address = $farm['address'];
 $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
 $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
 
+// Check if the action is 'download' or 'view'
+$action = isset($_GET['action']) && $_GET['action'] === 'download' ? 'D' : 'I';
+
 // Initialize database connection
 $database = new Database();
 $db = $database->getConnection();
@@ -108,5 +111,5 @@ $html .= '</tbody>
 // Generate PDF
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML($html);
-$mpdf->Output('expenses_report.pdf', 'I');
+$mpdf->Output('expenses_report.pdf', $action);
 ?>

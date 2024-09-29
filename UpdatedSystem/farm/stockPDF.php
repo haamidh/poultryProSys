@@ -29,6 +29,7 @@ $address = $farm['address'];
 // Get 'from' and 'to' dates from the form submission, if available
 $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
 $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
+$action = isset($_GET['action']) && $_GET['action'] === 'download' ? 'D' : 'I';
 
 // Initialize database connection
 $database = new Database();
@@ -212,6 +213,6 @@ $html .= '</tbody>
 // Generate PDF
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML($html);
-$mpdf->Output('stock_report.pdf', 'I');
+$mpdf->Output('stock_report.pdf', $action);
 
 ?>
