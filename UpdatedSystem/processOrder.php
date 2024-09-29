@@ -51,7 +51,8 @@
                   <h6 class="text">Total Price : <?php echo 'Rs. '.$total."/="; ?></h6>
                 </div>
                 <form action="checkout.php" method="post"> <div class="form-group">
-                  
+                <input type="hidden" name="items" value="<?php echo $row['product_name']; ?>">
+                <input type="hidden" name="amount" value="<?php echo $total; ?>">
                     
 
                   </div>

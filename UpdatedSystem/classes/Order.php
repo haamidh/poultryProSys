@@ -106,7 +106,7 @@ class Order {
     // Method to create a new order
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  (order_id, cus_id, farmer_id, product_id, quantity, unit_price, total, status, ordered_date) 
+                  (cus_id, farmer_id, product_id, quantity, unit_price, total, status, ordered_date) 
                   VALUES (:order_id, :cus_id, :farmer_id, :product_id, :quantity, :unit_price, :total, :status, :ordered_date)";
         $stmt = $this->conn->prepare($query);
 
