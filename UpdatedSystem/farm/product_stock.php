@@ -32,7 +32,7 @@ $total = '';
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
-    //$batch_id = $_POST['batch_id'];
+    $batch_id = $_POST['batch_id'];
     $quantity = $_POST['quantity'];
     $unit_price = $_POST['unit_price'];
     $total = $_POST['total'];
@@ -44,20 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
     $productStock->setUnit_price($unit_price);
     $productStock->setTotal($total);
 
-    // if ($productStock->create($user_id)) {
-    //     $success_message = "Added to stock successfully.";
-    //     // Redirect to the same page to avoid resubmission on refresh
-    //     header("Location: " . $_SERVER['PHP_SELF'] . "?product_id=" . $product_id);
-    //     exit();
-    // } 
-    if($productStock->addStock($user_id)){
-            $success_message = "Added to stock successfully.";
+    if ($productStock->create($user_id)) {
+        $success_message = "Added to stock successfully.";
         // Redirect to the same page to avoid resubmission on refresh
         header("Location: " . $_SERVER['PHP_SELF'] . "?product_id=" . $product_id);
         exit();
-    
-    }
-    else {
+    } else {
         $error_message = "Failed to add to stock.";
     }
 }
@@ -109,7 +101,7 @@ $frame->first_part($farm);
                                 </div>
                             </div>
 
-                            <!-- <div class="row p-2">
+                            <div class="row p-2">
                                 <div class="col">
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-form-label">Batch:</label>
@@ -126,7 +118,7 @@ $frame->first_part($farm);
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
 
                             <div class="row p-2">
                                 <div class="col">

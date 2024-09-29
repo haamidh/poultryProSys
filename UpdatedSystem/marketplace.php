@@ -50,7 +50,7 @@ $conn = $db->getConnection();
 <div class="container mt-5">
     <div class="row">
         <?php
-        $sql = "SELECT product_id,product_name,  category_id, product_price, product_img, description FROM products ORDER BY product_id DESC";
+        $sql = "SELECT product_id, product_name,  category_id, product_price, product_img, description FROM products ORDER BY product_id DESC";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 

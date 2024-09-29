@@ -99,17 +99,21 @@ class ProductStock implements crud
         return $stmt->execute();
     }
 
-    public function getDBQuantity(){
-        $query = "SELECT quantity FROM ".$this->table_name ."
-        WHERE product_id = :product_id";
-        try{
-            $stmt = $this->conn->prepare($query);
-            
-        } catch(PDOException $e){
+    // public function getDBQuantity(){
+    //     $query = "SELECT quantity FROM ".$this->table_name ."
+    //     WHERE product_id = :product_id";
+    //     try{
+    //         $stmt = $this->conn->prepare($query);
+    //         $stmt->bindParam(':product_id', 1);
+    //         $stmt->execute();
+    //         return $stmt->fetch(PDO::FETCH_ASSOC);
+    //     } catch(PDOException $e){
+    //         echo "Error getting quantity from database: " . $e->getMessage();
+    //     return false;
 
-        }
+    //     }
 
-    }
+    // }
 
     public function addStock()
     {
