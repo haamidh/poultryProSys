@@ -3,14 +3,14 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'config.php';
-require_once 'checkLogin.php';
-require_once 'admin_frame.php';
-require_once 'Feedback.php'; // Include the Feedback class file
+require_once '../classes/config.php';
+require_once '../classes/checkLogin.php';
+require_once 'Frame.php';
+require_once '../classes/Feedback.php';
 
 // Redirect to login page if user is not logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 

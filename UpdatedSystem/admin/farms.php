@@ -3,12 +3,12 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'config.php';
-require_once 'checkLogin.php';
-require_once 'admin_frame.php';
+require_once '../classes/config.php';
+require_once '../classes/checkLogin.php';
+require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 

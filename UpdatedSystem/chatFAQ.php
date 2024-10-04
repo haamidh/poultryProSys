@@ -26,9 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['clear'])) {
         For more detailed instructions or support, refer to the Poultry Pro website or contact their customer service.",
     ];
 
+    // Convert user message to lowercase for comparison
     $userMessageLower = strtolower($userMessage);
     $botResponse = "Sorry, I didn't understand that.";
 
+    // Look for a matching response
     foreach ($responses as $key => $response) {
         if (strpos(strtolower($key), $userMessageLower) !== false) {
             $botResponse = $response;
@@ -44,7 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['clear'])) {
     $_SESSION['chat_messages'][] = ['sender' => 'user', 'message' => $userMessage];
     $_SESSION['chat_messages'][] = ['sender' => 'bot', 'message' => $botResponse];
 
-    header('Location: chatbot.php');
+    // Stay on the same page
+    header('Location: chatFAQ.php');
     exit();
 }
 ?>
@@ -65,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['clear'])) {
         .navbar .nav-link {
             color: white !important;
             font-weight: bold;
-            
         }
 
         .navbar .nav-link:hover {
@@ -82,7 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['clear'])) {
             height: 40px;
             border-radius: 50%;
         }
-
 
         body {
             background-color: #f8f9fa;
@@ -247,56 +248,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['clear'])) {
                         }
                         ?>
                     </div>
-                    <form id="chat-form" action="chatbot.php" method="post" class="mb-3">
+                    <form id="chat-form" action="chatFAQ.php" method="post" class="mb-3">
                         <div class="input-group">
-                            <input type="text" id="message" class="form-control" name="message" placeholder="Type your message..." required>
-                            <button class="btn btn-primary" type="submit">Send</button>
+                            <input type="text" name="message" id="message" class="form-control" placeholder="Type your message..." required>
+                            <button type="submit" class="btn btn-primary">Send</button>
                         </div>
                     </form>
-                    <form action="chatbot.php" method="post" class="clear-chat-btn">
-                        <input type="hidden" name="clear" value="true">
-                        <button class="btn btn-danger" type="submit">Clear Chat</button>
+                    <form action="chatFAQ.php" method="post" class="clear-chat-btn">
+                        <button type="submit" name="clear" class="btn btn-warning">Clear Chat</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        function setMessage(message) {
-            document.getElementById('message').value = message;
-        }
-    </script>
-
 
     <footer class="footer">
-        <div style="align-items: center; text-align: center;">
-            <a href="index.html" style="color: white;">About Us</a>&nbsp;&nbsp;
-            <a href="#" style="color: white;">Market Place</a>&nbsp;&nbsp;
-            <a href="contact_us.php" style="color: white;">Contact</a>&nbsp;&nbsp;
-            <a href="feedbacks.php" style="color: white;">Review</a>&nbsp;&nbsp;
-            <a href="login.php" style="color: white;">Log In</a>&nbsp;&nbsp;
-            <a href="register.php" style="color: white;">Sign Up</a>
-        </div>
-        <div style="align-items: center; text-align: center;">
-            <hr style="border: 1px solid white; border-radius: 5px; margin-left: 50px; margin-right: 50px;">
-        </div>
-        <div style="display: flex; align-items: center;">
-            <div style="flex: 1; text-align: center;">
-                <p>&copy; 2024 PoultryPro. All Rights Reserved.</p>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <a class="navbar-brand mx-5" href="index.html">
-                    <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%;">
-                    PoultryPro
-                </a>
-            </div>
-            <div style="flex: 1; text-align: center; font-size: 28px;">
-                <a href="login.php" style="color: white;"><i class="bi bi-instagram"></i></a>&nbsp;
-                <a href="https://www.facebook.com/abdulrahman.dulapandan?mibextid=JRoKGi"><i class="bi bi-facebook"></i></a>&nbsp;
-                <a href="https://wa.me/+94768821356?text=I'm%20interested%20in%20your%20car%20for%20sale"><i class="bi bi-whatsapp"></i></a>
+        <div class="container text-center">
+            <p>&copy; PoultryPro 2024 | Designed by Abdul Rahman Dulapandan</p>
+            <div class="footer-icons">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-twitter"></i></a>
             </div>
         </div>
     </footer>
+
+    <script>
+        function setMessage(text) {
+            document.getElementById('message').value = text;
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
