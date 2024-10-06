@@ -1,11 +1,7 @@
 <?php
-
-require_once 'marketplace/marketplaceFrame.php';
 require 'classes/config.php';
 require 'marketplace/marketPlaceCRUD.php';
 
-$marketPlaceFrame = new marketPlaceFrame();
-$marketPlaceFrame->navbar();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $product_name = $_POST['items'];
     $amount = $_POST['amount'];
@@ -17,31 +13,29 @@ $currency = "LKR";
 
 $order_id = 1227852;
 $hash = strtoupper(
-    md5(
-        $merchant_id .
-            $order_id .
-            number_format($amount, 2, '.', '') .
-            $currency .
-            strtoupper(md5($merchant_secret))
-    )
+        md5(
+                $merchant_id .
+                $order_id .
+                number_format($amount, 2, '.', '') .
+                $currency .
+                strtoupper(md5($merchant_secret))
+        )
 );
-
-
-
 ?>
 
 <html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-<link rel="stylesheet" href="marketplace/marketPlaceStyle.css">
-<title>MarketPlace - PoultryPro</title>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="header.css">
+    <title>MarketPlace - PoultryPro</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-    
+<?php include 'includes/header.php'; ?>
 
     <div class="container">
         <div class="py-5 text-center">
@@ -69,7 +63,7 @@ $hash = strtoupper(
                             <input type="text" class="form-control" name="items" value="<?php echo $product_name ?>" readonly>
                         </div>
                         <div class="col mb-4">
-                            <label for="La\st name">Amount</label>
+                            <label for="Last name">Amount</label>
                             <input type="text" class="form-control" name="amount" value="<?php echo $amount; ?>" readonly>
                         </div>
                     </div>
@@ -108,13 +102,13 @@ $hash = strtoupper(
                         <hr class="mb-4">
 
                         <input type="hidden" name="country" value=""></br>
-            <input type="hidden" name="hash" value="<?php echo $hash; ?>">
-            
+                        <input type="hidden" name="hash" value="<?php echo $hash; ?>">
+
 
                         <div class="d-grid gap-2">
-                            
+
                             <input type="submit" value="Continue to Checkout" value="Buy Now" class="btn btn-primary btn-lg">
-                                
+
                             </form>
                         </div>
 

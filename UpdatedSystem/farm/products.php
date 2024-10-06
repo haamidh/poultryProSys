@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->setUnit($unit);
     $product->setCategory_id($category_id);
     $product->setProduct_price($selling_price);
-    $product->setProduct_img("./images/ProductImages/" . basename($_FILES["product_img"]["name"]));
+    $product->setProduct_img("images/ProductImages/" . basename($_FILES["product_img"]["name"]));
     $product->setLeastQuantity($least_quantity);
     $product->setDescription($description);
 

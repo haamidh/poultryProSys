@@ -26,63 +26,9 @@ $db = $database->getConnection();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
-        .navbar-nav .nav-item a {
-            font-weight: bold;
-        }
-
-        .navbar {
-            background-color: #356854;
-        }
-
-        .navbar .nav-link {
-            color: white !important;
-        }
-
-        .navbar .nav-link:hover {
-            color: #ddd !important;
-        }
-
-        .navbar .nav-item.active .nav-link {
-            color: #fff !important;
-            text-decoration: underline;
-        }
-
-        .navbar-brand img {
-            width: 40px;
-            height: 40px;
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-        }
-
-        .solid-hr {
-            border: 5px solid white;
-            border-radius: 5px;
-        }
-
-        .sign-in-btn {
-            background-color: #B7BF4A !important;
-            color: white !important;
-        }
-
-        .contentArea {
-            position: relative;
-            text-align: center;
-            color: white;
-        }
 
         .contentArea h1 {
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0);
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
         }
 
         .text-container {
@@ -110,59 +56,8 @@ $db = $database->getConnection();
             color: white !important;
         }
 
-        .navbar-nav .nav-item a {
-            font-weight: bold;
-        }
-
-        .navbar {
-            background-color: #356854;
-        }
-
-        .navbar .nav-link {
-            color: white !important;
-        }
-
-        .navbar .nav-link:hover {
-            color: #ddd !important;
-        }
-
-        .navbar .nav-item.active .nav-link {
-            color: #fff !important;
-            text-decoration: underline;
-        }
-
-        .navbar-brand img {
-            width: 40px;
-            height: 40px;
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-        }
-
-
-
-        .solid-hr {
-            border: 5px solid white;
-            border-radius: 5px;
-
-            margin-left: 250px;
-            margin-right: 250px;
-        }
-
-        .solid-hr1 {
-            border: 5px solid black;
-            border-radius: 5px;
-
-            margin-left: 250px;
-            margin-right: 250px;
-            margin-top: 100px;
-        }
-
-        .sign-in-btn {
-            background-color: #B7BF4A !important;
-            color: white !important;
-        }
+    
+     
 
         .contentArea {
             position: relative;
@@ -175,14 +70,7 @@ $db = $database->getConnection();
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0);
         }
 
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-        }
+  
 
         .text-container {
             position: relative;
@@ -190,79 +78,12 @@ $db = $database->getConnection();
             padding: 150px 70px;
         }
 
-        .footer {
-            background-color: #356854;
-            color: white;
-            padding: 20px 0;
-            margin-top: 100px;
-            text-align: center;
-        }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        .footer img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
-        .footer-icons {
-            font-size: 28px;
-            margin-top: 10px;
-        }
-
-        .footer-icons a {
-            color: white;
-            margin: 0 10px;
-        }
-
-        .footer-icons a:hover {
-            color: #ddd;
-        }
     </style>
 
 </head>
 
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand mx-5" href="index.html">
-            <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%;">
-            PoultryPro
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item mx-4">
-                    <a class="nav-link" href="index.html">About Us</a>
-                </li>
-                <li class="nav-item mx-4">
-                    <a class="nav-link" href="#">Market Place</a>
-                </li>
-                <li class="nav-item mx-4">
-                    <a class="nav-link" href="contact_us.php">Contact Us</a>
-                </li>
-                <li class="nav-item mx-4">
-                    <a class="nav-link" href="feedbacks.php">Review</a>
-                </li>
-                <li class="nav-item mx-4">
-                    <a class="nav-link" href="login.php">Log In</a>
-                </li>
-                <li class="nav-item mx-4">
-                    <a class="nav-link sign-in-btn" href="register.php">Sign Up</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <?php include 'includes/header.php'; ?>
 
     <?php
 

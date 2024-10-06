@@ -1,0 +1,28 @@
+.navbar {
+    background-color: #356854;
+}
+
+.navbar .nav-link {
+    color: white !important;
+    font-weight: bold;
+}
+
+.navbar .nav-link:hover {
+    color: #ddd !important;
+}
+
+.navbar .nav-item.active .nav-link {
+    color: #fff !important;
+    text-decoration: underline;
+}
+
+.navbar-brand img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.sign-in-btn {
+    background-color: #B7BF4A !important;
+    color: white !important;
+}
