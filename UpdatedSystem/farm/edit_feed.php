@@ -54,55 +54,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ob_end_flush();
         exit();
     } else {
-        echo "<p>Failed to update feed.</p>";
+        $error_message = "Failed to update feed.";
     }
 }
 ?>
+<style>
+    .form-label {
+        text-align: left;
+        display: block; /* Ensures it behaves like a block-level element */
+    }
 
-<main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
-    <div class="container">
-        <div class="row my-5 text-center justify-content-center">
-            <div class="col-lg-6 col-md-10 col-12 mb-3 my-5 px-5">
-                <div class="card">
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    /* Centering the form */
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+</style>
+
+<main class="col-lg-10 col-md-9 col-sm-8 p-0 overflow-auto">
+    <div class="container ">
+        <div class="row form-container">
+            <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
+                <div class="card shadow">
                     <div class="card-header p-3 text-center" style="background-color: #9B59B6;">
                         <h5 class="card-title text-white"><strong style="font-size: 24px;">Edit Feed</strong></h5>
                     </div>
-                    <div class="card-body" style="background-color: #D4C8DE;">
-                        <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?feed_id=" . $feed_id; ?>" method="POST">
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">Feed Name:</label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="text" name="feed_name" id="feed_name" value="<?php echo htmlspecialchars($feed_name); ?>" required>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="card-body" style="background-color: #F5F5F5;">
+
+                        <!-- Success/Error Messages -->
+                        <?php if (isset($error_message)) : ?>
+                            <div class="alert alert-danger text-center">
+                                <?php echo $error_message; ?>
                             </div>
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">Notification Threshold:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity" value="<?php echo htmlspecialchars($least_quantity); ?>">
-                                        </div>
-                                    </div>
-                                </div>
+                        <?php endif; ?>
+
+                        <!-- Feed Edit Form -->
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?feed_id=" . $feed_id; ?>" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Feed Name:</label>
+                                <input class="form-control" type="text" name="feed_name" id="feed_name" value="<?php echo htmlspecialchars($feed_name); ?>" required>
                             </div>
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">Description:</label>
-                                        <div class="col-sm-8">
-                                            <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($description); ?></textarea>
-                                        </div>
-                                    </div>
-                                </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Notification Threshold:</label>
+                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" value="<?php echo htmlspecialchars($least_quantity); ?>">
                             </div>
-                            <div class="row px-3" style="text-align:center;">
+
+                            <div class="mb-3">
+                                <label class="form-label">Description:</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($description); ?></textarea>
+                            </div>
+
+                            <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary" name="Update">Update</button>
                             </div>
-                            <div class="row px-3 mt-2" style="text-align:center;">
+                            <div class="d-grid gap-2 mt-3">
                                 <a href="feed.php" class="btn btn-danger">Back</a>
                             </div>
                         </form>
@@ -116,3 +129,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php
 $frame->last_part();
 ?>
+

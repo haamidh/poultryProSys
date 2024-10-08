@@ -54,16 +54,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deduct_feed'])) {
 $frame = new Frame();
 $frame->first_part($farm);
 ?>
+<style>
+
+    .card {
+
+        border: none;
+        border-radius: 10px;
+
+    }
+
+</style>
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
-    <div class="container">
-        <div class="row my-5">
+    <div class="container align-items-center">
+        <div class="row my-5   py-5">
 
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-header p-3 text-center" style="background-color: #9B59B6;">
                         <h5 class="card-title text-white"><strong style="font-size: 24px;">Deduct From Stock</strong></h5>
                     </div>
-                    <div class="card-body" style="background-color: #D4C8DE;">
+                    <div class="card-body" style="background-color: #F5F5F5;">
 
                         <?php if (isset($success_message)) : ?>
                             <div class="alert alert-success">
@@ -113,8 +123,8 @@ $frame->first_part($farm);
                 </div>
             </div>
 
-            <div class="col-lg-5 col-md-10 col-12 mb-3 px-5 py-3">
-                <div class="card">
+            <div class="col-lg-6 col-md-10 col-12 mb-3 px-5 py-3 justify-content-center">
+                <div class="card mx-5 shadow">
                     <div class="card-header p-2 text-center" style="background-color: #1E8449;">
                         <h5 class="card-title text-white"><span style="font-weight: bold;font-size: 24px;">Stock Available</span></h5>
                     </div>

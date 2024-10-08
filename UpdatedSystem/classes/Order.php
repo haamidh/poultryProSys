@@ -7,7 +7,7 @@ class Order {
     // Properties
     private $order_id;
     private $cus_id;
-    private $farmer_id;
+    private $farm_id;
     private $product_id;
     private $quantity;
     private $unit_price;
@@ -30,8 +30,8 @@ class Order {
         $this->cus_id = $cus_id;
     }
 
-    public function setFarmer_id($farmer_id) {
-        $this->farmer_id = $farmer_id;
+    public function setFarm_id($farm_id) {
+        $this->farm_id = $farm_id;
     }
 
     public function setProduct_id($product_id) {
@@ -71,8 +71,8 @@ class Order {
         return $this->cus_id;
     }
 
-    public function getFarmer_id() {
-        return $this->farmer_id;
+    public function getFarm_id() {
+        return $this->farm_id;
     }
 
     public function getProduct_id() {
@@ -106,14 +106,14 @@ class Order {
     // Method to create a new order
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  (cus_id, farmer_id, product_id, quantity, unit_price, total, status, ordered_date) 
-                  VALUES (:order_id, :cus_id, :farmer_id, :product_id, :quantity, :unit_price, :total, :status, :ordered_date)";
+                  (cus_id, farm_id, product_id, quantity, unit_price, total, status, ordered_date) 
+                  VALUES (:order_id, :cus_id, :farm_id, :product_id, :quantity, :unit_price, :total, :status, :ordered_date)";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
         $stmt->bindParam(':order_id', $this->order_id);
         $stmt->bindParam(':cus_id', $this->cus_id);
-        $stmt->bindParam(':farmer_id', $this->farmer_id);
+        $stmt->bindParam(':farm_id', $this->farm_id);
         $stmt->bindParam(':product_id', $this->product_id);
         $stmt->bindParam(':quantity', $this->quantity);
         $stmt->bindParam(':unit_price', $this->unit_price);
@@ -129,9 +129,11 @@ class Order {
     }
 
     // Method to read all orders
-    public function read() {
-        $query = "SELECT * FROM " . $this->table_name;
+    public function read($farm_id) {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE farm_id = :farm_id";
+
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':farm_id', $farm_id);
         $stmt->execute();
         $all_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -155,7 +157,7 @@ class Order {
     // Method to update an order
     public function update($order_id) {
         $query = "UPDATE " . $this->table_name . " 
-                  SET cus_id = :cus_id, farmer_id = :farmer_id, product_id = :product_id, 
+                  SET cus_id = :cus_id, farm_id = :farm_id, product_id = :product_id, 
                       quantity = :quantity, unit_price = :unit_price, total = :total, 
                       status = :status, ordered_date = :ordered_date 
                   WHERE order_id = :order_id";
@@ -164,7 +166,7 @@ class Order {
         // Bind parameters
         $stmt->bindParam(':order_id', $order_id);
         $stmt->bindParam(':cus_id', $this->cus_id);
-        $stmt->bindParam(':farmer_id', $this->farmer_id);
+        $stmt->bindParam(':farm_id', $this->farm_id);
         $stmt->bindParam(':product_id', $this->product_id);
         $stmt->bindParam(':quantity', $this->quantity);
         $stmt->bindParam(':unit_price', $this->unit_price);
@@ -192,11 +194,11 @@ class Order {
         return false;
     }
 
-    public function todayOrders($date, $farmer_id) {
-        $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE ordered_date = :ordered_date AND farmer_id=:farmer_id";
+    public function todayOrders($date, $farm_id) {
+        $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE ordered_date = :ordered_date AND farm_id=:farm_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':ordered_date', $date);
-        $stmt->bindParam(':farmer_id', $farmer_id);
+        $stmt->bindParam(':farm_id', $farm_id);
 
         if ($stmt->execute()) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);

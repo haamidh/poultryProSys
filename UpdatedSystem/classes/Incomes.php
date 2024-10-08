@@ -25,7 +25,7 @@ class Incomes
 
     public function getOrderData()
     {
-        $query = "SELECT * FROM orders WHERE farmer_id = :user_id";
+        $query = "SELECT * FROM orders WHERE farm_id = :user_id";
         if ($this->from_date && $this->to_date) {
             $query .= " AND ordered_date BETWEEN :from_date AND :to_date";
         }

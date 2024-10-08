@@ -70,21 +70,21 @@ $frame->first_part($farm);
     }
 
     .card {
-        border-color: #3E497A;
+        background-color: rgba(255, 255, 255, 0.3);
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        margin-top: 50px;
     }
 
-    .card-body {
-        background-color: #EFFFFB;
-        /*        background-image: url('../images/logo-poultryPro.png');
-                background-repeat: no-repeat;
-                
-                background-size: 100% 90%;*/
-
-
-    }
 
     .form-control {
-        border-color: #3E497A;
+        border-radius: 8px;
+        padding: 10px 15px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        transition: border 0.3s ease;
     }
 
     .form-control:focus {
@@ -134,7 +134,7 @@ $frame->first_part($farm);
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
     <div class="container">
-        <div class="row my-5 justify-content-center">
+        <div class="row justify-content-center">
             <div class="col-lg-8 col-md-12 col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
@@ -149,9 +149,9 @@ $frame->first_part($farm);
                                 </div>
                             </div>
 
-                            <div class="row p-2">
+                            <div class="row px-2">
                                 <div class="col">
-                                    <div class="row mb-3">
+                                    <div class="row">
                                         <label class="col-sm-3 col-form-label">Batch:</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="batch" value="<?php echo $next_batch; ?>" readonly>
@@ -159,7 +159,7 @@ $frame->first_part($farm);
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="row mb-3">
+                                    <div class="row">
                                         <label class="col-sm-3 col-form-label">Date:</label>
                                         <div class="col-sm-9">
                                             <input type="date" class="form-control" name="date" required>
@@ -169,9 +169,9 @@ $frame->first_part($farm);
                             </div>
 
 
-                            <div class="row p-2">
+                            <div class="row px-2">
                                 <div class="col">
-                                    <div class="row mb-3">
+                                    <div class="row">
                                         <label class="col-sm-3 col-form-label">Supplier:</label>
                                         <div class="col-sm-9">
                                             <select name="sup_id" id="sup_id" class="form-control" required>
@@ -186,7 +186,7 @@ $frame->first_part($farm);
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="row mb-3">
+                                    <div class="row ">
                                         <label class="col-sm-3 col-form-label">Age:</label>
                                         <div class="col-sm-9">
                                             <input type="number" class="form-control" name="age" id="age" required>
@@ -195,7 +195,7 @@ $frame->first_part($farm);
                                 </div>
                             </div>
 
-                            <div class="row p-2 mb-3">
+                            <div class="row px-2 mb-2">
                                 <div class="form-group">
                                     <label class=" col-form-label">Type:</label>
                                     <div class="form-check form-check-inline mx-5" >
@@ -211,9 +211,9 @@ $frame->first_part($farm);
                             </div>
 
 
-                            <div class="row p-2">
+                            <div class="row px-2">
                                 <div class="col">
-                                    <div class="row mb-3">
+                                    <div class="row">
                                         <label class="col-sm-4 col-form-label">Unit Price:</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" name="unit_price" id="unitPrice" required>
@@ -221,7 +221,7 @@ $frame->first_part($farm);
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="row mb-3">
+                                    <div class="row">
                                         <label class="col-sm-5 col-form-label">Number of Birds:</label>
                                         <div class="col-sm-7">
                                             <input type="number" class="form-control" name="quantity" id="quantity" required>
@@ -231,7 +231,7 @@ $frame->first_part($farm);
                             </div>
 
 
-                            <div class="row mb-3 p-2 justify-content-center">
+                            <div class="row px-2 justify-content-center">
                                 <label class="col-sm-2 col-form-label text-center">Total:</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control text-center" name="total_cost" id="totalCost" readonly required>

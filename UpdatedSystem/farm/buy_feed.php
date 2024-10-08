@@ -66,16 +66,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buy_feed'])) {
 ?>
 
 <!-- The rest of your HTML code for the form and stock display remains unchanged -->
+<style>
+
+    .card {
+
+        border: none;
+        border-radius: 10px;
+
+    }
+
+</style>
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
     <div class="container">
-        <div class="row my-5">
+        <div class="row my-5 mx-auto">
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-header p-3 text-center" style="background-color: #9B59B6;">
                         <h5 class="card-title text-white"><strong style="font-size: 24px;">Add To Stock</strong></h5>
                     </div>
-                    <div class="card-body" style="background-color: #D4C8DE;">
+                    <div class="card-body  ps-4 " style="background-color: #F5F5F5;">
                         <?php if (isset($success_message)) : ?>
                             <div class="alert alert-success">
                                 <?php echo htmlspecialchars($success_message); ?>
@@ -89,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buy_feed'])) {
                         <?php endif; ?>
 
                         <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?feed_id=" . $feed_id; ?>" method="POST">
-                            <div class="row p-2">
+                            <div class="row px-2 pt-3">
                                 <div class="col">
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-form-label">Feed Name:</label>
@@ -100,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buy_feed'])) {
                                 </div>
                             </div>
 
-                            <div class="row p-2">
+                            <div class="row px-2">
                                 <div class="col">
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-form-label">Supplier:</label>
@@ -118,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buy_feed'])) {
                                 </div>
                             </div>
 
-                            <div class="row p-2">
+                            <div class="row px-2">
                                 <div class="col">
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-form-label">Quantity:</label>
@@ -129,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buy_feed'])) {
                                 </div>
                             </div>
 
-                            <div class="row p-2">
+                            <div class="row px-2">
                                 <div class="col">
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-form-label">Unit Price:</label>
@@ -140,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buy_feed'])) {
                                 </div>
                             </div>
 
-                            <div class="row p-2">
+                            <div class="row px-2">
                                 <div class="col">
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-form-label">Total:</label>
@@ -162,8 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buy_feed'])) {
                 </div>
             </div>
 
-            <div class="col-lg-5 col-md-10 col-12 mb-3 px-5 py-5 my-5">
-                <div class="card">
+            <div class="col-lg-6 col-md-10 col-12 mb-3 px-5 py-5 my-5 justify-content-center" >
+                <div class="card mx-auto shadow">
                     <div class="card-header p-2 text-center" style="background-color: #1E8449;">
                         <h5 class="card-title text-white"><span style="font-weight: bold;font-size: 24px;">Stock Available</span></h5>
                     </div>

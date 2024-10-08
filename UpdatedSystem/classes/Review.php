@@ -41,7 +41,7 @@ class Review {
     // Insert review method using getters
     public function insertReview() {
         // Prepare the SQL statement
-        $sql = "INSERT INTO feedback (user_id, rating, comment, created_at) 
+        $sql = "INSERT INTO reviews (user_id, rating, comment, created_at) 
                 VALUES (:user_id, :rating_data, :user_review, NOW())";
         $stmt = $this->conn->prepare($sql);
 
@@ -69,7 +69,7 @@ class Review {
                    SUM(rating = 3) as 3_star_review, 
                    SUM(rating = 2) as 2_star_review, 
                    SUM(rating = 1) as 1_star_review 
-            FROM feedback";
+            FROM reviews";
 
         $stmt = $this->conn->query($sql);
         if ($stmt) {
@@ -89,14 +89,10 @@ class Review {
     }
 
     public function fetchIndividualReviews() {
-        $review_data = [];
-        $review_sql = "SELECT * FROM feedback ORDER BY created_at DESC";
-        $stmt = $this->conn->query($review_sql);
-
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $review_data[] = $row;
-        }
-        return $review_data;
+        $query = "SELECT * FROM reviews ORDER BY created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function findUserName($user_id) {
@@ -110,6 +106,24 @@ class Review {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result['username'] ?? null;
+    }
+
+    public function deleteReview($review_id) {
+        // Use the actual table name in the query
+        $query = "DELETE FROM reviews WHERE review_id = :review_id";
+        $stmt = $this->conn->prepare($query);
+
+        // Bind the feedback_id parameter
+        $stmt->bindParam(':review_id', $review_id);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            // Debugging output
+            print_r($stmt->errorInfo());
+            return false;
+        }
     }
 
 }

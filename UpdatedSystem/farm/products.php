@@ -101,8 +101,8 @@ $products = $product->read($user_id);
         <div class="row my-5 text-center">
 
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
-                <div class="card">
-                    <div class="card-header p-3 text-center" style="background-color: #9B59B6;">
+                <div class="card shadow">
+                    <div class="card-header p-3 text-center" style="background-color: #356854;">
                         <h5 class="card-title text-white"><strong style="font-size: 24px;">Add New Product</strong></h5>
                     </div>
                     <div class="card-body" style="background-color: #D4C8DE;">
@@ -226,20 +226,21 @@ $products = $product->read($user_id);
             </div>
 
             <div class="col-lg-6 col-md-10 col-12 mb-3 my-2">
-                <div class="row p-2">
-                    <div class="col-sm-12">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search for products..." onkeyup="searchProduct()">
-                    </div>
-                </div>
 
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
                         <h5 class="card-title p-2 text-white mb-0"><strong style="font-size:25px;">Product Details</strong></h5>
+                        <div class="input-group" style="width: 250px;">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search for products..." onkeyup="searchProduct()">
+                            <span class="input-group-text">
+                                <i class="bi bi-search" style="color: #3E497A;"></i>
+                            </span>
+                        </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover mb-0">
-                                <thead>
+                            <table class="table table-hover mb-0 table-striped table-bordered">
+                                <thead style="background-color: #3E497A; color: white;">
                                     <tr style="text-align:center;">
                                         <th scope="col">#</th>
                                         <th scope="col">Product Name</th>

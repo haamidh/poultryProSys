@@ -1,10 +1,11 @@
 <?php
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'config.php';
-require_once 'checkLogin.php';
+require_once '../classes/config.php';
+require_once '../classes/checkLogin.php';
 
 // Ensure the user is logged in and is an admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
@@ -39,9 +40,9 @@ if ($stmt->execute()) {
 
 // Redirect back to the appropriate dashboard
 if ($role === 'customer') {
-    header("Location: admin_customers.php?user_id=" . urlencode($_SESSION['user_id']));
+    header("Location: customers.php");
 } else {
-    header("Location: admin_farms.php?user_id=" . urlencode($_SESSION['user_id']));
+    header("Location: farms.php");
 }
 exit();
 ?>

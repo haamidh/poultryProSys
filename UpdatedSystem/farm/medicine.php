@@ -27,7 +27,7 @@ $med->setUser_id($user_id);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_med'])) {
         $med_name = $_POST['med_name'];
-        $least_quantity = $_POST['least_quantity'];
+        $least_quantity = number_format($_POST['least_quantity'], 2);
         $description = $_POST['description'];
 
         $med->setMed_name($med_name);
@@ -37,8 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($med->medicineExists($user_id)) {
             $error_message = "This medicine already exists";
         } else {
-
-
             if ($med->create($user_id)) {
                 $success_message = "Medicine added successfully.";
             } else {
@@ -51,86 +49,93 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $medicines = $med->read($user_id);
 ?>
 
+<style>
+    .form-label {
+        text-align: left;
+        display: block; /* Ensures it behaves like a block-level element */
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+</style>
+
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
     <div class="container">
         <div class="row my-5 text-center">
 
-            <div class="col-lg-5 col-md-10 col-12 mb-3 my-5 px-5">
-                <div class="card">
-                    <div class="card-header p-3 text-center" style="background-color: #9B59B6;">
-                        <h5 class="card-title text-white"><strong style="font-size: 24px;">New Medicine</strong></h5>
+            <!-- Add New Medicine Section -->
+            <div class="col-lg-5 col-md-10 col-12 mb-3 px-5">
+                <div class="card shadow">
+                    <div class="card-header p-3 text-center" style="background-color: #356854;">
+                        <h5 class="card-title text-white mb-0">
+                            <strong style="font-size: 24px;">New Medicine</strong>
+                        </h5>
                     </div>
-                    <div class="card-body" style="background-color: #D4C8DE;">
+                    <div class="card-body" style="background-color: #F5F5F5;">
 
+                        <!-- Success and Error Messages -->
                         <?php if (isset($success_message)) : ?>
-                            <div class="alert alert-success">
+                            <div class="alert alert-success text-center">
                                 <?php echo $success_message; ?>
                             </div>
                         <?php endif; ?>
-
                         <?php if (isset($error_message)) : ?>
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger text-center">
                                 <?php echo $error_message; ?>
                             </div>
                         <?php endif; ?>
 
-                        <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">Medicine Name:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="med_name" name="med_name" required>
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- Medicine Form -->
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Medicine Name:</label>
+                                <input type="text" class="form-control" id="med_name" name="med_name" required>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">Notification Threshold:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Notification Threshold:</label>
+                                <input type="text" class="form-control" id="least_quantity" name="least_quantity">
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">Description:</label>
-                                        <div class="col-sm-8">
-                                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description:</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                             </div>
 
-                            <div class="row px-3" style="text-align:center;">
-                                <button type="submit" class="btn btn-primary" name="add_med">Add Medi</button>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-block" name="add_med">Add Medicine</button>
                             </div>
-
                         </form>
+
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-7 col-md-10 col-12 mb-3 my-2">
-                <div class="card">
+            <!-- Medicine Details Section -->
+            <div class="col-lg-7 col-md-10 col-12 mb-3">
+                <div class="card shadow">
                     <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
-                        <h5 class="card-title p-2 text-white mb-0"><strong style="font-size:25px;">Medicine Details</strong></h5>
+                        <h5 class="card-title text-white mb-0">
+                            <strong style="font-size:25px;">Medicine Details</strong>
+                        </h5>
+                        <div class="input-group" style="width: 250px;">
+                            <input type="text" id="searchMedInput" class="form-control" placeholder="Search medicine..." onkeyup="searchMedicine()">
+                            <span class="input-group-text">
+                                <i class="bi bi-search" style="color: #3E497A;"></i>
+                            </span>
+                        </div>
                     </div>
+
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover mb-0">
-                                <thead>
-                                    <tr style="text-align:center;">
+                            <table class="table table-hover mb-0 table-striped table-bordered text-center">
+                                <thead style="background-color: #3E497A; color: white;">
+                                    <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Med Name</th>
-                                        <th scope="col" style="width:40%">Description</th>
+                                        <th scope="col">Description</th>
                                         <th scope="col" style="width:32%">Option</th>
                                     </tr>
                                 </thead>
@@ -139,15 +144,15 @@ $medicines = $med->read($user_id);
                                     $serialnum = 0;
                                     foreach ($medicines as $medicine) {
                                         $serialnum++;
-                                    ?>
+                                        ?>
                                         <tr>
                                             <th><?php echo $serialnum; ?></th>
                                             <td><?php echo $medicine['med_name']; ?></td>
                                             <td><?php echo $medicine['description']; ?></td>
-                                            <td style="text-align:center;">
-                                                <a href="buy_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-primary text-dark  py-1 px-2 "><i class="bi bi-plus-square-fill" style="font-size:18px;"></i></a>
-                                                <a href="use_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-warning text-dark py-1 px-2 "><i class="bi bi-dash-square-fill" style="font-size:18px;"></i></a>
-                                                <a href="edit_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-success text-light py-1 px-2 ">Edit</a>
+                                            <td>
+                                                <a href="buy_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-primary text-dark py-1 px-2"><i class="bi bi-plus-square-fill" style="font-size:18px;"></i></a>
+                                                <a href="use_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-warning text-dark py-1 px-2"><i class="bi bi-dash-square-fill" style="font-size:18px;"></i></a>
+                                                <a href="edit_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
                                                 <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $medicine['med_id']; ?>)">Delete</button>
                                             </td>
                                         </tr>
@@ -163,14 +168,37 @@ $medicines = $med->read($user_id);
     </div>
 </main>
 
-<?php
-$frame->last_part();
-?>
-
+<!-- Confirmation for Deletion -->
 <script>
     function myFunction(med_id) {
         if (confirm("Are you sure you want to delete this medicine?")) {
             window.location.href = "delete_medicine.php?med_id=" + med_id;
+        }
+    }
+
+    function searchMedicine() {
+        var input = document.getElementById("searchMedInput");
+        var filter = input.value.toUpperCase();
+        var table = document.querySelector(".table");
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < rows.length; i++) {
+            var medName = rows[i].getElementsByTagName("td")[0];
+            var description = rows[i].getElementsByTagName("td")[1];
+
+            if (medName || description) {
+                var nameValue = medName.textContent || medName.innerText;
+                var descriptionValue = description.textContent || description.innerText;
+
+                if (
+                        nameValue.toUpperCase().indexOf(filter) > -1 ||
+                        descriptionValue.toUpperCase().indexOf(filter) > -1
+                        ) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
         }
     }
 </script>

@@ -5,6 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
+require_once '../classes/User.php';
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -12,17 +13,16 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$user_id = $_SESSION['user_id'];
+
+
 $database = new Database();
 $db = $database->getConnection();
 
-$query = "SELECT * FROM user WHERE role = :role";
-$stmt = $db->prepare($query);
-$role = 'customer';
-$stmt->bindParam(':role', $role, PDO::PARAM_STR);
-$stmt->execute();
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$user = new User($db);
 
-$user_id = $_SESSION['user_id'];
+
+$users = $user->getAllCustomers();
 
 $admin = CheckLogin::checkLoginAndRole($user_id, 'admin');
 
@@ -55,32 +55,40 @@ $adminframe->first_part($admin);
                             </thead>
                             <tbody>
                                 <?php
-                                $uid = 1;
-                                foreach ($users as $user) {
-                                ?>
+                                if ($users) {
+                                    $uid = 1;
+                                    foreach ($users as $user) {
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $uid; ?></td>
+                                            <!--<td><?php echo htmlspecialchars($user['user_id']); ?></td>-->
+                                            <td><?php echo htmlspecialchars($user['username']); ?></td>
+                                            <td><?php echo htmlspecialchars($user['address']); ?></td>
+                                            <td><?php echo htmlspecialchars($user['city']); ?></td>
+                                            <td><?php echo htmlspecialchars($user['mobile']); ?></td>
+                                            <td><?php echo htmlspecialchars($user['email']); ?></td>
+                                            <td><?php echo htmlspecialchars($user['CREATED_AT']); ?></td>
+                                            <td>
+                                                <?php if ($user['status'] == 0) { ?>
+                                                    <button class="btn btn-success">
+                                                        <a href="unblock_user.php?unblock=<?php echo urlencode($user['user_id']); ?>&role=customer" class="text-light">Unblock</a>
+                                                    </button>
+                                                <?php } else { ?>
+                                                    <button class="btn btn-danger">
+                                                        <a href="block_user.php?block=<?php echo urlencode($user['user_id']); ?>&role=customer" class="text-light">Block</a>
+                                                    </button>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                        $uid++;
+                                    }
+                                } else {
+                                    ?>
                                     <tr>
-                                        <td><?php echo $uid; ?></td>
-                                        <!--<td><?php echo htmlspecialchars($user['user_id']); ?></td>-->
-                                        <td><?php echo htmlspecialchars($user['username']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['address']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['city']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['mobile']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['CREATED_AT']); ?></td>
-                                        <td>
-                                            <?php if ($user['status'] == 0) { ?>
-                                                <button class="btn btn-success">
-                                                    <a href="unblock_user.php?unblock=<?php echo urlencode($user['user_id']); ?>&role=customer" class="text-light">Unblock</a>
-                                                </button>
-                                            <?php } else { ?>
-                                                <button class="btn btn-danger">
-                                                    <a href="block_user.php?block=<?php echo urlencode($user['user_id']); ?>&role=customer" class="text-light">Block</a>
-                                                </button>
-                                            <?php } ?>
-                                        </td>
+                                        <td colspan="8" style="text-align: center;">No Customers found</td>
                                     </tr>
-                                <?php
-                                    $uid++;
+                                    <?php
                                 }
                                 ?>
                             </tbody>

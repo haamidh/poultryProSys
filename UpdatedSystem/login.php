@@ -30,6 +30,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!$errors) {
         if ($user->login()) {
             // Successful login
+            if ($user->status == '0') { // Check if the user is blocked
+                $_SESSION['error_message'] = "Your account was temporarily blocked by admin.";
+                header("Location: login.php?status=blocked");
+                exit();
+            }
             $_SESSION['user_id'] = $user->user_id;
             $_SESSION['username'] = $user->username;
             $_SESSION['role'] = $user->role;
@@ -65,59 +70,110 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <head>
         <meta charset="UTF-8">
-        <title>Log in form</title>
+        <title>Login</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="footer.css">
-
+        <link rel="stylesheet" href="header.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <style>
-            body{
+            body {
                 background-image: url('images/img6.jpg');
-                background-repeat: no-repeat; background-size: cover;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+                min-height: 100vh;
             }
-            .form-control{
+
+            /* Background overlay */
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1;
+            }
+
+            .card {
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                background-color: rgba(255, 255, 255, 0.5);
+                position: relative;
+                z-index: 2; /* Keep the card background behind the overlay */
+            }
+
+            .card-header,
+            .form-control,
+            .btn-primary,
+            .alert,
+            label,
+            input {
+                position: relative;
+                z-index: 4; /* Bring these elements to the front */
+            }
+
+            .card-header {
+                background-color: #40826D;
+                color: white;
+                border-radius: 10px 10px 0 0;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            .form-control {
                 background-color: lightcyan;
+                border-radius: 5px;
             }
+
+            .btn-primary {
+                background-color: #40826D;
+                border-color: #40826D;
+                width: 100%;
+            }
+
+            .btn-primary:hover {
+                background-color: #306A53;
+                border-color: #306A53;
+            }
+
+            .alert {
+                text-align: center;
+            }
+
+            label {
+                color: #333;
+            }
+
+            .navbar,
+            footer {
+                position: relative;
+                z-index: 5;
+            }
+
+            @media screen and (max-width: 576px) {
+                .card-header {
+                    font-size: 1.2rem;
+                }
+            }
+
         </style>
     </head>
 
     <body>
 
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #40826D;">
-            <a class="navbar-brand mx-5" href="index.html" style="font-weight: bold">
-                <img src="images/logo-poultryPro2.jpeg" alt="logo-poultryPro" style="border-radius: 50%; width: 40px; height: 40px;">
-                PoultryPro
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
-                <ul class="navbar-nav align-items-center">
-                    <div class="justify-content-center mt-2" style="color:white;">You don't have an account?</div>
-                    <li class="nav-item align-items-center mx-4" style="background-color:#B7BF4A;">
-                        <a class="nav-link" href="register.php" style="font-weight: bold; color:white;">Sign Up</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <?php
-        if (isset($_GET['status']) && $_GET['status'] === 'blocked') {
-            ?> <div class='alert alert-danger' role='alert'>
-                Your account was temporarily blocked by admin. Contact admin via this <a href='https://mail.google.com/mail' class='alert-link'> arahmandulapandan@gmail.com</a> mail.
-            </div><?php
-        }
-        ?>
+        <?php include 'includes/header.php'; ?>
+
         <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card" style="width:450px;">
-                        <div class="card-header" style="background-color: #40826D;color: white;">
+            <div class="row w-100">
+                <div class=" d-flex justify-content-center">
+                    <div class="card col-lg-4 col-md-6 col-sm-8 col-12">
+                        <div class="card-header">
                             <h4>Log In</h4>
                         </div>
                         <div class="card-body">
-
                             <?php if (isset($_SESSION['error_message'])) : ?>
                                 <div class="alert alert-danger" role="alert">
                                     <?php echo $_SESSION['error_message']; ?>
@@ -125,22 +181,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php unset($_SESSION['error_message']); ?>
                             <?php endif; ?>
 
-                            <form id="batchForm" action="login.php" method="post">
-                                <div class="row">
+                            <form id="loginForm" action="login.php" method="post">
+                                <div class="mb-3">
                                     <label>Email:<span style="color: red;"><?php echo $emailErr ?></span></label>
-                                    <input type="text" class="form-control" name="email" placeholder="abc123@gmail.com">
+                                    <input type="text" class="form-control" name="email" placeholder="Enter your email" required>
                                 </div>
-                                <br>
-                                <div class="row">
+                                <div class="mb-3">
                                     <label>Password:<span style="color: red;"><?php echo $passwordErr ?></span></label>
-                                    <input type="password" class="form-control" name="password">
+                                    <input type="password" class="form-control" name="password" placeholder="Enter your password" required>
                                 </div>
-                                <br>
-                                <div class="row align-items-center text-center">
+                                <div class="d-grid gap-2">
                                     <input type="submit" class="btn btn-primary" name="submit" value="Log In">
                                 </div>
-                                <!--                                <a class='mx-5' href="">Forget Password</a>-->
                             </form>
+
+                            <div class="mt-3 text-center">
+                                <small>Don't have an account? <a href="register.php" class="text-primary" style="font-weight: bold;">Sign Up</a></small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -152,3 +209,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </body>
 
 </html>
+
