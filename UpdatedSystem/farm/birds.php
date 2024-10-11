@@ -41,7 +41,7 @@ $frame->first_part($farm);
                         <h5 class="card-title p-2 text-white mb-0"><strong style="font-size:25px;">Batch Details</strong></h5>
                         <div>
                             <a href="add_birds.php" class="btn btn-outline-light"><i class="bi bi-house-add-fill"></i> Add New Batch</a>
-                            <a href="birds_health.php" class="btn btn-outline-light"><i class="bi bi-calendar-heart-fill"></i> Add Health Problems</a>
+                            <a href="health_problems.php" class="btn btn-outline-light"><i class="bi bi-calendar-heart-fill"></i> Health Problems</a>
                         </div>
                     </div>
                     <div class="card-body p-0">

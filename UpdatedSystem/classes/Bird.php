@@ -225,6 +225,20 @@ class Bird implements crud {
         }
     }
 
+    public function getBatch($batch_id) {
+        $query = "SELECT batch FROM " . $this->table_name . " WHERE batch_id = :batch_id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':batch_id', $batch_id);
+
+        $stmt->execute();
+
+        $batch = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $batch['batch'];
+    }
+    
     public function getBatchDetails($batch_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE batch_id = :batch_id";
 
@@ -269,6 +283,15 @@ class Bird implements crud {
         return $productDetails;
     }
 
+    public function getProductionBirds($batch_id) {
+        $query = "SELECT SUM(no_birds) as total_birds FROM product_stock WHERE batch_id = :batch_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':batch_id', $batch_id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['total_birds'] : null;
+    }
+
     public static function getSupplier($sup_id, $conn) {
         // Prepare the SQL query
         $query = "SELECT sup_name FROM supplier WHERE sup_id = :sup_id";
@@ -300,6 +323,20 @@ class Bird implements crud {
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['unit_price'] : null;
+    }
+    
+    public function getHealthDetails($status_id) {
+        $query = "SELECT * FROM health_status WHERE status_id = :status_id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':status_id', $status_id);
+
+        $stmt->execute();
+
+        $healthDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $healthDetails;
     }
 
 }

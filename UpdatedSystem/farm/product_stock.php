@@ -33,13 +33,15 @@ $total = '';
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
     $batch_id = $_POST['batch_id'];
+    $no_birds = $_POST['no_birds'];
     $quantity = $_POST['quantity'];
     $unit_price = $_POST['unit_price'];
     $total = $_POST['total'];
 
     $productStock->setUser_id($user_id);
     $productStock->setProduct_id($product_id);
-    $productStock->setBatch_id(1);
+    $productStock->setBatch_id($batch_id);
+    $productStock->setNo_birds($no_birds);
     $productStock->setQuantity($quantity);
     $productStock->setUnit_price($unit_price);
     $productStock->setTotal($total);
@@ -55,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
 }
 
 $product_name = $product->getProductName($product_id);
+$product_unit = $product->getProductUnit($product_id);
 $unit_price = $product->getProductPrice($product_id);
 $batches = $product->getAllBatches($user_id);
 
@@ -131,10 +134,27 @@ $frame->first_part($farm);
                                 </div>
                             </div>
 
+                            <?php
+                            if ($product_unit == 'kilogram') {
+                                ?>
+                                <div class="row p-2">
+                                    <div class="col">
+                                        <div class="row mb-3">
+                                            <label class="col-sm-3 col-form-label">Used Birds:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="no_birds" id="no_birds"  required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                            ?>
+
                             <div class="row p-2">
                                 <div class="col">
                                     <div class="row mb-3">
-                                        <label class="col-sm-3 col-form-label">Quantity:</label>
+                                        <label class="col-sm-3 col-form-label">Restock Quantity:</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="quantity" id="quantity" value="<?php echo htmlspecialchars($quantity); ?>" required>
                                         </div>
@@ -175,7 +195,7 @@ $frame->first_part($farm);
                 </div>
             </div>
 
-          
+
 
 
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5 py-5 my-5 justify-content-center" >
@@ -222,13 +242,20 @@ $frame->first_part($farm);
     const quantityInput = document.getElementById('quantity');
     const totalCostInput = document.getElementById('totalCost');
 
-    // Add an event listener to update the total cost whenever quantity changes
-    quantityInput.addEventListener('input', function () {
+    // Function to update the total cost
+    function updateTotalCost() {
         const quantity = parseFloat(quantityInput.value) || 0;
         const totalCost = quantity * unitPrice;
         totalCostInput.value = totalCost.toFixed(2);
-    });
+    }
+
+    // Add an event listener to update the total cost whenever quantity changes
+    quantityInput.addEventListener('input', updateTotalCost);
+
+    // Calculate the total on page load in case quantity is already filled
+    updateTotalCost();
 </script>
+
 <?php
 $frame->last_part();
 ?>

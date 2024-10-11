@@ -100,11 +100,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="row my-4 mx-2 py-4">
 
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
-                <div class="card">
-                    <div class="card-header p-3 text-center" style="background-color: #9B59B6;">
-                        <h5 class="card-title text-white"><strong style="font-size: 24px;">Birds Health Details</strong></h5>
+                <div class="card shadow-lg">
+                    <div class="card-header text-center" style="background-color: #6f42c1;">
+                        <h5 class="card-title text-white"><strong>Birds Health Details</strong></h5>
                     </div>
-                    <div class="card-body" style="background-color: #D4C8DE;">
+                    <div class="card-body" style="background-color: #f8f9fa;">
 
                         <?php if (isset($success_message)) : ?>
                             <div class="alert alert-success">
@@ -118,74 +118,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         <?php endif; ?>
 
-                        <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                            <input type="hidden" class="form-control" value="<?php echo $user_id; ?>" name="user_id" id="user_id">
+                        <form class="row g-2" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                            <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
 
-
-                            <div class="row p-2 mt-3">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">Batch:</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" name="batch_id" id="batch_id" required onchange="location = 'birds_health.php?batch_id=' + encodeURIComponent(this.value);">
-                                                <option value="">Select Batch</option>
-                                                <?php foreach ($batches as $batch) : ?>
-                                                    <option value="<?php echo htmlspecialchars($batch['batch_id']); ?>"
-                                                            <?php if (isset($selected_batch_id) && $selected_batch_id == $batch['batch_id']) echo 'selected'; ?>>
-                                                                <?php echo htmlspecialchars($batch['batch']); ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div class="col-12">
+                                <label for="batch_id" class="form-label">Batch:</label>
+                                <select class="form-select" name="batch_id" id="batch_id" required onchange="location = 'birds_health.php?batch_id=' + encodeURIComponent(this.value);">
+                                    <option value="" disabled selected>Select Batch</option>
+                                    <?php foreach ($batches as $batch) : ?>
+                                        <option value="<?php echo htmlspecialchars($batch['batch_id']); ?>"
+                                                <?php if (isset($selected_batch_id) && $selected_batch_id == $batch['batch_id']) echo 'selected'; ?>>
+                                                    <?php echo htmlspecialchars($batch['batch']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-4 col-form-label">No of ill birds:</label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="number" name="no_illness" id="no_illness" required>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div class="col-12">
+                                <label for="no_illness" class="form-label">No of ill birds:</label>
+                                <input class="form-control" type="number" name="no_illness" id="no_illness" required>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label">No of death birds:</label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="number" name="no_deaths" id="no_deaths" required>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div class="col-12">
+                                <label for="no_deaths" class="form-label">No of dead birds:</label>
+                                <input class="form-control" type="number" name="no_deaths" id="no_deaths" required>
                             </div>
 
-                            <div class="row p-2">
-                                <div class="col">
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label">Description:</label>
-                                        <div class="col-sm-12">
-                                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div class="col-12 mb-3">
+                                <label for="description" class="form-label">Description:</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                             </div>
 
-                            <div class="row px-3" style="text-align:center;">
-                                <input type="submit" class="btn btn-primary" name="submit" value="Add">
+                            <div class="col-12 mb-1">
+                                <input type="submit" class="btn btn-primary w-100" name="submit" value="Add">
                             </div>
 
-                            <div class="row px-3 mt-2" style="text-align:center;">
-                                <a href="birds.php" class="btn btn-danger">Back</a>
+                            <div class="col-12 mb-3">
+                                <a href="health_problems.php" class="btn btn-danger w-100">Back</a>
                             </div>
-
 
 
                         </form>
@@ -194,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
-                <canvas id="birdHealthChart" style="width:100%;max-width:600px"></canvas>
+                <canvas id="birdHealthChart" style="width:100%;max-width:600px;"></canvas>
             </div>
 
         </div>
@@ -223,16 +193,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            title: {
-                display: true,
-                text: 'Bird Health Status Summary',
-                fontSize: 20
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
             }
         }
     });
 </script>
-
-
-<?php
-$frame->last_part();
-?>

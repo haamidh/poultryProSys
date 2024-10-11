@@ -37,96 +37,87 @@ $expenses = new Expenses($db, $farm['user_id'], $from_date, $to_date);
 // Fetch all data and total amount
 $all_data = $expenses->getAllData();
 $total_amount = $expenses->getTotalAmount();
+$has_data = !empty($all_data);
 ?>
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
-    <div class="container py-4">
+    <div class="container">
         <div class="row py-5 px-3">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>EXPENSES DETAILS</h3>
+                <div class="card shadow-lg border-0 rounded">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Expenses Details</h3>
+                        <span class="text-light fs-5">Report Date: <?php echo date('F j, Y'); ?></span>
                     </div>
-                    <div class="card-body">
-                        <!-- Add date filter form -->
-                        <form method="GET" action="">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-6">
+                    <div class="card-body p-4">
+                        <!-- Date filter form -->
+                        <form method="GET" action="" class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-lg-4 col-md-6">
                                     <label for="from_date">From Date:</label>
-                                    <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">  </div>
-                                <div class="col-lg-4 col-md-6 col-6">
+                                    <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">
+                                </div>
+                                <div class="col-lg-4 col-md-6">
                                     <label for="to_date">To Date:</label>
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-12 pt-4 text-center">
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button type="submit" class="btn btn-primary">Filter</button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button class="btn btn-danger">
-                                                <a href="expensesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>$action=download" class="text-light" style="text-decoration: none;">Download</a>
-                                            </button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button class="btn btn-success">
-                                                <a href="expensesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light" style="text-decoration: none;">View PDF</a>
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="col-lg-4 col-md-12 d-flex align-items-end justify-content-between">
+                                    <button type="submit" class="btn btn-primary fs-6">
+                                        <i class="bi bi-funnel"></i> Filter
+                                    </button>
+                                    <a href="expensesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>&action=download" class="btn btn-danger fs-6 text-light">
+                                        <i class="bi bi-file-earmark-arrow-down"></i> Download
+                                    </a>
+                                    <a href="expensesPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="btn btn-success fs-6 text-light">
+                                        <i class="bi bi-file-earmark-text"></i> View PDF
+                                    </a>
                                 </div>
                             </div>
                         </form>
-
-                        <br>
-                        <!-- Add the submit button -->
-
-                        <div class="row my-4">
-                            <div class="col-12">
-                                <table class="table">
-                                    <thead>
-                                        <tr style="text-align:center;">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Payment Date</th>
-                                            <th scope="col">Payment Detail</th>
-                                            <th scope="col">Paid To</th>
-                                            <th scope="col" >Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        // Display the sorted data
-                                        if (!empty($all_data)) {
-                                            $uid = 1;
-                                            foreach ($all_data as $data) {
-                                                ?>
-                                                <tr>
-                                                    <td class="text-center"><?php echo $uid ?></td>
-                                                    <td class="text-center"><?php echo htmlspecialchars(substr($data['date'], 0, 10)) ?></td>
-                                                    <td><?php echo htmlspecialchars($data['detail']) ?></td>
-                                                    <td><?php echo htmlspecialchars($data['paid_to']) ?></td>
-                                                    <td style="text-align: right;"><?php echo number_format($data['amount'], 2) ?></td>
-                                                </tr>
-                                                <?php
-                                                $uid++;
-                                            }
-                                            ?>
-                                            <!-- Total amount row -->
-                                            <tr>
-                                                <td colspan="4" style="text-align: right; padding-right: 80px;"><strong>Total Amount</strong></td>
-                                                <td style="text-align: right; "><strong><?php echo number_format($total_amount, 2); ?></strong></td>
-                                            </tr>
-                                        <?php } else { ?>
-                                            <tr>
-                                                <td colspan="5" style="text-align: center;">No data found</td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
 
+                    <!-- Table displaying expenses details -->
+                    <div class="table-responsive px-4 py-2">
+                        <table class="table table-striped table-hover text-center align-middle">
+                            <thead class="table-dark text-center">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Payment Date</th>
+                                    <th>Payment Detail</th>
+                                    <th>Paid To</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($has_data) {
+                                    $uid = 1;
+                                    foreach ($all_data as $data) {
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $uid ?></td>
+                                            <td><?php echo date('F j, Y', strtotime($data['date'])) ?></td>
+                                            <td><?php echo htmlspecialchars($data['detail']) ?></td>
+                                            <td><?php echo htmlspecialchars($data['paid_to']) ?></td>
+                                            <td class="text-end"><?php echo number_format($data['amount'], 2) ?></td>
+                                        </tr>
+                                        <?php
+                                        $uid++;
+                                    }
+                                    ?>
+                                    <!-- Total amount row -->
+                                    <tr>
+                                        <td colspan="4" ><strong>Total Amount</strong></td>
+                                        <td class="text-end"><strong><?php echo number_format($total_amount, 2); ?></strong></td>
+                                    </tr>
+                                <?php } else { ?>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No data found</td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

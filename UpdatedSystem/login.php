@@ -14,7 +14,7 @@ $errors = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate password
-    if (!Validation::validatePasswordField($_POST['password'], $passwordErr)) {
+    if (!Validation::validatePasswordFieldLog($_POST['password'], $passwordErr)) {
         $errors = true;
     } else {
         $user->password = $_POST['password'];
@@ -183,12 +183,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <form id="loginForm" action="login.php" method="post">
                                 <div class="mb-3">
-                                    <label>Email:<span style="color: red;"><?php echo $emailErr ?></span></label>
-                                    <input type="text" class="form-control" name="email" placeholder="Enter your email" required>
+                                    <label>Email:</label>
+                                    <input type="text" class="form-control" name="email" id="email" placeholder="Enter your email" required>
+                                    <small id="emailError"class="text-danger"><?php echo $emailErr ?></small>
                                 </div>
                                 <div class="mb-3">
-                                    <label>Password:<span style="color: red;"><?php echo $passwordErr ?></span></label>
-                                    <input type="password" class="form-control" name="password" placeholder="Enter your password" required>
+                                    <label>Password:</label>
+                                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
+                                    <small id="passwordError"class="text-danger"><?php echo $passwordErr ?></small>
                                 </div>
                                 <div class="d-grid gap-2">
                                     <input type="submit" class="btn btn-primary" name="submit" value="Log In">
@@ -205,6 +207,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <?php include 'includes/footer.php'; ?>
+
+        <script>
+            // Email validation
+            document.getElementById('email').addEventListener('input', function () {
+                const emailInput = this;
+                const emailError = document.getElementById('emailError');
+                const emailValue = emailInput.value;
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                if (emailValue === "") {
+                    emailError.textContent = "Email is required.";
+                    emailInput.classList.add('is-invalid');
+                } else if (!emailRegex.test(emailValue)) {
+                    emailError.textContent = "Invalid email format.";
+                    emailInput.classList.add('is-invalid');
+                } else {
+                    emailError.textContent = "";
+                    emailInput.classList.remove('is-invalid');
+                }
+            });
+
+            // Password validation
+            document.getElementById('password').addEventListener('input', function () {
+                const passwordInput = this;
+                const passwordError = document.getElementById('passwordError');
+                const passwordValue = passwordInput.value;
+
+                // Regex for strong password: At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
+                const passwordRegex = /^.{4,}$/;
+
+                if (passwordValue === "") {
+                    passwordError.textContent = "Password is required.";
+                    passwordInput.classList.add('is-invalid');
+                } else if (!passwordRegex.test(passwordValue)) {
+                    passwordError.textContent = "Enter the valid password";
+                    passwordInput.classList.add('is-invalid');
+                } else {
+                    passwordError.textContent = "";
+                    passwordInput.classList.remove('is-invalid');
+                }
+            });
+        </script>
 
     </body>
 

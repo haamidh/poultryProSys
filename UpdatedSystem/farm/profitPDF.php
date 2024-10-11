@@ -26,7 +26,7 @@ $user_id = $_SESSION["user_id"];
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 
 // Use the actual farm details from the $farm array
-$farm_name = $farm['name'];
+$farm_name = $farm['username'];
 $address = $farm['address'];
 
 // Get 'from' and 'to' dates from the form submission, if available

@@ -212,6 +212,7 @@ class Product implements crud {
             return null;
         }
     }
+    
 
     public function getProductPrice($product_id) {
         // Prepare the SQL query
@@ -229,6 +230,30 @@ class Product implements crud {
             // Check if a result was returned
             if ($result) {
                 return $result['product_price'];
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+    
+    public function getProductUnit($product_id) {
+        // Prepare the SQL query
+        $query = "SELECT unit FROM " . $this->table_name . " WHERE product_id = :product_id";
+        $stmt = $this->conn->prepare($query);
+
+        // Bind the parameters
+        $stmt->bindParam(':product_id', $product_id);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            // Fetch the result
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Check if a result was returned
+            if ($result) {
+                return $result['unit'];
             } else {
                 return null;
             }

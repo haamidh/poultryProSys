@@ -26,14 +26,9 @@ $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 $frame = new Frame();
 $frame->first_part($farm);
 
+// Get "from" and "to" date from the submission, if available
 $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
 $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
-
-if (empty($from_date) && empty($to_date)) {
-    $to_date = date('Y-m-d');
-} elseif (!empty($from_date) && empty($to_date)) {
-    $to_date = date('Y-m-d');
-}
 
 $database = new Database();
 $db = $database->getConnection();
@@ -49,59 +44,53 @@ $total_medicine_amount = $stocks->getTotalMedicineStockAmount($from_date, $to_da
 
 $product_data = $stocks->getAllProductStockData($from_date, $to_date);
 $total_product_amount = $stocks->getTotalProductStockAmount($from_date, $to_date);
-
 ?>
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
-    <div class="container">
-        <div class="row py-5 px-3">
+    <div class="container-fluid px-4">
+        <div class="row py-5">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>STOCK DETAILS</h3>
+                <div class="card shadow-lg border-0 mb-5">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Stock Details</h3>
+                        <span class="text-light fs-5">Report Date: <?php echo date('F j, Y'); ?></span>
                     </div>
-                    <div class="card-body">
-                        <form method="GET" action="">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-6">
-                                    <label for="from_date">From Date:</label>
+                    <div class="card-body p-4">
+                        <form method="GET" action="" class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="from_date" class="form-label">From Date:</label>
                                     <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-6">
-                                    <label for="to_date">To Date:</label>
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="to_date" class="form-label">To Date:</label>
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-12 pt-4 text-center">
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button type="submit" class="btn btn-primary">Filter</button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button class="btn btn-danger">
-                                                <a href="stockPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>$action=download" class="text-light" style="text-decoration: none;">Download</a>
-                                            </button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button class="btn btn-success">
-                                                <a href="stockPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light" style="text-decoration: none;">View PDF</a>
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="col-lg-4 col-md-12 d-flex align-items-end justify-content-between">
+                                    <button type="submit" class="btn btn-primary fs-6">
+                                        <i class="bi bi-funnel"></i> Filter
+                                    </button>
+                                    <a href="stockPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>&action=download" class="btn btn-danger fs-6 text-light">
+                                        <i class="bi bi-file-earmark-arrow-down"></i> Download
+                                    </a>
+                                    <a href="stockPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="btn btn-success fs-6 text-light">
+                                        <i class="bi bi-file-earmark-text"></i> View PDF
+                                    </a>
                                 </div>
                             </div>
                         </form>
 
                         <!-- Feed Stock Table -->
-                        <div class="row my-5">
+                        <div class="row mb-5">
                             <div class="col-12">
-                                <h4 class="mb-4">Feed Stock</h4>
-                                <table class="table">
-                                    <thead>
-                                        <tr style="text-align:center;">
+                                <h4 class="mb-3 text-dark">Feed Stock</h4>
+                                <table class="table table-striped table-hover text-center align-middle">
+                                    <thead class="table-dark">
+                                        <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Stock Detail</th>
-                                            <th scope="col" class="text-center">Quantity</th>
-                                            <th scope="col" class="text-center">Amount</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -109,112 +98,106 @@ $total_product_amount = $stocks->getTotalProductStockAmount($from_date, $to_date
                                         if (!empty($feed_data)) {
                                             $uid = 1;
                                             foreach ($feed_data as $data) {
-                                        ?>
+                                                ?>
                                                 <tr>
-                                                    <td style="text-align:center;"><?php echo $uid; ?></td>
-                                                    <td style="text-align:left;"><?php echo htmlspecialchars($data['detail']); ?></td>
-                                                    <td style="text-align:right;"><?php echo number_format($data['quantity'], 2); ?></td>
-                                                    <td style="text-align:right;"><?php echo number_format($data['amount'], 2); ?></td>
+                                                    <td><?php echo $uid; ?></td>
+                                                    <td class="text-start"><?php echo htmlspecialchars($data['detail']); ?></td>
+                                                    <td><?php echo number_format($data['quantity'], 2); ?></td>
+                                                    <td><?php echo number_format($data['amount'], 2); ?></td>
                                                 </tr>
-                                            <?php
-                                                $uid++;
-                                            }
-                                            ?>
-                                            <tr>
-                                                <td colspan="3" class="text-center"><strong>Total Value</strong></td>
-                                                <td class="text-right pr-4"><strong><?php echo number_format($total_feed_amount, 2); ?></strong></td>
+        <?php $uid++;
+    } ?>
+                                            <tr class="fw-bold">
+                                                <td colspan="3">Total Value</td>
+                                                <td><?php echo number_format($total_feed_amount, 2); ?></td>
                                             </tr>
                                         <?php } else { ?>
                                             <tr>
-                                                <td colspan="4" class="text-center">No feed data found</td>
+                                                <td colspan="4" class="text-muted">No feed data found</td>
                                             </tr>
-                                        <?php } ?>
+<?php } ?>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <!-- Medicine Stock Table -->
-                        <div class="row my-5">
+                        <div class="row mb-5">
                             <div class="col-12">
-                                <h4 class="mb-4">Medicine Stock</h4>
-                                <table class="table">
-                                    <thead>
-                                        <tr style="text-align:center;">
+                                <h4 class="mb-3 text-dark">Medicine Stock</h4>
+                                <table class="table table-striped table-hover text-center align-middle">
+                                    <thead class="table-dark">
+                                        <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Stock Detail</th>
-                                            <th scope="col" class="text-center">Quantity</th>
-                                            <th scope="col" class="text-center">Amount</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        if (!empty($medicine_data)) {
-                                            $uid = 1;
-                                            foreach ($medicine_data as $data) {
-                                        ?>
+<?php
+if (!empty($medicine_data)) {
+    $uid = 1;
+    foreach ($medicine_data as $data) {
+        ?>
                                                 <tr>
-                                                    <td style="text-align:center;"><?php echo $uid; ?></td>
-                                                    <td style="text-align:left;"><?php echo htmlspecialchars($data['detail']); ?></td>
-                                                    <td style="text-align:right;"><?php echo number_format($data['quantity'], 2); ?></td>
-                                                    <td style="text-align:right;"><?php echo number_format($data['amount'], 2); ?></td>
+                                                    <td><?php echo $uid; ?></td>
+                                                    <td class="text-start"><?php echo htmlspecialchars($data['detail']); ?></td>
+                                                    <td><?php echo number_format($data['quantity'], 2); ?></td>
+                                                    <td><?php echo number_format($data['amount'], 2); ?></td>
                                                 </tr>
-                                            <?php
-                                                $uid++;
-                                            }
-                                            ?>
-                                            <tr>
-                                                <td colspan="3" class="text-center"><strong>Total Value</strong></td>
-                                                <td class="text-right pr-4"><strong><?php echo number_format($total_medicine_amount, 2); ?></strong></td>
+                                                <?php $uid++;
+                                            } ?>
+                                            <tr class="fw-bold">
+                                                <td colspan="3">Total Value</td>
+                                                <td><?php echo number_format($total_medicine_amount, 2); ?></td>
                                             </tr>
-                                        <?php } else { ?>
+<?php } else { ?>
                                             <tr>
-                                                <td colspan="4" class="text-center">No medicine data found</td>
+                                                <td colspan="4" class="text-muted">No medicine data found</td>
                                             </tr>
-                                        <?php } ?>
+<?php } ?>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <!-- Product Stock Table -->
-                        <div class="row my-5">
+                        <div class="row mb-5">
                             <div class="col-12">
-                                <h4 class="mb-4">Product Stock</h4>
-                                <table class="table">
-                                    <thead>
-                                        <tr style="text-align:center;">
+                                <h4 class="mb-3 text-dark">Product Stock</h4>
+                                <table class="table table-striped table-hover text-center align-middle">
+                                    <thead class="table-dark">
+                                        <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Stock Detail</th>
-                                            <th scope="col" class="text-center">Quantity</th>
-                                            <th scope="col" class="text-center">Amount</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        if (!empty($product_data)) {
-                                            $uid = 1;
-                                            foreach ($product_data as $data) {
-                                        ?>
+<?php
+if (!empty($product_data)) {
+    $uid = 1;
+    foreach ($product_data as $data) {
+        ?>
                                                 <tr>
-                                                    <td style="text-align:center;"><?php echo $uid; ?></td>
-                                                    <td style="text-align:left;"><?php echo htmlspecialchars($data['detail']); ?></td>
-                                                    <td style="text-align:right;"><?php echo number_format($data['quantity'], 2); ?></td>
-                                                    <td style="text-align:right;"><?php echo number_format($data['amount'], 2); ?></td>
+                                                    <td><?php echo $uid; ?></td>
+                                                    <td class="text-start"><?php echo htmlspecialchars($data['detail']); ?></td>
+                                                    <td><?php echo number_format($data['quantity'], 2); ?></td>
+                                                    <td><?php echo number_format($data['amount'], 2); ?></td>
                                                 </tr>
-                                            <?php
-                                                $uid++;
-                                            }
-                                            ?>
-                                            <tr>
-                                                <td colspan="3" class="text-center"><strong>Total Value</strong></td>
-                                                <td class="text-right pr-4"><strong><?php echo number_format($total_product_amount, 2); ?></strong></td>
+                                                <?php $uid++;
+                                            } ?>
+                                            <tr class="fw-bold">
+                                                <td colspan="3">Total Value</td>
+                                                <td><?php echo number_format($total_product_amount, 2); ?></td>
                                             </tr>
-                                        <?php } else { ?>
+<?php } else { ?>
                                             <tr>
-                                                <td colspan="4" class="text-center">No product data found</td>
+                                                <td colspan="4" class="text-muted">No product data found</td>
                                             </tr>
-                                        <?php } ?>
+<?php } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -228,4 +211,4 @@ $total_product_amount = $stocks->getTotalProductStockAmount($from_date, $to_date
 
 <?php
 $frame->last_part();
-?>
+?> 

@@ -55,22 +55,82 @@ $notification = new Notification($db);
 $notification->setUser_id($user_id);
 $notificationCount = $notification->getAllNotificationCount();
 $notifications = $notification->getAllNotifications();
+
+$incomeCharts = new Incomes($db, $farm['user_id'], $from_date, $to_date);
+// Fetch daily and monthly income for charts
+$daily_income = $incomeCharts->getDailyIncome();
+$monthly_income = $incomeCharts->getMonthlyIncome();
 ?>
 <style>
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        transform: scale(1.15);;
+    }
+
     .card-title {
         font-weight: bold;
         font-size: 18px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
     }
 
     .card-text {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(243, 243, 243, 0.8));
+        border-radius: 10px 10px 0 0;
+        padding: 20px;
+    }
+
+    .card-footer {
+        background-color: #fff;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .card-footer a {
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .card-footer a:hover {
+        color: #007bff;
+    }
+
+    .table {
+        border-radius:0 0 10px 10px ;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .thead-dark {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .table td, .table th {
+        padding: 15px;
+        vertical-align: middle;
     }
 
     #noti_number {
-        font-size: 24px;
+        font-size: 28px;
         position: relative;
         cursor: pointer;
+        transition: color 0.3s ease-in-out;
+    }
+
+    #noti_number:hover {
+        color: #ff4757;
     }
 
     #noti_number::after {
@@ -83,37 +143,123 @@ $notifications = $notification->getAllNotifications();
         border-radius: 50%;
         padding: 2px 6px;
         font-size: 12px;
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
     }
 
     #notification_list {
         display: none;
-        background: black;
-        color: white;
+        background: #ffffff;
+        color: #333;
         position: absolute;
-        right: 75px;
-        top: 100px;
-        width: 400px;
+        right: 50px;
+        top: 80px;
+        width: 350px;
         border: 1px solid #ddd;
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
         z-index: 1000;
+        border-radius: 10px;
     }
 
     #notification_list ul {
         list-style: none;
+        padding: 0;
         margin: 0;
-        padding: 5px;
     }
 
     #notification_list li {
-        padding: 5px;
-        border-bottom: 1px solid #ddd;
+        padding: 10px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 16px;
     }
 
     #notification_list li:last-child {
         border-bottom: none;
     }
+
+    #notification_list li:hover {
+        background: #f0f0f0;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 25px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        border: none;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+    /*    .overlay-container {
+            position: relative;  Needed for positioning the overlay 
+        }
+    
+        .overlay-container::before {
+            content: "";  Necessary for pseudo-elements 
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);  Adjust the color and opacity as needed 
+            z-index: 1;  Ensure the overlay is on top 
+            pointer-events: none;  Allows clicks to go through the overlay 
+        }*/
+
+    .chart-container {
+        transition: transform 0.3s ease; /* Smooth transition for scaling */
+    }
+
+    .chart-container:hover {
+        transform: scale(1.10); /* Increase size by 5% on hover */
+    }
+
+    @media (min-width: 992px) {
+        .chart-container:hover {
+            flex: 0 0 calc(10/12 * 100%); /* Adjust flex width for lg size */
+        }
+    }
+
+    .noti_li{
+        transition: transform 0.3s ease; 
+    }
+
+    .noti_li:hover {
+        transform: scale(1.05); 
+    }
+
+
 </style>
-<main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
+
+<main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto overlay-container">
     <div class="container">
         <div class="row my-4 mx-4 text-center">
             <div style="text-align: right;">
@@ -123,7 +269,7 @@ $notifications = $notification->getAllNotifications();
         <div id="notification_list">
             <ul>
                 <?php foreach ($notifications as $notification): ?>
-                    <li><?php echo $notification; ?> is low in stock!</li>
+                    <li class="noti_li"><?php echo $notification; ?> is low in stock!</li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -145,10 +291,10 @@ $notifications = $notification->getAllNotifications();
                 <div class="card">
                     <div class="card-body p-4" style="background-color: #989E12;">
                         <h5 class="card-title text-white">TODAY INCOME</h5>
-                        <h6 class="card-text text-white">RS. <?php echo number_format($total_incomes, 2); ?></h6>
+                        <h6 class="card-text text-white">Rs. <?php echo number_format($total_incomes, 2); ?></h6>
                     </div>
                     <div class="card-footer" style="background-color: #F1F4B0;">
-                        <a href="incomes.php" class="text-dark">More Details</a>
+                        <a href="incomes.php?from_date=<?php echo $from_date; ?>&to_date=<?php echo $to_date; ?>" class="text-dark">More Details</a>
                     </div>
                 </div>
             </div>
@@ -157,10 +303,10 @@ $notifications = $notification->getAllNotifications();
                 <div class="card">
                     <div class="card-body p-4" style="background-color: #B71717;">
                         <h5 class="card-title text-white">TODAY EXPENSES</h5>
-                        <h6 class="card-text text-white">RS. <?php echo number_format($total_expenses, 2); ?></h6>
+                        <h6 class="card-text text-white">Rs. <?php echo number_format($total_expenses, 2); ?></h6>
                     </div>
                     <div class="card-footer" style="background-color: #F0A9A9;">
-                        <a href="expenses.php" class="text-dark">More Details</a>
+                        <a href="expenses.php?from_date=<?php echo $from_date; ?>&to_date=<?php echo $to_date; ?>" class="text-dark">More Details</a>
                     </div>
                 </div>
             </div>
@@ -169,16 +315,16 @@ $notifications = $notification->getAllNotifications();
                 <div class="card">
                     <div class="card-body p-4" style="background-color: #1E8449;">
                         <h5 class="card-title text-white">TODAY PROFIT</h5>
-                        <h6 class="card-text text-white">RS. <?php echo number_format($total_profit, 2); ?></h6>
+                        <h6 class="card-text text-white">Rs. <?php echo number_format($total_profit, 2); ?></h6>
                     </div>
                     <div class="card-footer" style="background-color: #D4EAE2;">
-                        <a href="profit.php" class="text-dark">More Details</a>
+                        <a href="profit.php?from_date=<?php echo $from_date; ?>&to_date=<?php echo $to_date; ?>" class="text-dark">More Details</a>
                     </div>
                 </div>
             </div>
 
         </div>
-        <div class="row my-2 justify-content-center">
+        <div class="row my-2 justify-content-center mt-5">
             <div class="col-lg-8 col-md-12 col-12">
                 <div class="card">
                     <div class="card-body text-center p-3" style="background-color: #6c757d;">
@@ -201,7 +347,7 @@ $notifications = $notification->getAllNotifications();
                                     $serialnum = 0;
                                     foreach ($products as $product) {
                                         $serialnum++;
-                                    ?>
+                                        ?>
                                         <tr>
                                             <th class="text-center"><?php echo $serialnum; ?></th>
                                             <td><?php echo $product['product_name']; ?></td>
@@ -226,6 +372,18 @@ $notifications = $notification->getAllNotifications();
                 </div>
             </div>
         </div>
+        <!-- Charts Section -->
+        <div class="row mt-5 mb-5 justify-content-center align-items-center">
+            <div class="col-lg-8 px-4 mt-3 chart-container">
+                <h5 class="fw-bold fs-3">Daily Income Chart</h5>
+                <canvas id="dailyIncomeChart"></canvas>
+            </div>
+            <div class="col-lg-8 px-4 mt-5 chart-container">
+                <h5 class="fw-bold fs-3">Monthly Income Chart</h5>
+                <canvas id="monthlyIncomeChart"></canvas>
+            </div>
+        </div>
+
 
     </div>
 </main>
@@ -235,31 +393,102 @@ $notifications = $notification->getAllNotifications();
 $frame->last_part();
 ?>
 <script>
+    // Toggle notification dropdown visibility
+    document.getElementById('noti_number').addEventListener('click', function (event) {
+        event.stopPropagation(); // Prevent the click event from propagating to the document
+        var notificationList = document.getElementById('notification_list');
+        notificationList.style.display = (notificationList.style.display === 'none' || notificationList.style.display === '') ? 'block' : 'none';
+    });
+
+// Close notification list when clicking outside of it
+    document.addEventListener('click', function (event) {
+        var notificationList = document.getElementById('notification_list');
+        var notiIcon = document.getElementById('noti_number');
+
+        // Check if the click is outside the notification icon and the list
+        if (notificationList.style.display === 'block' && !notiIcon.contains(event.target) && !notificationList.contains(event.target)) {
+            notificationList.style.display = 'none';
+        }
+    });
+
+
     function makeEditable(button) {
         const td = button.closest('tr').querySelector('td:nth-child(3)');
         const form = td.querySelector('form');
         const span = form.querySelector('span');
         const input = form.querySelector('input[name="new_price"]');
 
-        // Toggle visibility
         span.classList.toggle('d-none');
         input.classList.toggle('d-none');
 
         if (!input.classList.contains('d-none')) {
             input.focus();
         } else {
-            // Submit the form when input field is hidden
             form.submit();
         }
     }
 </script>
+
+<!-- Include Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart.js Script -->
 <script>
-    document.getElementById('noti_number').addEventListener('click', function() {
-        var notificationList = document.getElementById('notification_list');
-        if (notificationList.style.display === 'none' || notificationList.style.display === '') {
-            notificationList.style.display = 'block';
-        } else {
-            notificationList.style.display = 'none';
-        }
+    document.addEventListener('DOMContentLoaded', function () {
+        const dailyIncomeCtx = document.getElementById('dailyIncomeChart').getContext('2d');
+        const monthlyIncomeCtx = document.getElementById('monthlyIncomeChart').getContext('2d');
+
+        // Daily Income Data
+        const dailyLabels = <?php echo json_encode(array_column($daily_income, 'day')); ?>;
+        const dailyData = <?php echo json_encode(array_column($daily_income, 'total')); ?>;
+
+        // Monthly Income Data
+        const monthlyLabels = <?php echo json_encode(array_column($monthly_income, 'month')); ?>;
+        const monthlyData = <?php echo json_encode(array_column($monthly_income, 'total')); ?>;
+
+        // Daily Income Chart
+        const dailyIncomeChart = new Chart(dailyIncomeCtx, {
+            type: 'line',
+            data: {
+                labels: dailyLabels,
+                datasets: [{
+                        label: 'Daily Income',
+                        data: dailyData,
+                        backgroundColor: 'rgba(153, 102, 255, 0.4)',
+                        borderColor: 'blue',
+                        fill: true
+                    }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Monthly Income Chart
+        const monthlyIncomeChart = new Chart(monthlyIncomeCtx, {
+            type: 'bar',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                        label: 'Monthly Income',
+                        data: monthlyData,
+                        backgroundColor: 'rgba(20, 90, 50, 0.9)',
+                        borderColor: 'rgba(20, 90, 50, 1)',
+                        borderWidth: 2
+                    }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     });
 </script>
+

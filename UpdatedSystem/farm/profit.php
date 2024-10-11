@@ -39,7 +39,6 @@ $db = $database->getConnection();
 // Instantiate the Product class
 $product = new Product($db);
 
-
 // Instantiate Incomes, Expenses, and Stocks classes
 $incomes = new Incomes($db, $farm['user_id'], $product, $from_date, $to_date);
 $expenses = new Expenses($db, $user_id, $from_date, $to_date);
@@ -62,152 +61,148 @@ $profitLoss = $totalIncome + $totalStocks - $totalExpense;
     <div class="container py-4">
         <div class="row py-5 px-3">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>PROFIT & LOSS STATEMENT</h3>
+                <div class="card shadow-lg border-0 rounded">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0 fw-bold fs-2">Profit & Loss Statement</h3>
+                        <span class="text-light fs-5">Report Date: <?php echo date('F j, Y'); ?></span>
                     </div>
-                    <div class="card-body">
-                        <!-- Add date filter form -->
-                        <form method="GET" action="">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-6">
-                                    <label for="from_date">From Date:</label>
+                    <div class="card-body ">
+                        <!-- Date Filter Form -->
+                        <form method="GET" action="" class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="from_date" class="form-label">From Date</label>
                                     <input type="date" id="from_date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="form-control">
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-6">
-                                    <label for="to_date">To Date:</label>
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="to_date" class="form-label">To Date</label>
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-12 pt-4 text-center">
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button type="submit" class="btn btn-primary">Filter</button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button class="btn btn-danger">
-                                                <a href="profitPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>$action=download" class="text-light" style="text-decoration: none;">Downlaod</a>
-                                            </button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-6">
-                                            <button class="btn btn-success">
-                                                <a href="profitPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="text-light" style="text-decoration: none;">View PDF</a>
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="col-lg-4 col-md-12 d-flex align-items-end justify-content-between">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-funnel"></i> Filter
+                                    </button>
+                                    <a href="profitPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>&action=download" class="btn btn-danger text-light">
+                                        <i class="bi bi-file-earmark-arrow-down"></i> Download
+                                    </a>
+                                    <a href="profitPDF.php?from_date=<?php echo htmlspecialchars($from_date); ?>&to_date=<?php echo htmlspecialchars($to_date); ?>" class="btn btn-success text-light">
+                                        <i class="bi bi-file-earmark-text"></i> View PDF
+                                    </a>
                                 </div>
                             </div>
                         </form>
 
-                        <!-- Display Income Table -->
-                        <div class="row my-4 py-4">
-                            <div class="col-12">
-
-                                <table class="table table-bordered border-dark">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" colspan="5" class="table-info">Incomes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Orders</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($totalIncome, 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;"><strong>Total Income</strong></td>
-                                            <td style="text-align: right; padding-right: 20px;"><strong><?php echo number_format($totalIncome, 2); ?></strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <br>
-                                <!-- Display Expenses Table -->
-                                <table class="table table-bordered border-dark">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" colspan="5" class="table-info">Expenses</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Birds</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($expensesDataCategorized['total_birds'], 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Medicine</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($expensesDataCategorized['total_medicine'], 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Feeds</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($expensesDataCategorized['total_feeds'], 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Miscellaneous</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($expensesDataCategorized['total_miscellaneous'], 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;"><strong>Total Expenses</strong></td>
-                                            <td style="text-align: right; padding-right: 20px;"><strong><?php echo number_format($totalExpense, 2); ?></strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <br>
-                                <!-- Display Stocks Table -->
-                                <table class="table table-bordered border-dark">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" colspan="5" class="table-info">Stocks</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Products Stock Value</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($stocksDataCategorized['total_products'], 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Medicine Stock Value</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($stocksDataCategorized['total_medicine'], 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;">Total Feeds Stock Value</td>
-                                            <td style="text-align: right; padding-right: 20px;"><?php echo number_format($stocksDataCategorized['total_feeds'], 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" style="padding-left: 200px;"><strong>Total Stocks Value</strong></td>
-                                            <td style="text-align: right; padding-right: 20px;"><strong><?php echo number_format($totalStocks, 2); ?></strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <br>
-                                <!-- Display Profit/Loss -->
-                                <h4>Profit/Loss</h4>
-                                <table class="table table-bordered border-dark">
-                                    <thead>
-                                        <tr>
-                                            <th class="table-info">Total Income</th>
-                                            <th class="table-info">Total Expenses</th>
-                                            <th class="table-info">Stock Available</th>
-                                            <th class="table-info">Profit/Loss</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="text-align: center;"><?php echo number_format($totalIncome, 2); ?></td>
-                                            <td style="text-align: center;"><?php echo number_format($totalExpense, 2); ?></td>
-                                            <td style="text-align: center;"><?php echo number_format($totalStocks, 2); ?></td>
-                                            <td style="text-align: center;"><strong><?php echo number_format($profitLoss, 2); ?></strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <!-- Income Table -->
+                        <div class="table-responsive mb-4 pt-4">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark text-center fs-3">
+                                    <tr>
+                                        <th colspan="5">Incomes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Orders</td>
+                                        <td class="text-end"><?php echo number_format($totalIncome, 2); ?></td>
+                                    </tr>
+                                    <tr class="fs-5">
+                                        <td colspan="4" class="text-start fw-bold">Total Income</td>
+                                        <td class="text-end fw-bold"><?php echo number_format($totalIncome, 2); ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
+
+                        <!-- Expenses Table -->
+                        <div class="table-responsive mb-4 pt-3">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark text-center fs-3">
+                                    <tr>
+                                        <th colspan="5">Expenses</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Birds</td>
+                                        <td class="text-end"><?php echo number_format($expensesDataCategorized['total_birds'], 2); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Medicine</td>
+                                        <td class="text-end"><?php echo number_format($expensesDataCategorized['total_medicine'], 2); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Feeds</td>
+                                        <td class="text-end"><?php echo number_format($expensesDataCategorized['total_feeds'], 2); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Miscellaneous</td>
+                                        <td class="text-end"><?php echo number_format($expensesDataCategorized['total_miscellaneous'], 2); ?></td>
+                                    </tr>
+                                    <tr class="fs-5">
+                                        <td colspan="4" class="text-start fw-bold">Total Expenses</td>
+                                        <td class="text-end fw-bold"><?php echo number_format($totalExpense, 2); ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Stocks Table -->
+                        <div class="table-responsive mb-4 pt-3">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark text-center fs-3">
+                                    <tr>
+                                        <th colspan="5">Stocks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Products Stock Value</td>
+                                        <td class="text-end"><?php echo number_format($stocksDataCategorized['total_products'], 2); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Medicine Stock Value</td>
+                                        <td class="text-end"><?php echo number_format($stocksDataCategorized['total_medicine'], 2); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-start">Total Feeds Stock Value</td>
+                                        <td class="text-end"><?php echo number_format($stocksDataCategorized['total_feeds'], 2); ?></td>
+                                    </tr>
+                                    <tr class="fs-5">
+                                        <td colspan="4" class="text-start fw-bold">Total Stocks Value</td>
+                                        <td class="text-end fw-bold "><?php echo number_format($totalStocks, 2); ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Profit/Loss Summary -->
+                        <h4 class="mb-3 text-dark fw-bold">Profit/Loss Summary</h4>
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-dark text-center ">
+                                <tr>
+                                    <th>Total Income</th>
+                                    <th>Total Expenses</th>
+                                    <th>Stock Available</th>
+                                    <th class="fs-5">Profit/Loss</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"><?php echo number_format($totalIncome, 2); ?></td>
+                                    <td class="text-center"><?php echo number_format($totalExpense, 2); ?></td>
+                                    <td class="text-center"><?php echo number_format($totalStocks, 2); ?></td>
+                                    <td class="text-center fw-bold fs-5"><?php echo number_format($profitLoss, 2); ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </main>
 
 <?php
 $frame->last_part();
 ?>
+

@@ -29,6 +29,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->status = 1;
 
     // Validate fields (same as your previous validation logic)
+    // Validate mobile
+    if (!Validation::validateMobile($user->mobile, $mobileErr)) {
+        $errors = true;
+    }
+
+    // Validate email
+    if (!Validation::validateEmail($user->email, $emailErr)) {
+        $errors = true;
+    }
+
+    // Validate name
+    if (!Validation::validateTextField($user->username, $textErr)) {
+        $errors = true;
+    }
+
+    // Validate password
+    if (!Validation::validatePasswordField($user->password, $passwordErr)) {
+        $errors = true;
+    }
+
+    // Validate role
+    if (empty($user->role)) {
+        $roleErr = "*Please select your role";
+        $errors = true;
+    }
+
+    // Validate city
+    if (empty($user->city)) {
+        $cityErr = "*Please select city";
+        $errors = true;
+    }
+
+    // Validate address
+    if (!Validation::validateAddressField($user->address, $addressErr)) {
+        $errors = true;
+    }
 
     if (!$errors) {
         if ($user->emailExists()) {
@@ -170,27 +206,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
                                 <div class="mb-3">
-                                    <label>Name:<span style="color: red;"><?php echo $textErr ?></span></label>
-                                    <input type="text" class="form-control" name="username" placeholder="Business name/Your name" required>
+                                    <label>Name:</label>
+                                    <input type="text" class="form-control" name="username" placeholder="Business name/Your name" required oninput="validateName(this)">
+                                    <small id="nameError" class="text-danger"><?php echo $textErr ?></small>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>Role:<span style="color: red;"><?php echo $roleErr ?></span></label>
+                                    <label>Role:</label>
                                     <select name="role" class="form-control" required>
                                         <option value="" disabled selected>Select role</option>
                                         <option value="farm">Farm</option>
                                         <option value="customer">Customer</option>
                                     </select>
+                                    <small class="text-danger"><?php echo $roleErr ?></small>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>Address:<span style="color: red;"><?php echo $addressErr ?></span></label>
+                                    <label>Address:</label>
                                     <input type="text" class="form-control" name="address" required>
+                                    <small  class="text-danger"><?php echo $addressErr ?></small>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label>City:<span style="color: red;"><?php echo $cityErr ?></span></label>
+                                        <label>City:</label>
                                         <select name="city" class="form-control" required>
                                             <option value="" disabled selected>Select city</option>
                                             <?php foreach ($cities as $city) : ?>
@@ -199,32 +238,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
+                                        <small  class="text-danger"><?php echo $cityErr ?></small>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Mobile:<span style="color: red;"><?php echo $mobileErr ?></span></label>
-                                        <input type="text" class="form-control" name="mobile" placeholder="0777777777" required>
+                                        <label>Mobile:</label>
+                                        <input type="text" class="form-control" name="mobile" id="mobileInput" placeholder="0777777777" required oninput="validateMobile()">
+                                        <small id="mobileError" class="text-danger"><?php echo $mobileErr ?></small>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>Email:<span style="color: red;"><?php echo $emailErr ?></span></label>
-                                    <input type="email" class="form-control" name="email" placeholder="abc123@gmail.com" required>
+                                    <label>Email:</label>
+                                    <input type="email" class="form-control" name="email" id="emailInput" placeholder="abc123@gmail.com" required oninput="validateEmail()">
+                                    <small id="emailError" class="text-danger"><?php echo $emailErr ?></small>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>Password:<span style="color: red;"><?php echo $passwordErr ?></span></label>
-                                    <input type="password" class="form-control" name="password" required>
+                                    <label>Password:</label>
+                                    <input type="password" class="form-control" name="password" placeholder="********" required oninput="validatePassword()">
+                                    <small id="passwordError" class="text-danger"><?php echo $passwordErr ?></small>
                                 </div>
 
-                                <div class="d-grid gap-2">
-                                    <input type="submit" class="btn btn-primary" name="submit" value="Sign Up">
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Register</button>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <p>Already have an account? <a href="login.php">Login here</a></p>
                                 </div>
 
                             </form>
-                            <div class="mt-3 text-center">
-                                <small>Already have an account? <a href="login.php" class="text-primary" style="font-weight: bold;">Log In</a></small>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -233,6 +278,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <?php include 'includes/footer.php'; ?>
 
+        <script>
+    function validateMobile() {
+        const mobileInput = document.getElementById('mobileInput');
+        const mobileError = document.getElementById('mobileError');
+        const mobileValue = mobileInput.value;
+
+        // Regular expression to check if it starts with 0 followed by 7-9
+        const regex = /^0[7-9][0-9]{8}$/;
+
+        // Check if the value matches the regex
+        if (mobileValue.length > 0 && !regex.test(mobileValue)) {
+            mobileError.textContent = "Mobile not valid";
+            mobileInput.classList.add("is-invalid");
+        } else {
+            mobileError.textContent = ""; // Clear error message
+            mobileInput.classList.remove("is-invalid");
+        }
+
+        // Remove non-numeric characters and update the input
+        mobileInput.value = mobileValue.replace(/[^0-9]/g, '');
+
+        // Validate the updated mobile value
+        if (mobileInput.value.length > 0 && mobileInput.value[0] !== '0') {
+            mobileError.textContent = "Mobile must start with 0."; // Set error message
+            mobileInput.classList.add("is-invalid");
+        } else if (mobileInput.value[0] === '0') {
+            mobileError.textContent = ""; // Clear error message
+            mobileInput.classList.remove("is-invalid");
+        }
+    }
+
+
+    function validateEmail() {
+        const emailInput = document.getElementById('emailInput');
+        const emailError = document.getElementById('emailError');
+        const emailValue = emailInput.value;
+
+        // Regular expression for basic email validation
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Check if the value matches the regex
+        if (emailValue.length > 0 && !regex.test(emailValue)) {
+            emailError.textContent = "Please enter a valid email address.";
+            emailInput.classList.add("is-invalid");
+        } else {
+            emailError.textContent = ""; // Clear error message
+            emailInput.classList.remove("is-invalid");
+        }
+    }
+
+    function validateName(input) {
+        const nameError = document.getElementById("nameError");
+        const value = input.value;
+
+        // Check if the first character is a number
+        if (value.length > 0 && !isNaN(value[0])) {
+            nameError.textContent = "The first character cannot be a number.";
+            input.classList.add("is-invalid"); // Add Bootstrap invalid class
+        } else {
+            nameError.textContent = ""; // Clear error message
+            input.classList.remove("is-invalid"); // Remove Bootstrap invalid class
+        }
+    }
+
+    function validatePassword() {
+        const passwordInput = document.querySelector('input[name="password"]');
+        const passwordError = document.getElementById('passwordError');
+        const passwordValue = passwordInput.value;
+
+        // Regular expression to check password strength
+        const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+
+        // Check if the password matches the strength criteria
+        if (passwordValue.length > 0 && !strongPasswordRegex.test(passwordValue)) {
+            passwordError.textContent = "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
+            passwordInput.classList.add("is-invalid"); // Add Bootstrap invalid class
+        } else {
+            passwordError.textContent = ""; // Clear error message
+            passwordInput.classList.remove("is-invalid"); // Remove Bootstrap invalid class
+        }
+    }
+
+        </script>
     </body>
 
 </html>

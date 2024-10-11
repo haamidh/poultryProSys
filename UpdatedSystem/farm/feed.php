@@ -7,6 +7,7 @@ require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once 'Frame.php';
 require_once '../classes/Feed.php';
+require '../classes/Validation.php';
 
 // Check if user is logged in and has the correct role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -23,6 +24,9 @@ $frame->first_part($farm);
 
 $feed = new Feed($con);
 $feed->setUser_id($user_id);
+$textErr = $notifyErr = "";
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_feed'])) {
@@ -34,14 +38,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $feed->setLeastQuantity($least_quantity);
         $feed->setDescription($description);
 
-        if ($feed->feedExists($user_id)) {
-            $error_message = "This feed already exists";
-        } else {
+        // Validate Decimal
+        if (!Validation::validateDecimalField($feed->getLeastQuantity(), $notifyErr)) {
+            $errors = true;
+        }
 
-            if ($feed->create($user_id)) {
-                $success_message = "Feed added successfully.";
+        // Validate name
+        if (!Validation::validateTextField($feed->getFeed_name(), $textErr)) {
+            $errors = true;
+        }
+
+        if (!$errors) {
+
+            if ($feed->feedExists($user_id)) {
+                $error_message = "This feed already exists";
             } else {
-                $error_message = "Failed to add feed.";
+
+                if ($feed->create($user_id)) {
+                    $success_message = "Feed added successfully.";
+                } else {
+                    $error_message = "Failed to add feed.";
+                }
             }
         }
     }
@@ -55,12 +72,12 @@ $feeds = $feed->read($user_id);
         text-align: left;
         display: block; /* Ensures it behaves like a block-level element */
     }
-    
+
     .card {
-       
+
         border: none;
         border-radius: 10px;
-        
+
     }
 
 </style>
@@ -95,13 +112,16 @@ $feeds = $feed->read($user_id);
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                             <div class="mb-3">
                                 <label class="form-label">Feed Name:</label>
-                                <input type="text" class="form-control" id="feed_name" name="feed_name" required>
+                                <input type="text" class="form-control" id="feed_name" name="feed_name" required oninput="validateName(this)">
+                                <small id="nameError" class="text-danger"><?php echo $textErr ?></small>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Notification Threshold:</label>
-                                <input type="text" class="form-control" id="least_quantity" name="least_quantity">
+                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" oninput="validateNotifyField(this)">
+                                <small id="notifyError" class="text-danger"><?php echo $notifyErr ?></small>
                             </div>
+
 
                             <div class="mb-3">
                                 <label class="form-label">Description:</label>
@@ -205,4 +225,47 @@ $feeds = $feed->read($user_id);
             }
         }
     }
+
+    function validateName(input) {
+        const nameError = document.getElementById("nameError");
+        const value = input.value;
+
+        // Check if the first character is a number
+        if (value.length > 0 && !isNaN(value[0])) {
+            nameError.textContent = "The first character cannot be a number.";
+            input.classList.add("is-invalid"); // Add Bootstrap invalid class
+        } else {
+            nameError.textContent = ""; // Clear error message
+            input.classList.remove("is-invalid"); // Remove Bootstrap invalid class
+        }
+    }
+
+    function validateNotifyField(input) {
+        const notifyError = document.getElementById("notifyError");
+        const value = input.value;
+
+        // Remove non-numeric characters (except decimal points)
+        const cleanedValue = value.replace(/[^0-9.]/g, '');
+        input.value = cleanedValue;
+
+        // Check if the cleaned value is empty or starts with a decimal
+        if (cleanedValue.length === 0) {
+            notifyError.textContent = "Invalid notification threshold.";
+            input.classList.add("is-invalid");
+        } else if (cleanedValue[0] === '.') {
+            notifyError.textContent = "The first character must be a number.";
+            input.classList.add("is-invalid");
+        } else {
+            // Split on decimal to ensure only one decimal point
+            const parts = cleanedValue.split('.');
+            if (parts.length > 2) {
+                notifyError.textContent = "Invalid input. Only one decimal point is allowed.";
+                input.classList.add("is-invalid");
+            } else {
+                notifyError.textContent = ""; // Clear error message
+                input.classList.remove("is-invalid");
+            }
+        }
+    }
+
 </script>

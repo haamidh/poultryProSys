@@ -1,8 +1,8 @@
 <?php
-class Validation
-{
-    public static function validateMobile($mobile, &$error = null)
-    {
+
+class Validation {
+
+    public static function validateMobile($mobile, &$error = null) {
         if (empty($mobile)) {
             $error = '*Mobile Number is Required';
             return false;
@@ -17,8 +17,7 @@ class Validation
         }
     }
 
-    public static function validateEmail($email, &$error = null)
-    {
+    public static function validateEmail($email, &$error = null) {
         if (empty($email)) {
             $error = '*Email is Required';
             return false;
@@ -32,8 +31,7 @@ class Validation
         }
     }
 
-    public static function validateAmount($amount, &$error = null)
-    {
+    public static function validateAmount($amount, &$error = null) {
         if (empty($amount)) {
             $error = '*Amount is required';
             return false;
@@ -47,8 +45,7 @@ class Validation
         }
     }
 
-    public static function validateNumberField($number, &$error = null)
-    {
+    public static function validateNumberField($number, &$error = null) {
         if (empty($number)) {
             $error = '*This field is required';
             return false;
@@ -62,8 +59,22 @@ class Validation
         }
     }
 
-    public static function validateTextField($text, &$error = null)
-    {
+    public static function validateDecimalField($number, &$error = null) {
+        if (empty($number)) {
+            $error = '*This field is required';
+            return false;
+        } else {
+            // Validate the decimal number
+            if (preg_match("/^\d+(\.\d+)?$/", $number)) {
+                return $number; // Return the valid number
+            } else {
+                $error = '*Please enter a valid decimal number';
+                return false;
+            }
+        }
+    }
+
+    public static function validateTextField($text, &$error = null) {
         if (empty($text)) {
             $error = '*This field is required';
             return false;
@@ -77,28 +88,40 @@ class Validation
         }
     }
 
-    public static function validatePasswordField($password, &$error = null)
-    {
+    public static function validatePasswordField($password, &$error = null) {
         if (empty($password)) {
             $error = '*This field is required';
             return false;
         } else {
-            if (preg_match("/^[a-zA-Z0-9\s\-@]+$/", $password)) { 
+            if (preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/", $password)) {
                 return $password;
             } else {
-                $error = '*Please enter the input in correct format(You can only use letters,numbers,spaces,hypens and at symbols)';
+                $error = '*Password must be at least 8 characters and include uppercase, lowercase, number, and special character.';
                 return false;
             }
         }
     }
 
-    public static function validateAddressField($address, &$error = null)
-    {
+    public static function validatePasswordFieldLog($password, &$error = null) {
+        if (empty($password)) {
+            $error = '*This field is required';
+            return false;
+        } else {
+            if (preg_match("/^.{4,}$/", $password)) {
+                return $password;
+            } else {
+                $error = '*Enter the valid password';
+                return false;
+            }
+        }
+    }
+
+    public static function validateAddressField($address, &$error = null) {
         if (empty($address)) {
             $error = '*This field is required';
             return false;
         } else {
-            if (preg_match("/^[a-zA-Z0-9\s\-,\/]+$/", $address)) { 
+            if (preg_match("/^[a-zA-Z0-9\s\-,\/]+$/", $address)) {
                 return $address;
             } else {
                 $error = '*Please enter the Address in correct format';
@@ -106,4 +129,5 @@ class Validation
             }
         }
     }
+
 }

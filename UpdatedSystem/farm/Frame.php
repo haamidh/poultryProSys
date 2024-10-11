@@ -20,6 +20,7 @@ class Frame {
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
                 <style>
+                    
                     .nav-item{
                         font-weight: bold;
                     }
@@ -35,6 +36,7 @@ class Frame {
                         background-color: #355f4c;
                         color: white;
                     }
+                    
                 </style>
             </head>
 
