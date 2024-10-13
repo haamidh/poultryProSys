@@ -8,7 +8,9 @@ $marketPlaceCRUD = new MarketPlaceCRUD();
 $product_id = $marketPlaceCRUD->getProductId();
 $row = $marketPlaceCRUD->viewProduct($product_id);
 $quantity = $_POST["quantity"];
-$total = $quantity * $row['product_price'];
+$product_price = $row['product_price'];
+$total = $quantity * $product_price;
+
 ?>
 <!doctype HTML>
 <html>
@@ -50,9 +52,10 @@ $total = $quantity * $row['product_price'];
                                     <form action="checkout.php" method="post"> <div class="form-group">
                                             <input type="hidden" name="items" value="<?php echo $row['product_name']; ?>">
                                             <input type="hidden" name="amount" value="<?php echo $total; ?>">
-
-
-                                        </div>
+                                            <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
+                                            <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+                                            <input type="hidden" name="product_price" value="<?php echo $product_price; ?>">
+                                       </div>
 
                                         <div class="cart mt-4 align-items-center">
                                             <input type="hidden" name="hash" value="<?php echo $hash ?>">  

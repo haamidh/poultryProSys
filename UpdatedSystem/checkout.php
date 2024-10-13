@@ -2,10 +2,28 @@
 require 'classes/config.php';
 require 'marketplace/marketPlaceCRUD.php';
 
+session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $product_name = $_POST['items'];
     $amount = $_POST['amount'];
+    $quantity = $_POST['quantity'];
+    $product_id = $_POST['product_id'];
+    $product_price = $_POST['product_price'];
+    if(!isset($_SESSION['order_details'])){
+        $_SESSION['order_details']=array();
+          }
+          $_SESSION['order_details'][] = array(
+            'cus_id'=> 35,
+            'farm_id'=> 23,
+            'product_id'=>$product_id,
+            'quantity'=>$quantity,
+            'product_price' =>$product_price,
+            'total' =>$amount
+          );
 }
+
+
+
 $merchant_id = 1227852;
 $merchant_secret = "OTYyNzU2MDEyMjY1MDg1NzUxMTMwMDY0OTc5MjMzNTY4NTI3NjU4";
 
@@ -49,7 +67,7 @@ $hash = strtoupper(
 
             <form method="post" action="https://sandbox.payhere.lk/pay/checkout">
                 <input type="hidden" name="merchant_id" value="<?php echo $merchant_id; ?>">
-                <input type="hidden" name="return_url" value="http://sample.com/return">
+                <input type="hidden" name="return_url" value="http://localhost/poultryProsys/poultryProSys/UpdatedSystem/marketplace/order.php">
                 <input type="hidden" name="cancel_url" value="http://sample.com/cancel">
                 <input type="hidden" name="notify_url" value="http://sample.com/notify">
                 <input type="hidden" name="currency" value="<?php echo $currency; ?>">
@@ -63,7 +81,11 @@ $hash = strtoupper(
                             <input type="text" class="form-control" name="items" value="<?php echo $product_name ?>" readonly>
                         </div>
                         <div class="col mb-4">
-                            <label for="Last name">Amount</label>
+                            <label for="Quantity">Quantity</label>
+                            <input type="text" class="form-control" name="quantity" value="<?php echo $quantity; ?>" readonly>
+                        </div>
+                        <div class="col mb-4">
+                            <label for="Last name">Total Amount</label>
                             <input type="text" class="form-control" name="amount" value="<?php echo $amount; ?>" readonly>
                         </div>
                     </div>
