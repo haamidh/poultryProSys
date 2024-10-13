@@ -255,6 +255,67 @@ class Order {
         }
     }
 
+    public function getAllServiceFees($from_date, $to_date) {
+        // SQL query that handles both date filters being optional
+        $query = "SELECT order_id, service_fee, payment_date 
+              FROM order_payments 
+              WHERE (:from_date IS NULL OR payment_date >= :from_date)
+              AND (:to_date IS NULL OR payment_date <= :to_date)
+              ORDER BY payment_date DESC"; // Specify the column for ordering
+
+        $stmt = $this->conn->prepare($query);
+
+        // Handle NULL dates when not provided
+        $from_date = !empty($from_date) ? $from_date : null;
+        $to_date = !empty($to_date) ? $to_date : null;
+
+        // Bind date parameters, using NULL if not provided
+        $stmt->bindParam(':from_date', $from_date);
+        $stmt->bindParam(':to_date', $to_date);
+
+        // Execute the query
+        $stmt->execute();
+
+        // Fetch results
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    public function getDailyServiceFees($to_date) {
+
+        $start_date = date('Y-m-d', strtotime($to_date . ' -30 days'));
+
+        // SQL query to calculate service fees per day
+        $query = "SELECT DATE(payment_date) AS day, SUM(service_fee) AS total_service_fees
+              FROM order_payments
+              WHERE payment_date >= :from_date 
+              AND payment_date < :to_date
+              GROUP BY DATE(payment_date)
+              ORDER BY DATE(payment_date)";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':from_date', $start_date);
+        $stmt->bindParam(':to_date', $to_date);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getMonthlyServiceFees($to_date) {
+        // SQL query to calculate service fees per month
+        $query = "SELECT DATE_FORMAT(payment_date, '%Y-%m') AS month, SUM(service_fee) AS total_service_fees
+              FROM order_payments
+              WHERE payment_date >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+              GROUP BY DATE_FORMAT(payment_date, '%Y-%m')
+              ORDER BY DATE_FORMAT(payment_date, '%Y-%m')";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 ?>

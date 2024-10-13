@@ -3,19 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/register.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/index.html</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/classes/Incomes.php</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/farm/profitPDF.php</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/classes/Order.php</file>
             <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/login.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/admin/farms.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/classes/Validation.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/admin/customers.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/admin/reviews.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/admin/Frame.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/contact_us.php</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/farm/stock.php</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/farm/incomes.php</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/classes/User.php</file>
             <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/admin/dashboard.php</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/farm/dashboard.php</file>
+            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/farm/incomesPDF.php</file>
             <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/chatFAQ.php</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/style.css</file>
-            <file>file:/C:/xampp/htdocs/poultryProSys/UpdatedSystem/includes/footer.php</file>
         </group>
     </open-files>
 </project-private>

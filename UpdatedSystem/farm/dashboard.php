@@ -62,6 +62,10 @@ $daily_income = $incomeCharts->getDailyIncome();
 $monthly_income = $incomeCharts->getMonthlyIncome();
 ?>
 <style>
+
+    body {
+        background-color: #e9fef2;
+    }
     .card {
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -235,7 +239,12 @@ $monthly_income = $incomeCharts->getMonthlyIncome();
         }*/
 
     .chart-container {
-        transition: transform 0.3s ease; /* Smooth transition for scaling */
+        margin-top: 50px;
+        margin-bottom: 50px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
     .chart-container:hover {
