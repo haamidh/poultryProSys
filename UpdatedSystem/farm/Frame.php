@@ -69,7 +69,7 @@ class Frame {
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-white" href="#">
+        <a class="nav-link text-white" href="miscellaneous.php">
             <i class="bi bi-gear-fill"></i> Miscellaneous
         </a>
     </li>

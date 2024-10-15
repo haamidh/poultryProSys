@@ -9,8 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $quantity = $_POST['quantity'];
     $product_id = $_POST['product_id'];
     $product_price = $_POST['product_price'];
+    if (isset($_SESSION['order_details'])) {
+        unset($_SESSION['order_details']);
+    }
     if(!isset($_SESSION['order_details'])){
         $_SESSION['order_details']=array();
+        $_SESSION['order_details']['created_at'] = time();
           }
           $_SESSION['order_details'][] = array(
             'cus_id'=> 35,
@@ -20,6 +24,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'product_price' =>$product_price,
             'total' =>$amount
           );
+
+          // Set the expiry duration (in seconds), e.g., 30 minutes
+$expiry_duration = 20;  // 30 minutes
+
+// Check if 'order_details' session array exists and has a 'created_at' key
+if (isset($_SESSION['order_details']) && isset($_SESSION['order_details']['created_at'])) {
+    // Calculate the time elapsed since the session array was created
+    $time_elapsed = time() - $_SESSION['order_details']['created_at'];
+
+    // If the time elapsed exceeds the expiry duration, clear the session data
+    if ($time_elapsed > $expiry_duration) {
+        unset($_SESSION['order_details']);  // delete the session array
+        echo "Session expired. The order details have been cleared.";
+    }
+}
+
+// You can now safely add new order details after the expiry check
+if (!isset($_SESSION['order_details'])) {
+    // Store the new order details
+    $_SESSION['order_details'] = [
+        'cus_id' => 35,
+        'farm_id' => 23,
+        'product_id' => 26,
+        'quantity' => 6,
+        'product_price' => 250,
+        'total' => 1500,
+        'created_at' => time()  // store the timestamp again
+    ];
+    echo "New order details have been added.";
+}
+
 }
 
 
