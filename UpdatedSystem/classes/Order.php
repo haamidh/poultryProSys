@@ -106,8 +106,8 @@ class Order {
     // Method to create a new order
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  (cus_id, farm_id, product_id, quantity, unit_price, total, status, ordered_date) 
-                  VALUES (:order_id, :cus_id, :farm_id, :product_id, :quantity, :unit_price, :total, :status, :ordered_date)";
+                  (cus_id, farm_id, product_id, quantity, unit_price, total, status) 
+                  VALUES (:order_id, :cus_id, :farm_id, :product_id, :quantity, :unit_price, :total, :status)";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
@@ -119,7 +119,7 @@ class Order {
         $stmt->bindParam(':unit_price', $this->unit_price);
         $stmt->bindParam(':total', $this->total);
         $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':ordered_date', $this->ordered_date);
+        
 
         // Execute the query
         if ($stmt->execute()) {
