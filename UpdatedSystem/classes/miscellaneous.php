@@ -81,6 +81,21 @@ public function read($user_id)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+public function miscellaneousExists($user_id)
+{
+    // Modify the query to remove spaces and make it case-insensitive
+    $query = "SELECT category_id FROM " . $this->table_name . " 
+          WHERE LOWER(REPLACE(category_name, ' ', '')) = LOWER(REPLACE(:category_name, ' ', '')) 
+          AND user_id = :user_id 
+          LIMIT 1";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':category_name', $this->category_name);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+
+    return $stmt->rowCount() > 0;
+}
    }
 
 
