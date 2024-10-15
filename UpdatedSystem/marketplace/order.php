@@ -1,5 +1,39 @@
 <?php
 session_start();
+require_once '../classes/config.php';
+require_once '../classes/Order.php';
+
+
+$database = new Database();
+$con = $database->getConnection();
+
+if(!isset($_SESSION['order_details'])){
+  header("Location: ../login.php");
+}
+
+
+
+
+$order = new Order($con);
+$product_id = $_SESSION['order_details'][0]['product_id'];
+$quantity = $_SESSION['order_details'][0]['quantity'];
+$unit_price = $_SESSION['order_details'][0]['product_price'];
+$total_amount = $_SESSION['order_details'][0]['total'];
+$status = 1;
+
+      
+      $order->setCus_id(23);
+      $order->setFarm_id(23);
+      $order->setProduct_id($product_id);
+      $order->setQuantity($quantity);
+      $order->setUnit_price($unit_price);
+      $order->setTotal($total_amount);
+      $order->setStatus($status);
+      
+      $order->create();
+      
+
+      
 
 ?>
 <!DOCTYPE html>
@@ -36,7 +70,7 @@ session_start();
         <div class="border p-4 rounded">
           <h5>Order Summary</h5>
           <div class="d-flex justify-content-between">
-            <p><strong>Date:</strong> <?php echo $order_date; ?></p>
+            
             <!-- Use the correct session variable 'order_details' -->
             <p><strong>Order Number:</strong> <?php echo str_pad($_SESSION['order_details'][0]['cus_id'], 9, '0', STR_PAD_LEFT); ?></p>
             <p><strong>Payment Method:</strong> Mastercard</p>
