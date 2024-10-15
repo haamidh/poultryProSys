@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   
 <div class="mb-3">
     <label for="staticEmail" class="form-control">category_name</label>
-      <input type="text" readonly class="form-control" id="category_name" placeholder="e.g : transportation" name="category_name">
+      <input type="text" class="form-control" id="category_name" placeholder="e.g : transportation" name="category_name">
   </div>
   <div class="mb-3">
     <label for="inputPassword" class="form-control">category_description</label>
