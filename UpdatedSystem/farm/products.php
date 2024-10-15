@@ -85,7 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Fetch product categories for dropdown
-function fetchCategories($con) {
+function fetchCategories($con)
+{
     $query = $con->prepare('SELECT * FROM product_categories');
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -100,17 +101,14 @@ $products = $product->read($user_id);
     <div class="container">
         <div class="row my-5 text-center">
 
-        
-        
-        
 
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 px-5 mb-1">           
-            <button class="btn btn-primary" name="add_product_categories"><a href="products_category.php" style="text-decoration: none; color: white;">Add new Product categories</a></button>   
-        </div>
-    </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 px-5 mb-1">
+                    <button class="btn btn-primary" name="add_product_categories"><a href="products_category.php"
+                            style="text-decoration: none; color: white;">Add new Product categories</a></button>
+                </div>
+            </div>
 
-   
 
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
                 <div class="card shadow">
@@ -119,19 +117,20 @@ $products = $product->read($user_id);
                     </div>
                     <div class="card-body" style="background-color: #D4C8DE;">
 
-                        <?php if (!empty($success_message)) : ?>
+                        <?php if (!empty($success_message)): ?>
                             <div class="alert alert-success">
                                 <?php echo $success_message; ?>
                             </div>
                         <?php endif; ?>
 
-                        <?php if (!empty($error_message)) : ?>
+                        <?php if (!empty($error_message)): ?>
                             <div class="alert alert-danger">
                                 <?php echo $error_message; ?>
                             </div>
                         <?php endif; ?>
 
-                        <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+                        <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
+                            method="POST" enctype="multipart/form-data">
 
                             <div class="row p-2">
                                 <div class="col-sm-6">
@@ -182,11 +181,13 @@ $products = $product->read($user_id);
                                     <div class="col-sm-8">
                                         <div class="row mb-3 px-3">
                                             <div class="col-sm-6 form-check">
-                                                <input type="radio" class="form-check-input" name="unit" value="kilogram" id="kilogram" required>
+                                                <input type="radio" class="form-check-input" name="unit"
+                                                    value="kilogram" id="kilogram" required>
                                                 <label class="form-check-label" for="Kg">kg</label>
                                             </div>
                                             <div class="col-sm-6 form-check">
-                                                <input type="radio" class="form-check-input" name="unit" value="pieces" id="pieces" required>
+                                                <input type="radio" class="form-check-input" name="unit" value="pieces"
+                                                    id="pieces" required>
                                                 <label class="form-check-label" for="Pieces">Pieces</label>
                                             </div>
                                         </div>
@@ -211,7 +212,8 @@ $products = $product->read($user_id);
                                     <div class="row">
                                         <label class="col-sm-6 col-form-label">Notification Threshold:</label>
                                         <div class="col-sm-12">
-                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity">
+                                            <input type="text" class="form-control" id="least_quantity"
+                                                name="least_quantity">
                                         </div>
                                     </div>
                                 </div>
@@ -222,7 +224,8 @@ $products = $product->read($user_id);
                                     <div class="row mb-3">
                                         <label class="col-sm-4 col-form-label">Description:</label>
                                         <div class="col-sm-12">
-                                            <textarea name="description" class="form-control" rows="3" required></textarea>
+                                            <textarea name="description" class="form-control" rows="3"
+                                                required></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -240,10 +243,13 @@ $products = $product->read($user_id);
             <div class="col-lg-6 col-md-10 col-12 mb-3 my-2">
 
                 <div class="card shadow">
-                    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
-                        <h5 class="card-title p-2 text-white mb-0"><strong style="font-size:25px;">Product Details</strong></h5>
+                    <div class="card-header d-flex justify-content-between align-items-center"
+                        style="background-color: #3E497A;">
+                        <h5 class="card-title p-2 text-white mb-0"><strong style="font-size:25px;">Product
+                                Details</strong></h5>
                         <div class="input-group" style="width: 250px;">
-                            <input type="text" id="searchInput" class="form-control" placeholder="Search for products..." onkeyup="searchProduct()">
+                            <input type="text" id="searchInput" class="form-control"
+                                placeholder="Search for products..." onkeyup="searchProduct()">
                             <span class="input-group-text">
                                 <i class="bi bi-search" style="color: #3E497A;"></i>
                             </span>
@@ -272,9 +278,13 @@ $products = $product->read($user_id);
                                             <td><?php echo $product['product_price']; ?></td>
                                             <td><?php echo $product['unit']; ?></td>
                                             <td style="text-align:center;">
-                                                <a href="product_stock.php?product_id=<?php echo $product['product_id']; ?>" class="btn btn-primary text-dark py-1 px-2"><i class="bi bi-plus-square-fill" style="font-size:18px;"></i></a>
-                                                <a href="edit_product.php?product_id=<?php echo $product['product_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
-                                                <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $product['product_id']; ?>)">Delete</button>
+                                                <a href="product_stock.php?product_id=<?php echo $product['product_id']; ?>"
+                                                    class="btn btn-primary text-dark py-1 px-2"><i
+                                                        class="bi bi-plus-square-fill" style="font-size:18px;"></i></a>
+                                                <a href="edit_product.php?product_id=<?php echo $product['product_id']; ?>"
+                                                    class="btn btn-success text-light py-1 px-2">Edit</a>
+                                                <button class="btn btn-danger text-light py-1 px-2"
+                                                    onclick="myFunction(<?php echo $product['product_id']; ?>)">Delete</button>
                                             </td>
 
                                         </tr>
@@ -322,10 +332,10 @@ $products = $product->read($user_id);
 
                 // If the input matches any of these values, show the row
                 if (
-                        nameValue.toUpperCase().indexOf(filter) > -1 ||
-                        priceValue.toUpperCase().indexOf(filter) > -1 ||
-                        unitValue.toUpperCase().indexOf(filter) > -1
-                        ) {
+                    nameValue.toUpperCase().indexOf(filter) > -1 ||
+                    priceValue.toUpperCase().indexOf(filter) > -1 ||
+                    unitValue.toUpperCase().indexOf(filter) > -1
+                ) {
                     rows[i].style.display = "";
                 } else {
                     rows[i].style.display = "none";
