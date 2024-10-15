@@ -56,6 +56,6 @@ class miscellaneous {
         $this->category_description = $category_description;
     }
 
-
+    
 
 }
