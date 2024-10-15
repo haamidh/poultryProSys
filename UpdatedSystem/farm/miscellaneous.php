@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once 'Frame.php';
-require_once '../classes/Medicine.php';
+require_once '../classes/miscellaneous.php';
 
 // Check if user is logged in and has the correct role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -22,12 +22,23 @@ $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 $frame = new Frame();
 $frame->first_part($farm);
 
-$med = new Medicine($con);
-$med->setUser_id($user_id);
+$mis = new miscellaneous($con);
+$mis->setUser_id($user_id);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $category_name=$_POST[""];
+    $category_name=$_POST["category_name"];
+    $category_description=$_POST["category_description"];
+
+    $mis->setCategory_name($category_name);
+    $mis->setCategory_description($category_description);
+   
+
 }
+
+
+$miscellaneous = $mis->read($user_id);
+
+
 ?>
 <html>
     <head><title>miscellaneous</title>
@@ -65,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>
   <div class="mb-3">
     <label for="inputPassword" class="form-control">category_description</label>
-      <input type="text" class="form-control" id="category_description" id="category_description" placeholder="detailed description">
+      <input type="text" class="form-control" id="category_description" name="category_description" placeholder="detailed description">
   </div>
   <div class="d-grid gap-2">
   <input type="submit"  id="submit" value="submit">

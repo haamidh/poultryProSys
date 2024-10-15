@@ -15,7 +15,7 @@ class miscellaneous {
     
     private $conn;
     private $table_name = "miscellaneous_category";
-    private $user_id;
+    private $user_id;   
     private $category_id;
     private $category_name;
     private $category_description;
@@ -56,6 +56,32 @@ class miscellaneous {
         $this->category_description = $category_description;
     }
 
-    
+   public function create($user_id) {
+$query="INSERT INTO " . $this->table_name . " (user_id, category_id,category_name,category_description) VALUES (:user_id, :category_id,:category_name, :category_description)";
+$stmt = $this->conn->prepare($query);
 
+// Sanitize input
+$this->category_name = htmlspecialchars(strip_tags($this->category_name));
+$this->category_description = htmlspecialchars(strip_tags($this->category_description));
+
+// Bind parameters
+$stmt->bindParam(':user_id', $user_id);
+$stmt->bindParam(':category_id', $this->category_id);
+$stmt->bindParam(':category_name', $this->category_name);
+$stmt->bindParam(':category_description', $this->category_description);
+
+return $stmt->execute();
 }
+
+public function read($user_id)
+{
+    $query = "SELECT * FROM " . $this->table_name . " WHERE user_id= :user_id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+   }
+
+
