@@ -100,6 +100,18 @@ $products = $product->read($user_id);
     <div class="container">
         <div class="row my-5 text-center">
 
+        
+        
+        
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 px-5 mb-1">           
+            <button class="btn btn-primary" name="add_product_categories"><a href="products_category.php" style="text-decoration: none; color: white;">Add new Product categories</a></button>   
+        </div>
+    </div>
+
+   
+
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
                 <div class="card shadow">
                     <div class="card-header p-3 text-center" style="background-color: #356854;">
