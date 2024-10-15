@@ -57,7 +57,7 @@ class miscellaneous {
     }
 
    public function create($user_id) {
-$query="INSERT INTO " . $this->table_name . " (user_id, category_id,category_name,category_description) VALUES (:user_id, :category_id,:category_name, :category_description)";
+$query="INSERT INTO " . $this->table_name . " (user_id, category_name,category_description) VALUES (:user_id, :category_name, :category_description)";
 $stmt = $this->conn->prepare($query);
 
 // Sanitize input
@@ -66,7 +66,6 @@ $this->category_description = htmlspecialchars(strip_tags($this->category_descri
 
 // Bind parameters
 $stmt->bindParam(':user_id', $user_id);
-$stmt->bindParam(':category_id', $this->category_id);
 $stmt->bindParam(':category_name', $this->category_name);
 $stmt->bindParam(':category_description', $this->category_description);
 
