@@ -21,16 +21,34 @@ $unit_price = $_SESSION['order_details'][0]['product_price'];
 $total_amount = $_SESSION['order_details'][0]['total'];
 $status = 1;
 
+if (!isset($_SESSION['order_created'])) {
+  $order = new Order($con);
+  $product_id = $_SESSION['order_details'][0]['product_id'];
+  $quantity = $_SESSION['order_details'][0]['quantity'];
+  $unit_price = $_SESSION['order_details'][0]['product_price'];
+  $total_amount = $_SESSION['order_details'][0]['total'];
+  $status = 1;
+
+  // Set order details
+  $order->setCus_id(23);
+  $order->setFarm_id(23);
+  $order->setProduct_id($product_id);
+  $order->setQuantity($quantity);
+  $order->setUnit_price($unit_price);
+  $order->setTotal($total_amount);
+  $order->setStatus($status);
+  
+  // Create the order in the database
+  $order->create();
+
+  // Mark the order as created in the session
+  $_SESSION['order_created'] = true;
+}
+
+
       
-      $order->setCus_id(23);
-      $order->setFarm_id(23);
-      $order->setProduct_id($product_id);
-      $order->setQuantity($quantity);
-      $order->setUnit_price($unit_price);
-      $order->setTotal($total_amount);
-      $order->setStatus($status);
       
-      $order->create();
+
       
 
       
