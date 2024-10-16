@@ -226,46 +226,6 @@ $feeds = $feed->read($user_id);
         }
     }
 
-    function validateName(input) {
-        const nameError = document.getElementById("nameError");
-        const value = input.value;
-
-        // Check if the first character is a number
-        if (value.length > 0 && !isNaN(value[0])) {
-            nameError.textContent = "The first character cannot be a number.";
-            input.classList.add("is-invalid"); // Add Bootstrap invalid class
-        } else {
-            nameError.textContent = ""; // Clear error message
-            input.classList.remove("is-invalid"); // Remove Bootstrap invalid class
-        }
-    }
-
-    function validateNotifyField(input) {
-        const notifyError = document.getElementById("notifyError");
-        const value = input.value;
-
-        // Remove non-numeric characters (except decimal points)
-        const cleanedValue = value.replace(/[^0-9.]/g, '');
-        input.value = cleanedValue;
-
-        // Check if the cleaned value is empty or starts with a decimal
-        if (cleanedValue.length === 0) {
-            notifyError.textContent = "Invalid notification threshold.";
-            input.classList.add("is-invalid");
-        } else if (cleanedValue[0] === '.') {
-            notifyError.textContent = "The first character must be a number.";
-            input.classList.add("is-invalid");
-        } else {
-            // Split on decimal to ensure only one decimal point
-            const parts = cleanedValue.split('.');
-            if (parts.length > 2) {
-                notifyError.textContent = "Invalid input. Only one decimal point is allowed.";
-                input.classList.add("is-invalid");
-            } else {
-                notifyError.textContent = ""; // Clear error message
-                input.classList.remove("is-invalid");
-            }
-        }
-    }
 
 </script>
+<script src="script.js"></script>
