@@ -25,6 +25,43 @@ $frame->first_part($farm);
 $misEx = new MisExpenses($con);
 $misEx->setUser_id($user_id);
 
+//db
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $expense_name = $_POST["expense_name"];
+    $handled_by = $_POST["handled_by"];
+    $expense_amount = $_POST["expense_amount"];
+    $misc_description = $_POST["misc_description"];
+    $payment_method = $_POST["payment_method"];
+    $create_at=$_POST["create_at"];
+
+
+
+
+    $misEx->setExpense_name($expense_name);
+    $misEx->setHandled_by($handled_by);
+    $misEx->setExpense_amount($expense_amount);
+    $misEx->setMisc_description($misc_description);
+    $misEx->setPayment_method($payment_method);
+    $misEx->setCreated_at($created_at);
+    
+    
+    // Call the create method to insert the new category
+    if ($misEx->miscellaneousExpensesExists($user_id)) {
+        $error_message = "This Miscellaneous Expenses already exists";
+    } else {
+        if ($misEx->create($user_id)) {
+            $success_message = "Miscellaneous Expenses added successfully.";
+        } else {
+            $error_message = "Failed to add miscellaneous Expenses.";
+        }
+    }
+}
+
+
+
+
+
+
 
 function fetchCategories($con) {
     $query = $con->prepare('SELECT * FROM miscellaneous_categories');
@@ -125,7 +162,7 @@ $misEx = $misEx->read($user_id);
                             </div>
                             <div class="mb-3">
                                 <label for="category_description" class="form-control">date</label>
-                                <input type="text" class="form-control" id="date" name="date" placeholder="date">
+                                <input type="date" class="form-control" id="date" name="date" placeholder="date">
     
                             </div>
                             <div class="d-grid gap-2">
