@@ -3,26 +3,26 @@ session_start();
 require_once '../classes/config.php';
 require_once '../classes/Order.php';
 
+// Ensure the user is logged in and has the correct role
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
+  header("Location: ../login.php");
+  exit();
+}
+
+// Ensure 'order_details' are set in the session
+if (!isset($_SESSION['order_details'])) {
+  header("Location: ../login.php");
+  exit();
+}
 
 $database = new Database();
 $con = $database->getConnection();
 
-if(!isset($_SESSION['order_details'])){
-  header("Location: ../login.php");
-}
-
-
-
-
 $order = new Order($con);
-$product_id = $_SESSION['order_details'][0]['product_id'];
-$quantity = $_SESSION['order_details'][0]['quantity'];
-$unit_price = $_SESSION['order_details'][0]['product_price'];
-$total_amount = $_SESSION['order_details'][0]['total'];
-$status = 1;
 
+// Check if the order has already been placed
 if (!isset($_SESSION['order_created'])) {
-  $order = new Order($con);
+  // Extract order details from session
   $product_id = $_SESSION['order_details'][0]['product_id'];
   $quantity = $_SESSION['order_details'][0]['quantity'];
   $unit_price = $_SESSION['order_details'][0]['product_price'];
@@ -30,8 +30,8 @@ if (!isset($_SESSION['order_created'])) {
   $status = 1;
 
   // Set order details
-  $order->setCus_id(23);
-  $order->setFarm_id(23);
+  $order->setCus_id(23); // This should probably come from the session
+  $order->setFarm_id(23); // This should also come from session data or form
   $order->setProduct_id($product_id);
   $order->setQuantity($quantity);
   $order->setUnit_price($unit_price);
@@ -43,17 +43,16 @@ if (!isset($_SESSION['order_created'])) {
 
   // Mark the order as created in the session
   $_SESSION['order_created'] = true;
+
+  // Redirect to order confirmation page to prevent duplicate order creation
+  header("Location: order.php");
+  exit();
 }
 
-
-      
-      
-
-      
-
-      
+// Unset session variables for the next order (in the confirmation page)
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,8 +88,8 @@ if (!isset($_SESSION['order_created'])) {
           <h5>Order Summary</h5>
           <div class="d-flex justify-content-between">
             
-            <!-- Use the correct session variable 'order_details' -->
-            <p><strong>Order Number:</strong> <?php echo str_pad($_SESSION['order_details'][0]['cus_id'], 9, '0', STR_PAD_LEFT); ?></p>
+            <!-- There is no 'cus_id' in 'order_details', perhaps replace it with farm_id or add it explicitly -->
+            <p><strong>Order Number:</strong> <?php echo str_pad(23, 9, '0', STR_PAD_LEFT); // You need to update this with actual order number ?></p>
             <p><strong>Payment Method:</strong> Mastercard</p>
           </div>
           <hr>
@@ -136,3 +135,8 @@ if (!isset($_SESSION['order_created'])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<?php 
+unset($_SESSION['order_details']);
+unset($_SESSION['order_created']);
+?>

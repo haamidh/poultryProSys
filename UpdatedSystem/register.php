@@ -216,7 +216,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <select name="role" class="form-control" required>
                                         <option value="" disabled selected>Select role</option>
                                         <option value="farm">Farm</option>
-                                        <option value="customer">Customer</option>
+                                        <option value="customer" selected>Customer</option>
                                     </select>
                                     <small class="text-danger"><?php echo $roleErr ?></small>
                                 </div>
