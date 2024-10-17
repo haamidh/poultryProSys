@@ -25,6 +25,17 @@ $frame->first_part($farm);
 $misEx = new MisExpenses($con);
 $misEx->setUser_id($user_id);
 
+
+function fetchCategories($con) {
+    $query = $con->prepare('SELECT * FROM miscellaneous_categories');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$categories = fetchCategories($con);
+
+$misEx = $misEx->read($user_id);
+
 ?>
 
 <html>
@@ -62,11 +73,23 @@ $misEx->setUser_id($user_id);
 
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
     
-                        <div class="form-row">
-                        <div class="mb-3">
-                                <label for="staticEmail" class="form-control">Category_id</label>
-                                    <input type="text" class="form-control" id="category_id" name="category_id">
-    
+                        <div class="col-sm-6">
+                                    <div class="row">
+                                        <label class="col-sm-8 col-form-label">Select Category:</label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <select name="category_id" class="form-control" required>
+                                                <option disabled selected>Select Category</option>
+                                                <?php foreach ($categories as $category) { ?>
+                                                    <option value="<?= $category['category_id'] ?>">
+                                                        <?= $category['category_name'] ?>
+                                                    </option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="staticEmail" class="form-control">Expense_name</label>

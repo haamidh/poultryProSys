@@ -39,7 +39,7 @@ $mis->setUser_id($user_id);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category_name = $_POST["category_name"];
     $category_description = $_POST["category_description"];
-
+    
     $mis->setCategory_name($category_name);
     $mis->setCategory_description($category_description);
 
@@ -126,10 +126,14 @@ $miscellaneous = $mis->read($user_id);
                                 <input type="submit" id="submit" value="submit">
                             </div>
 
-                            <div class="d-grid gap-2">
+                            <!--div class="d-grid gap-2">
                                 <input type="submit" id="submit" value="Add MisExpenses">
-                            </div>
+                            </div>-->
                         </form>
+
+                        <div class="d-grid gap-2 mt-3">
+                                <a href="MisExpenses.php" class="btn btn-success">Add MisExpenses</a>
+                            </div>
                     </div>
                 </div>
             </div>
