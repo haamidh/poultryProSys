@@ -20,7 +20,7 @@ class Frame {
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
                 <style>
-                    
+
                     .nav-item{
                         font-weight: bold;
                     }
@@ -36,7 +36,7 @@ class Frame {
                         background-color: #355f4c;
                         color: white;
                     }
-                    
+
                 </style>
             </head>
 
@@ -58,65 +58,63 @@ class Frame {
                         <nav class="col-lg-2 col-md-3 col-sm-4 ">
                             <div class="navbar-collapse collapse show p-3 vh-100" id="navbarNavDropdown" style="background-color: #40826D;">
                                 <ul class="nav flex-column">
-    <li class="nav-item">
-        <a class="nav-link text-white" href="dashboard.php">
-            <i class="bi bi-house-door-fill"></i> Dashboard
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" href="birds.php">
-            <i class="bi bi-twitter"></i> Batches
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" href="miscellaneous.php">
-            <i class="bi bi-gear-fill"></i> Miscellaneous
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" href="feed.php">
-            <i class="bi bi-backpack4-fill"></i> Feeds
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" href="medicine.php">
-            <i class="bi bi-capsule-pill"></i> Medicine
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" href="orders.php">
-            <i class="bi bi-cart-fill"></i> Orders
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" href="products.php">
-            <i class="bi bi-database-fill-down"></i>
- Products
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" href="supplier.php">
-            <i class="bi bi-person-circle"></i>
- Supplier
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-clipboard2-data-fill"></i> Reports
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="stock.php">Stock Report</a></li>
-            <li><a class="dropdown-item" href="incomes.php">Income Report</a></li>
-            <li><a class="dropdown-item" href="expenses.php">Expenses Report</a></li>
-            <li><a class="dropdown-item" href="profit.php">Profit Report</a></li>
-        </ul>
-    </li>
-    <li class="nav-item">
-        <a href="../logout.php" class="nav-link text-white">
-            <i class="bi bi-box-arrow-right"></i> Logout
-        </a>
-    </li>
-</ul>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="dashboard.php">
+                                            <i class="bi bi-house-door-fill"></i> Dashboard
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="birds.php">
+                                            <i class="bi bi-twitter"></i> Batches
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="products.php">
+                                            <i class="bi bi-database-fill-down"></i> Products
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="orders.php">
+                                            <i class="bi bi-cart-fill"></i> Orders
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="feed.php">
+                                            <i class="bi bi-backpack4-fill"></i> Feeds
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="medicine.php">
+                                            <i class="bi bi-capsule-pill"></i> Medicine
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="supplier.php">
+                                            <i class="bi bi-person-circle"></i> Supplier
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="miscellaneous.php">
+                                            <i class="bi bi-gear-fill"></i> Miscellaneous
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-clipboard2-data-fill"></i> Reports
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <li><a class="dropdown-item" href="stock.php">Stock Report</a></li>
+                                            <li><a class="dropdown-item" href="incomes.php">Income Report</a></li>
+                                            <li><a class="dropdown-item" href="expenses.php">Expenses Report</a></li>
+                                            <li><a class="dropdown-item" href="profit.php">Profit Report</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="../logout.php" class="nav-link text-white">
+                                            <i class="bi bi-box-arrow-right"></i> Logout
+                                        </a>
+                                    </li>
+                                </ul>
 
                             </div>
                         </nav>

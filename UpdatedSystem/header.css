@@ -25,4 +25,5 @@
 .sign-in-btn {
     background-color: #B7BF4A !important;
     color: white !important;
+    border-radius: 10px;
 }
