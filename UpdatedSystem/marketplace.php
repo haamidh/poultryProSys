@@ -1,5 +1,11 @@
 <?php
+session_start();
 require 'classes/config.php';
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
+     $_SESSION['role'] = 'guest';
+    
+  }
 
 $db = new Database();
 $conn = $db->getConnection();

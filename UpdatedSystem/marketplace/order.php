@@ -30,7 +30,7 @@ if (!isset($_SESSION['order_created'])) {
   $status = 1;
 
   // Set order details
-  $order->setCus_id(23); // This should probably come from the session
+  $order->setCus_id($_SESSION['user_id']); // This should probably come from the session
   $order->setFarm_id(23); // This should also come from session data or form
   $order->setProduct_id($product_id);
   $order->setQuantity($quantity);
@@ -133,6 +133,7 @@ if (!isset($_SESSION['order_created'])) {
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
 </body>
 </html>
 
