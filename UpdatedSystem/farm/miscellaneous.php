@@ -125,6 +125,10 @@ $miscellaneous = $mis->read($user_id);
                             <div class="d-grid gap-2">
                                 <input type="submit" id="submit" value="submit">
                             </div>
+
+                            <div class="d-grid gap-2">
+                                <input type="submit" id="submit" value="Add MisExpenses">
+                            </div>
                         </form>
                     </div>
                 </div>
