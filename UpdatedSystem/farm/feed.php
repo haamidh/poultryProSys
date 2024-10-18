@@ -26,7 +26,7 @@ $feed = new Feed($con);
 $feed->setUser_id($user_id);
 $textErr = $notifyErr = "";
 
-
+$errors = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_feed'])) {
