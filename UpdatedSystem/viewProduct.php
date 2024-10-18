@@ -51,6 +51,7 @@ if (!empty($row)) { // Check if product found
                                         <form action="processOrder.php?product_id=<?php echo $row["product_id"] ?>" method="post"> <div class="form-group">
                                                 <label for="quantity">Quantity:</label>
                                                 <input type="number" min="1" max="<?php echo $productStock["quantity"]; ?>" class="form-control col-2" id="quantity" name="quantity" required>
+                                                <input type="hidden" name="farm_id" value="<?php echo $row["farm_id"]; ?>">
                                             </div>
 
                                             <div class="cart mt-4 align-items-center">

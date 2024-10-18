@@ -9,6 +9,7 @@ $product_id = $marketPlaceCRUD->getProductId();
 $row = $marketPlaceCRUD->viewProduct($product_id);
 $quantity = $_POST["quantity"];
 $product_price = $row['product_price'];
+$farm_id = $row['farm_id'];
 $total = $quantity * $product_price;
 
 ?>
@@ -55,6 +56,7 @@ $total = $quantity * $product_price;
                                             <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
                                             <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
                                             <input type="hidden" name="product_price" value="<?php echo $product_price; ?>">
+                                            <input type="hidden" name="farm_id" value="<?php echo $farm_id; ?>">
                                        </div>
 
                                         <div class="cart mt-4 align-items-center">

@@ -15,6 +15,7 @@ class Order {
     private $status;
     private $ordered_date;
     private $created_at;
+    private $order_num;
 
     // Constructor
     public function __construct($db) {
@@ -62,6 +63,10 @@ class Order {
         $this->created_at = $created_at;
     }
 
+    public function setOrder_num($order_num){
+        $this->order_num = $order_num;
+    }
+
     // Getter methods
     public function getOrder_id() {
         return $this->order_id;
@@ -101,6 +106,10 @@ class Order {
 
     public function getCreated_at() {
         return $this->created_at;
+    }
+
+    public function getOrder_num(){
+        return $this->order_num;
     }
 
     // Method to create a new order
@@ -316,6 +325,43 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
+    function generateOrderNum($con, $farm_id)
+    {
+        // Prepare the query to get the last order number for the specified farm
+        $query = $con->prepare("SELECT order_num FROM " . $this->table_name . " WHERE farm_id = ? ORDER BY order_num DESC LIMIT 1");
+    
+        // Check if the query preparation failed
+        if (!$query) {
+            die("Running Query failed: " . $con->errorInfo()[2]);
+        }
+    
+        // Bind the farm_id parameter and execute the query
+        $query->bindParam(1, $farm_id, PDO::PARAM_INT);
+        $query->execute();
+        
+        // Fetch the result
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+    
+        // If there is no previous order number, return a new one
+        if (!$row) {
+            return $farm_id . '0001';
+        } else {
+            // Get the last order number
+            $lastId = $row['order_num'];
+    
+            // Extract the last 4 digits from the order number (which is the numeric part)
+            $numSuffix = intval(substr($lastId, -4));
+    
+            // Increment the number and format it to always be 4 digits (e.g., 0001, 0002, etc.)
+            $updatedId = sprintf('%04d', $numSuffix + 1);
+    
+            // Return the new order number with the farm_id prefix and incremented numeric part
+            return $farm_id . $updatedId;
+        }
+    }
+    
 }
 
 ?>

@@ -18,7 +18,7 @@ class MarketPlaceCRUD
 
     public function viewProduct(string $product_id)
     {
-        $sql = "SELECT product_id, product_name, unit, category_id, product_price, product_img, description FROM products WHERE product_id = :product_id";
+        $sql = "SELECT product_id, farm_id, product_name, unit, category_id, product_price, product_img, description FROM products WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':product_id', $product_id);
 

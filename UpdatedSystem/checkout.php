@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Please Login before purchasing";
     // header("Location: login.php");
     // exit();
-} 
+}
 
 // Check if the user is logged in but their role is not 'customer'
 if ($_SESSION['role'] !== 'customer') {
@@ -26,39 +26,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $quantity = $_POST['quantity'];
     $product_id = $_POST['product_id'];
     $product_price = $_POST['product_price'];
+    $farm_id = $_POST['farm_id'];
     if (isset($_SESSION['order_details'])) {
         unset($_SESSION['order_details']);
     }
-    if(!isset($_SESSION['order_details'])){
-        $_SESSION['order_details']=array();
+    if (!isset($_SESSION['order_details'])) {
+        $_SESSION['order_details'] = array();
         $_SESSION['order_details']['created_at'] = time();
-          }
-          $_SESSION['order_details'][] = array(
-            'cus_id'=> $_SESSION['user_id'],
-            'farm_id'=> 23,
-            'product_id'=>$product_id,
-            'quantity'=>$quantity,
-            'product_price' =>$product_price,
-            'total' =>$amount
-          );
-
-          // Set the expiry duration (in seconds), e.g., 30 minutes
-$expiry_duration = 20;  // 30 minutes
-
-// Check if 'order_details' session array exists and has a 'created_at' key
-if (isset($_SESSION['order_details']) && isset($_SESSION['order_details']['created_at'])) {
-    // Calculate the time elapsed since the session array was created
-    $time_elapsed = time() - $_SESSION['order_details']['created_at'];
-
-    // If the time elapsed exceeds the expiry duration, clear the session data
-    if ($time_elapsed > $expiry_duration) {
-        unset($_SESSION['order_details']);  // delete the session array
-        echo "Session expired. The order details have been cleared.";
     }
-}
+    $_SESSION['order_details'][] = array(
+        'cus_id' => $_SESSION['user_id'],
+        'farm_id' => $farm_id,
+        'product_id' => $product_id,
+        'quantity' => $quantity,
+        'product_price' => $product_price,
+        'total' => $amount
+    );
 
+    // Set the expiry duration (in seconds)
+    $expiry_duration = 5*60;  // 5 minutes
 
+    // Check if 'order_details' session array exists and has a 'created_at' key
+    if (isset($_SESSION['order_details']) && isset($_SESSION['order_details']['created_at'])) {
+        // Calculate the time elapsed since the session array was created
+        $time_elapsed = time() - $_SESSION['order_details']['created_at'];
 
+        // If the time elapsed exceeds the expiry duration, clear the session data
+        if ($time_elapsed > $expiry_duration) {
+            unset($_SESSION['order_details']);  // delete the session array
+            $_SESSION['error_message'] = "Session expired. The order details have been cleared. Please Login again and order";
+            echo "Session expired. The order details have been cleared.";
+        }
+    }
 }
 
 
@@ -70,29 +69,29 @@ $currency = "LKR";
 
 $order_id = 1227852;
 $hash = strtoupper(
-        md5(
-                $merchant_id .
-                $order_id .
-                number_format($amount, 2, '.', '') .
-                $currency .
-                strtoupper(md5($merchant_secret))
-        )
+    md5(
+        $merchant_id .
+            $order_id .
+            number_format($amount, 2, '.', '') .
+            $currency .
+            strtoupper(md5($merchant_secret))
+    )
 );
 ?>
 
 <html>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="header.css">
-    <title>MarketPlace - PoultryPro</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+<link rel="stylesheet" href="header.css">
+<title>MarketPlace - PoultryPro</title>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-<?php include 'includes/header.php'; ?>
+    <?php include 'includes/header.php'; ?>
 
     <div class="container">
         <div class="py-5 text-center">
@@ -170,35 +169,35 @@ $hash = strtoupper(
 
                             <input type="submit" value="Continue to Checkout" value="Buy Now" class="btn btn-primary btn-lg">
 
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
+            </form>
         </div>
 
+    </div>
+    </div>
+    </div>
 
-        <!-- Bootstrap Bundle with Popper -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
-        <script>
-// Function to display an error message as an alert and redirect to the login page
-function showError(message) {
-    if (message) {
-        alert(message);
-        window.location.href = "login.php";  // Redirect to the login page after clicking OK
-    }
-}
 
-// Wait for the page to fully load before showing the alert
-window.onload = function() {
-    <?php
-    if (isset($_SESSION['error_message'])) {
-        echo "showError('" . $_SESSION['error_message'] . "');";
-        unset($_SESSION['error_message']); // Clear the error message after displaying it
-    }
-    ?>
-};
-</script>
-    </body>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <script>
+        // Function to display an error message as an alert and redirect to the login page
+        function showError(message) {
+            if (message) {
+                alert(message);
+                window.location.href = "login.php"; // Redirect to the login page after clicking OK
+            }
+        }
+
+        // Wait for the page to fully load before showing the alert
+        window.onload = function() {
+            <?php
+            if (isset($_SESSION['error_message'])) {
+                echo "showError('" . $_SESSION['error_message'] . "');";
+                unset($_SESSION['error_message']); // Clear the error message after displaying it
+            }
+            ?>
+        };
+    </script>
+</body>
 
 </html>
