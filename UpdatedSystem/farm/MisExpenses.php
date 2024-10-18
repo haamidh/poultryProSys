@@ -176,11 +176,101 @@ $misEx = $misEx->read($user_id);
 
                     </form>
                 </div>
+                <!-- Supplier Details Section -->
+                <div class="col-lg-7 col-md-10 col-12 mb-3">
+                <div class="card shadow">
+                    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
+                        <h5 class="card-title text-white mb-0">
+                            <strong style="font-size:25px;">Miscellaneous Expenses Details</strong>
+                        </h5>
+                        <div class="input-group" style="width: 250px;">
+                            <input type="text" id="searchSupplierInput" class="form-control" placeholder="Search category..." onkeyup="searchcategory()">
+                            <span class="input-group-text">
+                                <i class="bi bi-search" style="color: #3E497A;"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 table-striped table-bordered text-center">
+                                <thead style="background-color: #3E497A; color: white;">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Expenses Name</th>
+                                        <th scope="col">Handled By</th>
+                                        <th scope="col">Misc_amount</th>
+                                        <th scope="col" style="width:32%">Option</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $serialnum = 0;
+                                    foreach ($misExpense as $misEx) {
+                                        $serialnum++;
+                                        ?>
+                                        <tr>
+                                            <th><?php echo $serialnum; ?></th>
+                                            <td><?php echo $misEx['expense_name']; ?></td>
+                                            <td><?php echo $misEx['handled_by']; ?></td>
+                                            <td><?php echo $misEx['expense_amount']; ?></td>
+                                            <td>
+                                                <a href="edit_MisExpenses.php?sup_id=<?php echo  $misEx['category_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
+                                                <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $misEx['category_id']; ?>)">Delete</button>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
             </div>
         </div>
         </div>
-    </main>
 
+        </main>
+
+        <!-- Confirmation for Deletion -->
+<script>
+    function myFunction(category_id) {
+        if (confirm("Are you sure you want to delete this miscellaneous?")) {
+            window.location.href = "delete_MisExpenses.php?category_id=" + category_id;
+        }
+    }
+
+    function searchMiscellenous() {
+        var input = document.getElementById("searchMiscellenousInput");
+        var filter = input.value.toUpperCase();
+        var table = document.querySelector(".table");
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < rows.length; i++) {
+            var supplierName = rows[i].getElementsByTagName("td")[0];
+            var contact = rows[i].getElementsByTagName("td")[1];
+            var email = rows[i].getElementsByTagName("td")[2];
+
+            if (expensename || contact || email) {
+                var nameValue = expensename.textContent ||expensename.innerText;
+                var contactValue = contact.textContent || contact.innerText;
+                var emailValue = email.textContent || email.innerText;
+
+                if (
+                        nameValue.toUpperCase().indexOf(filter) > -1 ||
+                        contactValue.toUpperCase().indexOf(filter) > -1 ||
+                        emailValue.toUpperCase().indexOf(filter) > -1
+                        ) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
 
 
 </body>
