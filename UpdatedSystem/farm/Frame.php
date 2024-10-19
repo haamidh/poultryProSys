@@ -95,12 +95,12 @@ class Frame {
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-white" href="miscellaneous.php">
-                                            <i class="bi bi-gear-fill"></i> Miscellaneous
+                                            <i class="bi bi-gear-fill"></i> Expenses
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-white" href="stock.php">
-                                            <i class="bi bi-gear-fill"></i> Inventory
+                                            <i class="bi bi-box-seam-fill"></i> Inventory
                                         </a>
                                     </li>
                                     <li class="nav-item">

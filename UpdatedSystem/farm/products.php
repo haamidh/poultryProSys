@@ -139,7 +139,7 @@ $products = $product->read($user_id);
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <select name="category_id" class="form-control" required>
-                                                <option disabled selected>Select Category</option>
+                                                <option value="" disabled selected>Select Category</option>
                                                 <?php foreach ($categories as $category) { ?>
                                                     <option value="<?= $category['category_id'] ?>">
                                                         <?= $category['category_name'] ?>
@@ -158,7 +158,7 @@ $products = $product->read($user_id);
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <input type="text" name="selling_price" class="form-control" required>
+                                            <input type="number" name="selling_price" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
