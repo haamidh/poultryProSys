@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
-require_once '../classes/Supplier.php';
+require_once '../classes/MisExpenses.php';
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -22,25 +22,25 @@ $frame = new Frame();
 $frame->first_part($farm);
 
 // Instantiate the Supplier class
-$supplier = new Supplier($con);
-
+$misEx = new MisExpenses($con);
 // Get supplier ID from GET request
-$sup_id = isset($_GET['sup_id']) ? $_GET['sup_id'] : '';
+$misEx = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 
-if ($sup_id) {
+
+if ($category_id) {
     // Get supplier details
-    $supplier_details = $supplier->readOne($sup_id);
-    if ($supplier_details) {
-        $supplier_name = $supplier_details['sup_name'];
-        $supplier_address = $supplier_details['address'];
-        $supplier_contact = $supplier_details['mobile'];  // Changed from 'mobile' to 'contact'
-        $supplier_email = $supplier_details['email'];  // Added if email is needed for form
+    $expenses_details = $misEx->readOne($category_id);
+    if ($expenses_details ) {
+        $supplier_name = $expenses_details['sup_name'];
+        $supplier_address = $expenses_details['address'];
+        $supplier_contact = $expenses_details['mobile'];  // Changed from 'mobile' to 'contact'
+        $supplier_email = $expenses_details['email'];  // Added if email is needed for form
     } else {
-        echo "No supplier found with the provided ID.";
+        echo "No Expenses found with the provided ID.";
         exit();
     }
 } else {
-    echo "Supplier ID is required.";
+    echo "Expenses ID is required.";
     exit();
 }
 
