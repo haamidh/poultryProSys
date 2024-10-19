@@ -69,7 +69,7 @@ class OrderDetails {
         $this->city = $city;
     }
 
-    public function create(){
+    public function create($order_num,$phone){
         $query = "INSERT INTO " . $this->table_name . " 
                   (order_num, first_name, last_name, email, phone_number, address, city) 
                   VALUES (:order_num, :first_name, :last_name, :email, :phone_number, :address, :city)";
@@ -77,11 +77,11 @@ class OrderDetails {
 
         // Bind parameters
         
-        $stmt->bindParam(':order_num', $this->order_num);
+        $stmt->bindParam(':order_num', $order_num);
         $stmt->bindParam(':first_name', $this->first_name);
         $stmt->bindParam(':last_name', $this->last_name);
         $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':phone_number', $this->phone_number);
+        $stmt->bindParam(':phone_number', $phone);
         $stmt->bindParam(':address', $this->address);
         $stmt->bindParam(':city', $this->city);
         

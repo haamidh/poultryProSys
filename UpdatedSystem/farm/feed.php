@@ -118,7 +118,7 @@ $feeds = $feed->read($user_id);
 
                             <div class="mb-3">
                                 <label class="form-label">Notification Threshold:</label>
-                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" oninput="validateNotifyField(this)">
+                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" required oninput="validateNotifyField(this)">
                                 <small id="notifyError" class="text-danger"><?php echo $notifyErr ?></small>
                             </div>
 

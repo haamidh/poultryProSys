@@ -21,6 +21,9 @@ $con = $database->getConnection();
 
 $order = new Order($con);
 $order_details = new OrderDetails($con);
+$farm_id = $_SESSION['order_details'][0]['farm_id'];
+$order_num = $order->generateOrderNum($con, $farm_id);
+
 
 // Check if the order has already been placed
 if (!isset($_SESSION['order_created'])) {
@@ -32,6 +35,13 @@ if (!isset($_SESSION['order_created'])) {
   $total_amount = $_SESSION['order_details'][0]['total'];
   $status = 1;
 
+  $first_name = $_SESSION['billing_details'][0]['first_name'];
+  $last_name = $_SESSION['billing_details'][0]['last_name'];
+  $email = $_SESSION['billing_details'][0]['email'];
+  $phone = $_SESSION['billing_details'][0]['phone'];
+  $address = $_SESSION['billing_details'][0]['address'];
+  $city = $_SESSION['billing_details'][0]['city'];
+
   // Set order details
   $order_num = $order->generateOrderNum($con, $farm_id);
   $order->setCus_id($_SESSION['user_id']); // This should probably come from the session
@@ -42,14 +52,9 @@ if (!isset($_SESSION['order_created'])) {
   $order->setTotal($total_amount);
   $order->setStatus($status);
 
-  $first_name = $_POST['first_name'];
-  $last_name = $_POST['last_name'];
-  $email = $_POST['email'];
-  $phone = $_POST['phone'];
-  $address = $_POST['address'];
-  $city = $_POST['city'];
-
+  
   $order_details->setOrder_num($order_num);
+  $order->setOrder_num($order_num);
   $order_details->setFirst_name($first_name);
   $order_details->setLast_name($last_name);
   $order_details->setEmail($email);
@@ -57,7 +62,7 @@ if (!isset($_SESSION['order_created'])) {
   $order_details->setAddress($address);
   $order_details->setCity($city);
 
-  $order_details->create();
+  $order_details->create($order_num,$phone);
 
   // Create the order in the database
   $order->create();
@@ -70,7 +75,14 @@ if (!isset($_SESSION['order_created'])) {
   exit();
 }
 
-// Unset session variables for the next order (in the confirmation page)
+$first_name = $_SESSION['billing_details'][0]['first_name'];
+  $last_name = $_SESSION['billing_details'][0]['last_name'];
+  $email = $_SESSION['billing_details'][0]['email'];
+  $phone = $_SESSION['billing_details'][0]['phone'];
+  $address = $_SESSION['billing_details'][0]['address'];
+  $city = $_SESSION['billing_details'][0]['city'];
+
+
 
 ?>
 
@@ -90,20 +102,20 @@ if (!isset($_SESSION['order_created'])) {
       <!-- Left Column -->
       <div class="col-md-6">
         <h1 class="mb-4">Thank you for your purchase!</h1>
-        <p>Your order will be processed within 24 hours during working days. We will notify you by email once your order has been shipped.</p>
+        <p>Your order will be processed within 24 hours during working days.</p>
 
         <!-- Billing Address Section -->
         <div class="border p-3 rounded">
           <h5>Billing address</h5>
-          <p><strong>Name:</strong> <? echo $first_name.' '.$last_name; ?></p>
-          <p><strong>Address:</strong><? echo $address.' '.$city; ?></p>
-          <p><strong>Phone:</strong><? echo $phone; ?></p>
-          <p><strong>Email:</strong> <? echo $email; ?></p>
+          <p><strong>Name:</strong> <?php echo $first_name.' '.$last_name; ?></p>
+          <p><strong>Address:</strong><?php echo $address.' '.$city; ?></p>
+          <p><strong>Phone:</strong><?php echo $phone; ?></p>
+          <p><strong>Email:</strong> <?php echo $email; ?></p>
           
         </div>
 
         <!-- Track Your Order Button -->
-        <a href="#" class="btn btn-success mt-4">Track Your Order</a>
+        <a href="#" class="btn btn-success mt-4">View My Orders</a>
       </div>
 
       <!-- Right Column (Order Summary) -->
@@ -123,10 +135,11 @@ if (!isset($_SESSION['order_created'])) {
           <div class="d-flex justify-content-between">
             <div>
               <!-- Corrected: Use 'order_details' session variable -->
-              <p><strong>Product ID:</strong> <?php echo $_SESSION['order_details'][0]['product_id']; ?></p>
-              <p>Quantity: <?php echo $_SESSION['order_details'][0]['quantity']; ?><br>Price per Unit: $<?php echo $_SESSION['order_details'][0]['product_price']; ?></p>
+              <p><strong>Product :</strong> <?php echo $_SESSION['order_details'][0]['item_name']; ?></p>
+              <p><strong>Quantity:</strong> <?php echo $_SESSION['order_details'][0]['quantity']; ?></p>
+              <p><strong>Unit Price:</strong> LKR <?php echo $_SESSION['order_details'][0]['product_price']; ?></p>
             </div>
-            <p class="fw-bold">$<?php echo $_SESSION['order_details'][0]['total']; ?></p>
+            <p class="fw-bold">Total : LKR <?php echo $_SESSION['order_details'][0]['total']; ?></p>
           </div>
 
           <hr>
@@ -134,23 +147,20 @@ if (!isset($_SESSION['order_created'])) {
           <!-- Price Breakdown -->
           <div class="d-flex justify-content-between">
             <p>Sub Total</p>
-            <p>$<?php echo $_SESSION['order_details'][0]['total']; ?></p>
+            <p>LKR <?php echo $_SESSION['order_details'][0]['total']; ?></p>
           </div>
           <div class="d-flex justify-content-between">
             <p>Shipping</p>
-            <p>$2.00</p>
+            <p>FREE</p>
           </div>
-          <div class="d-flex justify-content-between">
-            <p>Tax</p>
-            <p>$5.00</p>
-          </div>
+          
 
           <hr>
 
           <!-- Total Price -->
           <div class="d-flex justify-content-between fw-bold">
             <p>Order Total</p>
-            <p>$<?php echo $_SESSION['order_details'][0]['total'] + 2 + 5; ?></p>
+            <p>$<?php echo $_SESSION['order_details'][0]['total']; ?></p>
           </div>
         </div>
       </div>
@@ -166,4 +176,6 @@ if (!isset($_SESSION['order_created'])) {
 <?php
 unset($_SESSION['order_details']);
 unset($_SESSION['order_created']);
+unset($_SESSION['billing_details']);
+
 ?>

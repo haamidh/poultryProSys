@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
 
         $supplier->setSup_name($sup_name);
+        $supplier->setUser_id($user_id);
         $supplier->setAddress($address);
         $supplier->setCity($city);
         $supplier->setMobile($mobile);  // Changed from 'setMobile' to 'setContact'

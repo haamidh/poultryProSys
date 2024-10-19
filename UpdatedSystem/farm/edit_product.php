@@ -250,7 +250,7 @@ $categories = fetchCategories($con);
             <div class="col-lg-6 col-md-10 col-12 mb-3 px-5">
                 <div class="card">
                     <div class="card-body text-center" style="background-color: #D4C8DE;">
-                        <img src=".<?php echo htmlspecialchars($product_img); ?>" alt="Product Image" class="img-fluid">
+                        <img src="../<?php echo htmlspecialchars($product_img); ?>" alt="Product Image" class="img-fluid">
                     </div>
                 </div>
             </div>

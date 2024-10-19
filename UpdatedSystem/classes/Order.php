@@ -115,12 +115,12 @@ class Order {
     // Method to create a new order
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  (cus_id, farm_id, product_id, quantity, unit_price, total, status) 
-                  VALUES (:cus_id, :farm_id, :product_id, :quantity, :unit_price, :total, :status)";
+                  (order_num, cus_id, farm_id, product_id, quantity, unit_price, total, status) 
+                  VALUES (:order_num, :cus_id, :farm_id, :product_id, :quantity, :unit_price, :total, :status)";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
-        
+        $stmt->bindParam(':order_num',$this->order_num);
         $stmt->bindParam(':cus_id', $this->cus_id);
         $stmt->bindParam(':farm_id', $this->farm_id);
         $stmt->bindParam(':product_id', $this->product_id);
@@ -360,6 +360,22 @@ class Order {
             // Return the new order number with the farm_id prefix and incremented numeric part
             return $farm_id . $updatedId;
         }
+    }
+
+    function getCustomerOrders($user_id){
+        $query = "SELECT * FROM " . $this->table_name . " WHERE cus_id = :cus_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':cus_id', $user_id);
+        $stmt->execute();
+        $all_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Sort data by date
+        usort($all_orders, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
+        });
+
+        return $all_orders;
     }
     
 }

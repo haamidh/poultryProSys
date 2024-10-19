@@ -81,7 +81,7 @@ $misEx = $misEx->read($user_id);
 <html>
 
 <head>
-    <title>miscellaneous</title>
+    <title>Expenses</title>
     <style>
         .form-label {
             text-align: left;
@@ -105,7 +105,7 @@ $misEx = $misEx->read($user_id);
                     <div class="card shadow">
                         <div class="card-header p-3 text-center" style="background-color: #356854;">
                             <h5 class="card-title text-white mb-0">
-                                <strong style="font-size: 24px;">Add Miscellaneous </strong>
+                                <strong style="font-size: 24px;">Add Expenses </strong>
                             </h5>
                         </div>
                         <div class="card-body" style="background-color: #F5F5F5;"></div>
@@ -237,7 +237,7 @@ $misEx = $misEx->read($user_id);
         <!-- Confirmation for Deletion -->
 <script>
     function myFunction(category_id) {
-        if (confirm("Are you sure you want to delete this miscellaneous?")) {
+        if (confirm("Are you sure you want to delete this Expense?")) {
             window.location.href = "delete_MisExpenses.php?category_id=" + category_id;
         }
     }

@@ -95,7 +95,12 @@ class Frame {
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-white" href="miscellaneous.php">
-                                            <i class="bi bi-gear-fill"></i> Miscellaneous
+                                            <i class="bi bi-gear-fill"></i> Expenses
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="stock.php">
+                                            <i class="bi bi-box-seam-fill"></i> Inventory
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -103,7 +108,7 @@ class Frame {
                                             <i class="bi bi-clipboard2-data-fill"></i> Reports
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <li><a class="dropdown-item" href="stock.php">Stock Report</a></li>
+                                            <!-- <li><a class="dropdown-item" href="stock.php">Stock Report</a></li> -->
                                             <li><a class="dropdown-item" href="incomes.php">Income Report</a></li>
                                             <li><a class="dropdown-item" href="expenses.php">Expenses Report</a></li>
                                             <li><a class="dropdown-item" href="profit.php">Profit Report</a></li>

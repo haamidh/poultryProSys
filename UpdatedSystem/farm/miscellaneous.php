@@ -45,12 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Call the create method to insert the new category
     if ($mis->miscellaneousExists($user_id)) {
-        $error_message = "This miscellaneous already exists";
+        $error_message = "This expense already exists";
     } else {
         if ($mis->create($user_id)) {
-            $success_message = "miscellaneous added successfully.";
+            $success_message = "Expense added successfully.";
         } else {
-            $error_message = "Failed to add miscellaneous.";
+            $error_message = "Failed to add the expense.";
         }
     }
 }
@@ -65,7 +65,7 @@ $miscellaneous = $mis->read($user_id);
 <html>
 
 <head>
-    <title>miscellaneous</title>
+    <title>Expenses</title>
     <style>
         .form-label {
             text-align: left;
@@ -89,7 +89,7 @@ $miscellaneous = $mis->read($user_id);
                     <div class="card shadow">
                         <div class="card-header p-3 text-center" style="background-color: #356854;">
                             <h5 class="card-title text-white mb-0">
-                                <strong style="font-size: 24px;">Add Miscellaneous Category</strong>
+                                <strong style="font-size: 24px;">Add Expense Category</strong>
                             </h5>
                         </div>
                         <div class="card-body" style="background-color: #F5F5F5;"></div>
@@ -132,7 +132,7 @@ $miscellaneous = $mis->read($user_id);
                         </form>
 
                         <div class="d-grid gap-2 mt-3">
-                                <a href="MisExpenses.php" class="btn btn-success">Add MisExpenses</a>
+                                <a href="MisExpenses.php" class="btn btn-success">Add Expenses</a>
                             </div>
                     </div>
                 </div>
