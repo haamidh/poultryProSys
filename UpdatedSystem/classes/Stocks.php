@@ -232,7 +232,7 @@ class Stocks {
         $result=$stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($result === false || !isset($result['available_quantity'])) {
-            return 0; // Return 0 if no stock is available
+            return 0; 
         }
     
         return $result['available_quantity'];

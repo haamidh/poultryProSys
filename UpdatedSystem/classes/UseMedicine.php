@@ -14,7 +14,7 @@ class UseMedicine implements crud {
         $this->conn = $db;
     }
 
-    // Getters
+    //Getters
     public function getUser_id() {
         return $this->user_id;
     }
@@ -27,7 +27,7 @@ class UseMedicine implements crud {
         return $this->quantity;
     }
 
-    // Setters
+    //Setters
     public function setUser_id($user_id) {
         $this->user_id = $user_id;
     }
@@ -40,13 +40,12 @@ class UseMedicine implements crud {
         $this->quantity = $quantity;
     }
 
-    // CRUD methods
+    //Function to create use medicine
     public function create($user_id) {
         $query = "INSERT INTO " . $this->table_name . " (user_id, med_id, quantity) 
                   VALUES (:user_id, :med_id, :quantity)";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':med_id', $this->med_id);
         $stmt->bindParam(':quantity', $this->quantity);
@@ -54,6 +53,7 @@ class UseMedicine implements crud {
         return $stmt->execute();
     }
 
+    //Function to get all from use medicine
     public function read($user_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -62,6 +62,7 @@ class UseMedicine implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Function to get one from use medicine
     public function readOne($useMed_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE useMed_id = :useMed_id LIMIT 1";
         $stmt = $this->conn->prepare($query);
@@ -85,7 +86,6 @@ class UseMedicine implements crud {
                   WHERE useMed_id = :useMed_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':useMed_id', $useMed_id);
         $stmt->bindParam(':med_id', $this->med_id);
         $stmt->bindParam(':quantity', $this->quantity);
@@ -97,7 +97,6 @@ class UseMedicine implements crud {
         $query = "DELETE FROM " . $this->table_name . " WHERE useMed_id = :useMed_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':useMed_id', $useMed_id);
 
         return $stmt->execute();

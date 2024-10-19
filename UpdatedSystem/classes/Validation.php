@@ -2,6 +2,7 @@
 
 class Validation {
 
+    //Function to validate mobile number
     public static function validateMobile($mobile, &$error = null) {
         if (empty($mobile)) {
             $error = '*Mobile Number is Required';
@@ -17,6 +18,7 @@ class Validation {
         }
     }
 
+    //Function to validate email
     public static function validateEmail($email, &$error = null) {
         if (empty($email)) {
             $error = '*Email is Required';
@@ -31,6 +33,7 @@ class Validation {
         }
     }
 
+    //Function to validate decimal numbers
     public static function validateAmount($amount, &$error = null) {
         if (empty($amount)) {
             $error = '*Amount is required';
@@ -45,6 +48,7 @@ class Validation {
         }
     }
 
+    //Function to validate int numbers
     public static function validateNumberField($number, &$error = null) {
         if (empty($number)) {
             $error = '*This field is required';
@@ -66,7 +70,7 @@ class Validation {
         } else {
             // Validate the decimal number
             if (preg_match("/^\d+(\.\d+)?$/", $number)) {
-                return $number; // Return the valid number
+                return $number;
             } else {
                 $error = '*Please enter a valid decimal number';
                 return false;
@@ -74,6 +78,7 @@ class Validation {
         }
     }
 
+    //Function to validate text
     public static function validateTextField($text, &$error = null) {
         if (empty($text)) {
             $error = '*This field is required';
@@ -88,6 +93,7 @@ class Validation {
         }
     }
 
+    //Function to validate password
     public static function validatePasswordField($password, &$error = null) {
         if (empty($password)) {
             $error = '*This field is required';

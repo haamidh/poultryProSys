@@ -4,7 +4,6 @@ class Supplier {
 
     private $conn;
     private $table_name = "supplier";
-    // Properties
     private $sup_id;    
     private $user_id;
     private $sup_name;
@@ -13,12 +12,11 @@ class Supplier {
     private $city;
     private $email;
 
-    // Constructor
     public function __construct($db) {
         $this->conn = $db;
     }
 
-    // Setter methods
+    //Setter
     public function setSup_id($id) {
         $this->sup_id = $id;
     }
@@ -48,7 +46,7 @@ class Supplier {
     }
 
     
-    // Getter methods
+    //Getters
     public function getSup_id() {
         return $this->sup_id;
     }
@@ -78,12 +76,11 @@ class Supplier {
     }
 
     
-    // Method to create a new supplier
+    //Function to create supplier
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " (sup_name, user_id, address, mobile, city, email) VALUES (:sup_name, :user_id, :address, :mobile, :city, :email)";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':sup_name', $this->sup_name);        
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':address', $this->address);
@@ -91,14 +88,12 @@ class Supplier {
         $stmt->bindParam(':city', $this->city);
         $stmt->bindParam(':email', $this->email);
 
-        // Execute the query
         if ($stmt->execute()) {
             return true;
         }
         return false;
     }
 
-    // Method to update supplier details
     public function update($sup_id) {
         $query = "UPDATE " . $this->table_name . " SET 
                   sup_name = :sup_name, 
@@ -109,7 +104,6 @@ class Supplier {
                   WHERE sup_id = :sup_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':sup_name', $this->sup_name);
         $stmt->bindParam(':address', $this->address);
         $stmt->bindParam(':mobile', $this->mobile);
@@ -117,14 +111,12 @@ class Supplier {
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':sup_id', $sup_id);
 
-        // Execute the query
         if ($stmt->execute()) {
             return true;
         }
         return false;
     }
 
-    // Method to delete a supplier
     public function delete($sup_id) {
         $query = "DELETE FROM " . $this->table_name . " WHERE sup_id = :sup_id";
         $stmt = $this->conn->prepare($query);
@@ -132,7 +124,7 @@ class Supplier {
         return $stmt->execute();
     }
 
-    // Method to read one supplier's details
+    //Function to get one from supplier
     public function readOne($sup_id) {
         $query = "SELECT sup_name, address, mobile, city, email FROM " . $this->table_name . " WHERE sup_id = :sup_id";
         $stmt = $this->conn->prepare($query);
@@ -141,7 +133,7 @@ class Supplier {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Method to read all suppliers
+    //Function to read all suppliers
     public function readAll($user_id) {
         $query = "SELECT sup_id, sup_name, address, mobile, city, email FROM " . $this->table_name . " WHERE user_id=:user_id";
         $stmt = $this->conn->prepare($query);
@@ -151,7 +143,7 @@ class Supplier {
     }
 
     public function supplierExists($user_id) {
-        // Modify the query to remove spaces and make it case-insensitive
+        //to remove spaces and make it case-insensitive
         $query = "SELECT sup_id FROM " . $this->table_name . " 
               WHERE LOWER(REPLACE(sup_name, ' ', '')) = LOWER(REPLACE(:sup_name, ' ', '')) 
               AND user_id = :user_id 

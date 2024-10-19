@@ -14,7 +14,7 @@ class UseFeed implements crud {
         $this->conn = $db;
     }
 
-    // Getters
+    //Getters
     public function getUser_id() {
         return $this->user_id;
     }
@@ -27,7 +27,7 @@ class UseFeed implements crud {
         return $this->quantity;
     }
 
-    // Setters
+    //Setters
     public function setUser_id($user_id) {
         $this->user_id = $user_id;
     }
@@ -40,13 +40,12 @@ class UseFeed implements crud {
         $this->quantity = $quantity;
     }
 
-    // CRUD methods
+    //Function to create use feed
     public function create($user_id) {
         $query = "INSERT INTO " . $this->table_name . " (user_id, feed_id, quantity) 
                   VALUES (:user_id, :feed_id, :quantity)";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':feed_id', $this->feed_id);
         $stmt->bindParam(':quantity', $this->quantity);
@@ -85,7 +84,6 @@ class UseFeed implements crud {
                   WHERE useFeed_id = :useFeed_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':useFeed_id', $useFeed_id);
         $stmt->bindParam(':feed_id', $this->feed_id);
         $stmt->bindParam(':quantity', $this->quantity);
@@ -97,13 +95,12 @@ class UseFeed implements crud {
         $query = "DELETE FROM " . $this->table_name . " WHERE useFeed_id = :useFeed_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':useFeed_id', $useFeed_id);
 
         return $stmt->execute();
     }
 
-    // New method to get usage by feed_id
+    //to get usage
     public function getUsage($feed_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE feed_id = :feed_id";
         $stmt = $this->conn->prepare($query);
