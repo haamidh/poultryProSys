@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
 
 // Ensure 'order_details' are set in the session
 if (!isset($_SESSION['order_details'])) {
-  header("Location: ../login.php");
+  header("Location: ../marketplace.php");
   exit();
 }
 
@@ -160,7 +160,7 @@ $first_name = $_SESSION['billing_details'][0]['first_name'];
           <!-- Total Price -->
           <div class="d-flex justify-content-between fw-bold">
             <p>Order Total</p>
-            <p>$<?php echo $_SESSION['order_details'][0]['total']; ?></p>
+            <p>LKR <?php echo $_SESSION['order_details'][0]['total']; ?></p>
           </div>
         </div>
       </div>

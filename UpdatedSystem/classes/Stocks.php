@@ -221,7 +221,13 @@ class Stocks {
         $stmt->bindParam(':product_id', $product_id);
 
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);  // Return only a single product's quantity
+        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result === false || !isset($result['available_quantity'])) {
+            return 0; // Return 0 if no stock is available
+        }
+    
+        return $result['available_quantity'];
     }
 
 }

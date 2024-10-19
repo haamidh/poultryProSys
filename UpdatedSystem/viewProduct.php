@@ -1,75 +1,105 @@
 <?php
 require 'classes/config.php';
 require 'marketplace/marketPlaceCRUD.php';
+require 'classes/Stocks.php';
+require 'classes/Product.php';
 
-
+$database = new Database();
+$con = $database->getConnection();
+$farm_id = isset($_GET["farm_id"]) ? $_GET["farm_id"] : '';
 $marketPlaceCRUD = new MarketPlaceCRUD();
 $product_id = $marketPlaceCRUD->getProductId();
 $row = $marketPlaceCRUD->viewProduct($product_id);
-$productStock = $marketPlaceCRUD->productStockDisplay($product_id);
+$Stocks = new Stocks($con,$farm_id);
+$itemStock = $Stocks->getProductAvailableQuantity($product_id);
+
+if($itemStock > 0){
+    $product_quantity = $product_qty_num = $itemStock;
+} else {
+    $product_quantity = 'OUT OF STOCK';
+    $product_qty_num = 0;
+}
+
+
+
+
+
+// if($productStock = $marketPlaceCRUD->productStockDisplay($product_id)){
+//     if(is_array($productStock)){
+//         $product_quantity = $product_qty_num = $productStock['quantity']; 
+//     } else {
+//         $product_quantity = "OUT OF STOCK";
+//         $product_qty_num = 0;
+//     }
+// }
 
 if (!empty($row)) { // Check if product found
-    ?>
-    <!doctype HTML>
-    <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-            <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-            <link rel="stylesheet" href="marketplace/marketPlaceStyle.css">
-            <link rel="stylesheet" href="header.css">
-            <title>MarketPlace - PoultryPro</title>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        </head>
-        <body>
-            <?php include 'includes/header.php'; ?>
-            <div class="container mt-5 mb-5">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-10">
-                        <div class="card">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="images p-3">
-                                        <div class="text-center p-4"> <img src="<?php echo $row['product_img'] ?>" width="250" /> </div>
-
+?>
+<!doctype HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+        <link rel="stylesheet" href="marketplace/marketPlaceStyle.css">
+        <link rel="stylesheet" href="header.css">
+        <title>MarketPlace - PoultryPro</title>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <?php include 'includes/header.php'; ?>
+        <div class="container mt-5 mb-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="images p-3">
+                                    <div class="text-center p-4">
+                                        <img src="<?php echo !empty($row['product_img']) ? $row['product_img'] : 'default_image.jpg'; ?>" width="250" />
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="product p-4">
-                                        <div class="mt-4 mb-3">
-                                            <span class="text-uppercase text-muted">PoultryPro</span>
-                                            <h3 class="text-uppercase"><?php echo $row['product_name']; ?></h3>
-                                            <div class="price d-flex flex-row align-items-center">
-                                                <h6>Rs. <?php echo $row['product_price']; ?></h6>
-                                            </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="product p-4">
+                                    <div class="mt-4 mb-3">
+                                        <span class="text-uppercase text-muted">PoultryPro</span>
+                                        <h3 class="text-uppercase"><?php echo $row['product_name']; ?></h3>
+                                        <div class="price d-flex flex-row align-items-center">
+                                            <h6>Rs. <?php echo $row['product_price']; ?></h6>
                                         </div>
-                                        <p class="about"><?php echo $row['description']; ?></p>
-                                        <div class="sizes mt-5">
-                                            <h6 class="text">Available Stock : <?php echo $productStock["quantity"]; ?></h6>
-                                        </div>
-                                        <form action="processOrder.php?product_id=<?php echo $row["product_id"] ?>" method="post"> <div class="form-group">
-                                                <label for="quantity">Quantity:</label>
-                                                <input type="number" min="1" max="<?php echo $productStock["quantity"]; ?>" class="form-control col-2" id="quantity" name="quantity" required>
-                                                <input type="hidden" name="farm_id" value="<?php echo $row["farm_id"]; ?>">
-                                            </div>
-
-                                            <div class="cart mt-4 align-items-center">
-                                                <button type="submit" class="btn btn-danger text-uppercase mr-2 px-4">Buy</button>
-                                                <i class="fa fa-heart text-muted"></i>
-                                                <i class="fa fa-share-alt text-muted"></i>
-                                            </div>
-                                        </form>
                                     </div>
+                                    <p class="about"><?php echo $row['description']; ?></p>
+                                    <div class="sizes mt-5">
+                                        <h6 class="text">Available Stock : <?php echo $product_quantity; ?></h6>
+                                    </div>
+
+                                    <?php if($product_qty_num > 0) { ?>
+                                    <form action="processOrder.php?product_id=<?php echo $product_id; ?>" method="post"> 
+                                        <div class="form-group">
+                                            <label for="quantity">Quantity:</label>
+                                            <input type="number" min="1" max="<?php echo $product_qty_num; ?>" class="form-control col-2" id="quantity" name="quantity" required>
+                                            <input type="hidden" name="farm_id" value="<?php echo $row['farm_id']; ?>">
+                                        </div>
+
+                                        <div class="cart mt-4 align-items-center">
+                                            <button type="submit" class="btn btn-danger text-uppercase mr-2 px-4">Buy</button>
+                                            <i class="fa fa-heart text-muted"></i>
+                                            <i class="fa fa-share-alt text-muted"></i>
+                                        </div>
+                                    </form>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </body>
-    </html>
-    <?php
+        </div>
+    </body>
+</html>
+<?php
 } else {
     echo 'Product not found.';
 }
