@@ -110,30 +110,36 @@ $adminframe->first_part($admin);
     .search-bar input {
         border-radius: 10px;
         padding-left: 15px;
-        padding-right: 35px;
+        padding-right: 35px; /* Adjust padding to make space for the icon */
         height: 38px;
         border: 1px solid #ccc;
         width: 100%;
     }
 
-    .search-bar i {
+    .search-bar .search-icon {
         position: absolute;
-        background-color: white;
-        border-left: 0;
+        right: 10px; /* Position the icon on the right side */
+        top: 50%;
+        transform: translateY(-50%); /* Center the icon vertically */
+        font-size: 18px;
+        color: #888;
+        cursor: pointer;
     }
+
 
 </style>
 
 <!-- Page Content -->
 <div class="contentArea">
-    <div class="container">
-        <div class="card mt-5">
+    <div class="container py-4">
+        <div class="card">
             <div class="card-header">
                 <h5><strong>Farms Management</strong></h5>
                 <div class="search-bar">
                     <input type="text" id="searchMedInput" placeholder="Search farm..." onkeyup="searchFarm()">
-                    <i class="bi bi-search"></i>
+                    <i class="bi bi-search search-icon"></i>
                 </div>
+
             </div>
 
             <div class="card-body table-responsive">
@@ -155,7 +161,7 @@ $adminframe->first_part($admin);
                         if ($users) {
                             $uid = 1;
                             foreach ($users as $user) {
-                        ?>
+                                ?>
                                 <tr>
                                     <td><?php echo $uid; ?></td>
                                     <td><?php echo htmlspecialchars($user['username']); ?></td>
@@ -163,7 +169,7 @@ $adminframe->first_part($admin);
                                     <td><?php echo htmlspecialchars($user['city']); ?></td>
                                     <td><?php echo htmlspecialchars($user['mobile']); ?></td>
                                     <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                    <td><?php echo htmlspecialchars(date("d M Y", strtotime($user['CREATED_AT']))); ?></td>
+                                    <td><?php echo htmlspecialchars(date("d M Y", strtotime($user['created_at']))); ?></td>
                                     <td>
                                         <?php if ($user['status'] == 0) { ?>
                                             <button class="btn btn-success">
@@ -176,11 +182,11 @@ $adminframe->first_part($admin);
                                         <?php } ?>
                                     </td>
                                 </tr>
-                        <?php
+                                <?php
                                 $uid++;
                             }
                         } else {
-                        ?>
+                            ?>
                             <tr>
                                 <td colspan="8" class="no-data">No Farms found</td>
                             </tr>
@@ -212,9 +218,9 @@ $adminframe->last_part();
                 var addressValue = address.textContent || address.innerText;
 
                 if (
-                    nameValue.toUpperCase().indexOf(filter) > -1 ||
-                    addressValue.toUpperCase().indexOf(filter) > -1
-                ) {
+                        nameValue.toUpperCase().indexOf(filter) > -1 ||
+                        addressValue.toUpperCase().indexOf(filter) > -1
+                        ) {
                     rows[i].style.display = "";
                 } else {
                     rows[i].style.display = "none";

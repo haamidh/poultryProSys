@@ -24,19 +24,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_review'], $_POST[
         // Insert the review using the object
         if ($review->insertReview()) {
             // Success message
-            echo "<script>alert('Feedback submitted successfully.');</script>";
+            echo "<script>alert('Review submitted successfully.');</script>";
             echo "<script>setTimeout(function() {
-                window.location.href = 'rating.php';
+                window.location.href = 'review.php';
             }, 1000);</script>";
         } else {
             // Failure message
-            echo "<script>alert('Failed to submit feedback.');</script>";
+            echo "<script>alert('Failed to submit your review. Please try again later.');</script>";
         }
     } else {
         // Not logged in message
-        echo "<script>alert('You must be logged in to submit feedback.');</script>";
+        echo "<script>alert('You must be logged in to submitreview.');</script>";
         echo "<script>setTimeout(function() {
-                window.location.href = 'rating.php';
+                window.location.href = 'review.php';
             }, 1000);</script>";
     }
 }

@@ -60,7 +60,7 @@ class Frame {
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
                                         <a class="nav-link text-white" href="dashboard.php">
-                                            <i class="bi bi-house-door-fill"></i> Dashboard
+                                            <i class="bi bi-microsoft"></i> Dashboard
                                         </a>
                                     </li>
                                     <li class="nav-item">

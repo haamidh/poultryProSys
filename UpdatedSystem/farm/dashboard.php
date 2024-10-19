@@ -122,7 +122,7 @@ $monthly_income = $incomeCharts->getMonthlyIncome();
     }
 
     .table td, .table th {
-        padding: 15px;
+        
         vertical-align: middle;
     }
 
@@ -222,26 +222,10 @@ $monthly_income = $incomeCharts->getMonthlyIncome();
     .btn-primary:hover {
         background-color: #2980b9;
     }
-    /*    .overlay-container {
-            position: relative;  Needed for positioning the overlay 
-        }
-    
-        .overlay-container::before {
-            content: "";  Necessary for pseudo-elements 
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);  Adjust the color and opacity as needed 
-            z-index: 1;  Ensure the overlay is on top 
-            pointer-events: none;  Allows clicks to go through the overlay 
-        }*/
+
 
     .chart-container {
-        margin-top: 50px;
-        margin-bottom: 50px;
-        padding: 20px;
+       
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -251,11 +235,7 @@ $monthly_income = $incomeCharts->getMonthlyIncome();
         transform: scale(1.10); /* Increase size by 5% on hover */
     }
 
-    @media (min-width: 992px) {
-        .chart-container:hover {
-            flex: 0 0 calc(10/12 * 100%); /* Adjust flex width for lg size */
-        }
-    }
+    
 
     .noti_li{
         transition: transform 0.3s ease; 
@@ -291,7 +271,7 @@ $monthly_income = $incomeCharts->getMonthlyIncome();
                         <h6 class="card-text text-white"> <?php echo number_format($today_orders); ?></h6>
                     </div>
                     <div class="card-footer" style="background-color: #D4C8DE;">
-                        <a href="#" class="text-dark">More Details</a>
+                        <a href="orders.php" class="text-dark">More Details</a>
                     </div>
                 </div>
             </div>
@@ -382,18 +362,33 @@ $monthly_income = $incomeCharts->getMonthlyIncome();
             </div>
         </div>
         <!-- Charts Section -->
-        <div class="row mt-5 mb-5 justify-content-center align-items-center">
-            <div class="col-lg-8 px-4 mt-3 chart-container">
-                <h5 class="fw-bold fs-3">Daily Income Chart</h5>
-                <canvas id="dailyIncomeChart"></canvas>
-            </div>
-            <div class="col-lg-8 px-4 mt-5 chart-container">
-                <h5 class="fw-bold fs-3">Monthly Income Chart</h5>
-                <canvas id="monthlyIncomeChart"></canvas>
+        <!--        <div class="row mx-2 px-5 mt-5 mb-5 align-items-center">
+                    
+        
+                        <div class="col-lg-6 mx-2 chart-container">
+                            <h5 class="fw-bold fs-3">Daily Income Chart</h5>
+                            <canvas id="dailyIncomeChart"></canvas>
+                        </div>
+                        <div class="col-lg-6 chart-container">
+                            <h5 class="fw-bold fs-3">Monthly Income Chart</h5>
+                            <canvas id="monthlyIncomeChart"></canvas>
+                        </div>
+                    
+        
+                </div>-->
+        <div class="container text-center">
+            <div class="row align-items-center mx-4 my-5 justify-content-center">
+                <div class="col mx-4 my-4 chart-container">
+                    <h5 class="fw-bold fs-3">Daily Income Chart</h5>
+                    <canvas id="dailyIncomeChart"></canvas>
+                </div>
+
+                <div class="col mx-4 my-4 chart-container">
+                    <h5 class="fw-bold fs-3">Monthly Income Chart</h5>
+                    <canvas id="monthlyIncomeChart"></canvas>
+                </div>
             </div>
         </div>
-
-
     </div>
 </main>
 

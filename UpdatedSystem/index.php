@@ -195,7 +195,7 @@
                 &nbsp;
                 <h5
                     style="font-size: 28px; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: #356854;">
-                    Farmers can securely register, log in, update profiles, and access a
+                    Farmers can securely register, log in and access a
                     dashboard with key farm metrics. The system includes detailed management of poultry inventory,
                     medicine and feed tracking, and product listings with descriptions and prices. It also handles
                     order processing, payment, and sales reports.
@@ -303,7 +303,7 @@
                 <img src="images/abdul.jpeg" style="width: 150px; height: 150px; border-radius: 50%;">
                 &nbsp;
                 <h5 style="font-weight: bold;">A.R. Dulapandan</h5>
-                <h6>UWU/CST/21/048<br>Computer Science and Technologie<br>Uva Wellassa University</h6>
+                <h6>UWU/CST/21/048<br>Computer Science and Technology<br>Uva Wellassa University</h6>
 
 
             </div>
@@ -312,14 +312,14 @@
             <div class="col-lg-2 col-md-12 col-12 pt-4">
                 <img src="images/tharindhu.jpeg" style="width: 150px; height: 150px; border-radius: 50%;">
                 <h5 style="font-weight: bold;">H.T.D. De Zoysa</h5>
-                <h6>UWU/CST/21/049<br>Computer Science and Technologie<br>Uva Wellassa University</h6>
+                <h6>UWU/CST/21/049<br>Computer Science and Technology<br>Uva Wellassa University</h6>
             </div>
 
             <!--<div class="col" style="flex: 1; text-align: center;  padding: 20px;">-->
             <div class="col-lg-2 col-md-12 col-12 pt-4">
                 <img src="images/hamidh.jpg" style="width: 150px; height: 150px; border-radius: 50%;">
                 <h5 style="font-weight: bold;">A.A.A. Haamidh</h5>
-                <h6>UWU/CST/21/057<br>Computer Science and Technologie<br>Uva Wellassa University<br></h6>
+                <h6>UWU/CST/21/057<br>Computer Science and Technology<br>Uva Wellassa University<br></h6>
             </div>
 
 
@@ -327,14 +327,14 @@
             <div class="col-lg-2 col-md-12 col-12 pt-4">
                 <img src="images/dulakshmi.jpg" style="width: 150px; height: 150px; border-radius: 50%;">
                 <h5 style="font-weight: bold;">V.D.S. Premachandra</h5>
-                <h6>UWU/CST/21/072<br>Computer Science and Technologie<br>Uva Wellassa University</h6>
+                <h6>UWU/CST/21/072<br>Computer Science and Technology<br>Uva Wellassa University</h6>
             </div>
 
             <!--<div class="col" style="flex: 1; text-align: center;  padding: 20px;">-->
             <div class="col-lg-2 col-md-12 col-12 pt-4">
                 <img src="images/jayathi.jpg" style="width: 150px; height: 150px; border-radius: 50%;">
                 <h5 style="font-weight: bold;">B.S.J. Jayoda</h5>
-                <h6>UWU/CST/21/094<br>Computer Science and Technologie<br>Uva Wellassa University</h6>
+                <h6>UWU/CST/21/094<br>Computer Science and Technology<br>Uva Wellassa University</h6>
             </div>
             <div class="col-lg-1 col-md-12 col-12 pt-4"></div>
         </div>

@@ -74,6 +74,12 @@ $order_payments = $orders->getAllServiceFees($from_date, $to_date);
         align-items: center;
     }
 
+    .card-header h5 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
     .table {
         margin-top: 20px;
         width: 100%;
@@ -177,7 +183,7 @@ $order_payments = $orders->getAllServiceFees($from_date, $to_date);
                                     <label for="to_date" class="form-label">To Date:</label>
                                     <input type="date" id="to_date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="form-control">
                                 </div>
-                                <div class="col-lg-4 col-md-12 d-flex align-items-end">
+                                <div class="col-lg-4 col-md-12 d-flex align-items-end justify-content-center">
                                     <button type="submit" class="btn btn-primary fs-6">
                                         <i class="bi bi-funnel"></i> Filter
                                     </button>

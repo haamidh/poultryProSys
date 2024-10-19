@@ -45,7 +45,7 @@ $data['1_star_percent'] = ($data['1_star_review'] / $total_reviews) * 100;
         <div class="container mt-5">
             <div class="card">
                 <div class="card-header text-center" style="background-color: #40826D;color: white;"><h4>Reviews</h4></div>
-                <div class="card-body">
+                <div class="card-body shadow-lg">
                     <div class="row align-items-center">
                         <div class="col-sm-4 text-center">
                             <h2 class="text-warning mb-4">
@@ -111,10 +111,10 @@ $data['1_star_percent'] = ($data['1_star_review'] / $total_reviews) * 100;
             </div>
 
             <div class="review">
-                <h3>Reviews</h3>
+                <h3  class="mt-5 mb-4">Reviews</h3>
                 <div id="review_list">
                     <?php foreach ($review_data as $r_data): ?>
-                        <div class="border p-3 mb-3">
+                        <div class=" p-3 mb-3 shadow">
                             <p><strong><?= $review->findUserName($r_data['user_id']) ?></strong> <span class="text-muted">on <?= date('F j, Y', strtotime($r_data['created_at'])) ?></span></p>
                             <p><?= $r_data['comment'] ?></p>
                             <p class="text-warning">

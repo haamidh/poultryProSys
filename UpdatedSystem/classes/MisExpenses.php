@@ -21,7 +21,7 @@ class MisExpenses {
     private $expense_amount;
     private $misc_description;
     private $payment_method;
-    private $created_at;
+    private $date;
    
     
     function __construct($conn) {
@@ -53,8 +53,8 @@ class MisExpenses {
         return $this->payment_method;
     }
 
-    function getCreated_at() {
-        return $this->created_at;
+    function getdate() {
+        return $this->date;
     }
 
     function setCategory_id($category_id) {
@@ -80,9 +80,12 @@ class MisExpenses {
     function setPayment_method($payment_method) {
         $this->payment_method = $payment_method;
     }
+//public function setdate($date) {
+   // $this->date = $date;  // Correct the property name to match the database field
+//}
 
-    function setCreated_at($created_at) {
-        $this->created_at = $created_at;
+    function setdate($date) {
+        $this->date = $date;
     }
 
     function getUser_id() {
@@ -176,45 +179,62 @@ class MisExpenses {
     // }
 
     // Retrieve expenses for a specific user
-    //create miscellenous expenses
-
-
-    
-    // public function create($user_id) {
-    //     $query="INSERT INTO " . $this->table_name . " (user_id, category_name,category_description) VALUES (:user_id, :category_name, :category_description)";
-    //     $stmt = $this->conn->prepare($query);
-        
-    //     // Sanitize input
-    //     $this->category_name = htmlspecialchars(strip_tags($this->category_name));
-    //     $this->category_description = htmlspecialchars(strip_tags($this->category_description));
-        
-    //     // Bind parameters
-    //     $stmt->bindParam(':user_id', $user_id);
-    //     $stmt->bindParam(':category_name', $this->category_name);
-    //     $stmt->bindParam(':category_description', $this->category_description);
-        
-    //     return $stmt->execute();
-    //     }
-
-    
+    // create miscellenous expenses
     public function read($user_id) {
         try {
             $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':user_id', htmlspecialchars(strip_tags($user_id)), PDO::PARAM_INT);
+            $clean_user_id = htmlspecialchars(strip_tags($user_id)); // Sanitize first
+            $stmt->bindParam(':user_id', $clean_user_id, PDO::PARAM_INT); // Then bind the sanitized variable
+            
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             error_log("Read Error: " . $e->getMessage()); // Log error for debugging
             return [];
         }
+    }       
+    
+    
+    
+    public function create($user_id) {
+        // SQL query to insert the record
+        $query = "INSERT INTO " . $this->table_name . " 
+                  (user_id, category_id, expense_name, handled_by, expense_amount, misc_description, payment_method, date)
+                  VALUES (:user_id, :category_id, :expense_name, :handled_by, :expense_amount, :misc_description, :payment_method, :date)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        // Sanitize input to prevent XSS and other vulnerabilities
+        $this->Category_id     = htmlspecialchars(strip_tags($this->category_id));
+        $this->expense_name     = htmlspecialchars(strip_tags($this->expense_name));
+        $this->handled_by       = htmlspecialchars(strip_tags($this->handled_by));
+        $this->expense_amount   = htmlspecialchars(strip_tags($this->expense_amount));
+        $this->misc_description = htmlspecialchars(strip_tags($this->misc_description));
+        $this->payment_method   = htmlspecialchars(strip_tags($this->payment_method));
+        $this->date             = htmlspecialchars(strip_tags($this->date));
+        
+        // Bind parameters to the prepared statement
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':category_id', $this->category_id, PDO::PARAM_INT); // Assuming category_id is an integer
+        $stmt->bindParam(':expense_name', $this->expense_name);
+        $stmt->bindParam(':handled_by', $this->handled_by);
+        $stmt->bindParam(':expense_amount', $this->expense_amount);
+        $stmt->bindParam(':misc_description', $this->misc_description);
+        $stmt->bindParam(':payment_method', $this->payment_method);
+        $stmt->bindParam(':date', $this->date);  // Corrected this to match the column name
+        
+        // Execute the query
+        return $stmt->execute();
     }
+    
+    
 
     public function miscellaneousExpensesExists($user_id)
 {
     // Modify the query to remove spaces and make it case-insensitive
     $query = "SELECT expense_id FROM " . $this->table_name . " 
-          WHERE LOWER(REPLACE(category_name, ' ', '')) = LOWER(REPLACE(:category_name, ' ', '')) 
+          WHERE LOWER(REPLACE(expense_name, ' ', '')) = LOWER(REPLACE(:expense_name, ' ', '')) 
           AND user_id = :user_id 
           LIMIT 1";
 
