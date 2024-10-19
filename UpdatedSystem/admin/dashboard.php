@@ -104,11 +104,6 @@ $monthly_income = $orders->getMonthlyServiceFees($to_date);
         transform: scale(1.05); /* Increase size by 5% on hover */
     }
 
-    @media (min-width: 992px) {
-        .chart-container:hover {
-            flex: 0 0 calc(10/12 * 100%); /* Adjust flex width for lg size */
-        }
-    }
 
 </style>
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto overlay-container">

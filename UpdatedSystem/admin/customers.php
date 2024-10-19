@@ -57,6 +57,12 @@ $adminframe->first_part($admin);
         font-weight: bold;
     }
 
+    .card-header h5 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
     .table {
         margin-top: 20px;
         border-collapse: separate;
@@ -163,7 +169,7 @@ $adminframe->first_part($admin);
                                             <td><?php echo htmlspecialchars($user['city']); ?></td>
                                             <td><?php echo htmlspecialchars($user['mobile']); ?></td>
                                             <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                            <td><?php echo htmlspecialchars(date("d M Y", strtotime($user['CREATED_AT']))); ?></td>
+                                            <td><?php echo htmlspecialchars(date("d M Y", strtotime($user['created_at']))); ?></td>
                                             <td>
                                                 <?php if ($user['status'] == 0) { ?>
                                                     <button class="btn btn-success">

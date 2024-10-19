@@ -200,6 +200,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="mt-3 text-center">
                                 <small>Don't have an account? <a href="register.php" class="text-primary" style="font-weight: bold;">Sign Up</a></small>
                             </div>
+                            <div class="mt-1 text-center">
+                                <small>Forget password? <a href="forget_password.php" class="text-primary" style="font-weight: bold;">Forget Password</a></small>
+                            </div>
                         </div>
                     </div>
                 </div>
