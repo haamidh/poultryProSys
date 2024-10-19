@@ -8,9 +8,15 @@ body {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease; /* Added transition for card hover effect */
 }
 
-/* Hover zoom effect */
+/* Hover zoom effect for the card */
+.card:hover {
+    transform: translateY(-5px); /* Lift the card slightly on hover */
+}
+
+/* Image container for zoom effect */
 .image-container {
     position: relative;
     width: 100%;
@@ -85,8 +91,12 @@ body {
     background-color: #e04b44; /* Changed hover color to a darker shade of the button */
 }
 
-/* Mobile Friendly */
+/* Responsive styles for product cards */
 @media (max-width: 768px) {
+    .card {
+        margin-bottom: 20px; /* Add margin for small screens */
+    }
+
     .image-container {
         max-width: 100%;
     }

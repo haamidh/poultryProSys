@@ -11,14 +11,13 @@ $conn = $db->getConnection();
 ?>
 
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    <link rel="stylesheet" href="marketplace/marketPlaceStyle.css">
+    <link href="marketplace/marketPlaceStyle.css" rel="stylesheet">
     <link rel="stylesheet" href="header.css">
     <title>MarketPlace - PoultryPro</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -45,17 +44,17 @@ $conn = $db->getConnection();
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
+            <span class="visually-hidden">Previous</span>
         </a>
         <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
+            <span class="visually-hidden">Next</span>
         </a>
     </div>
     <div class="container mt-5">
         <div class="row">
             <?php
-            $sql = "SELECT product_id, product_name, farm_id, unit,  category_id, product_price, product_img, description FROM products ORDER BY product_id DESC";
+            $sql = "SELECT product_id, product_name, farm_id, unit, category_id, product_price, product_img, description FROM products ORDER BY product_id DESC";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
@@ -65,18 +64,14 @@ $conn = $db->getConnection();
                 <div class="col-md-3">
                     <div class="card mb-4 market-product">
                        <img src="' . htmlspecialchars($row["product_img"]) . '" alt="' . htmlspecialchars($row["product_name"]) . '" class="card-img-top p-3" width="200" height="200">
- <div class="card-body">
- 
+                        <div class="card-body">
                             <h5 class="card-title">' . htmlspecialchars($row["product_name"]) . '</h5>
-                            
                             <h5 class="card-text">Rs. ' . htmlspecialchars($row["product_price"]) . '</h5>
-                            
                             <p class="card-text">
-    <span class="badge bg-success">Per ' . htmlspecialchars($row["unit"]) . '</span>
-</p>
-                            <a href="viewProduct.php?product_id=' . htmlspecialchars($row["product_id"]) . '&farm_id=' . htmlspecialchars($row["farm_id"]) . ' " class="btn btn-primary">Buy</a>
-                        
-                            </div>
+                                <span class="badge bg-success">Per ' . htmlspecialchars($row["unit"]) . '</span>
+                            </p>
+                            <a href="viewProduct.php?product_id=' . htmlspecialchars($row["product_id"]) . '&farm_id=' . htmlspecialchars($row["farm_id"]) . '" class="btn btn-primary">Buy</a>
+                        </div>
                     </div>
                 </div>
                 ';
