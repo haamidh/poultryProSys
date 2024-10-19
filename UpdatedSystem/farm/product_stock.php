@@ -33,7 +33,7 @@ $total = '';
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
     $batch_id = $_POST['batch_id'];
-    $no_birds = $_POST['no_birds'];
+    $no_birds = isset($_POST['no_birds']) ? $_POST['no_birds'] : 0;
     $quantity = $_POST['quantity'];
     $unit_price = $_POST['unit_price'];
     $total = $_POST['total'];
@@ -148,8 +148,6 @@ $frame->first_part($farm);
                                     </div>
                                 </div>
                                 <?php
-                            }else{
-                                $no_birds=0;
                             }
                             ?>
 
