@@ -175,7 +175,7 @@ $products = $product->read($user_id);
                                                 <label class="form-check-label" for="Kg">kg</label>
                                             </div>
                                             <div class="col-sm-6 form-check">
-                                                <input type="radio" class="form-check-input" name="unit" value="pieces" id="pieces" required>
+                                                <input type="radio" class="form-check-input" name="unit" value="piece" id="pieces" required>
                                                 <label class="form-check-label" for="Pieces">Pieces</label>
                                             </div>
                                         </div>

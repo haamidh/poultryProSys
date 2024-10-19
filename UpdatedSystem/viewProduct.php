@@ -72,10 +72,13 @@ if (!empty($row)) { // Check if product found
                                     </div>
                                     <p class="about"><?php echo $row['description']; ?></p>
                                     <div class="sizes mt-5">
-                                        <h6 class="text">Available Stock : <?php echo $product_quantity; ?></h6>
+                                        <h6 class="text">Available Stock : <?php echo $product_quantity; ?>
+                                        <?php if($product_qty_num > 0) { ?>
+                                             <?php echo $row['unit']; ?>s</h6>
                                     </div>
+                                    
 
-                                    <?php if($product_qty_num > 0) { ?>
+                                    
                                     <form action="processOrder.php?product_id=<?php echo $product_id; ?>" method="post"> 
                                         <div class="form-group">
                                             <label for="quantity">Quantity:</label>

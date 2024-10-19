@@ -55,7 +55,7 @@ $conn = $db->getConnection();
     <div class="container mt-5">
         <div class="row">
             <?php
-            $sql = "SELECT product_id, product_name, farm_id,  category_id, product_price, product_img, description FROM products ORDER BY product_id DESC";
+            $sql = "SELECT product_id, product_name, farm_id, unit,  category_id, product_price, product_img, description FROM products ORDER BY product_id DESC";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
@@ -68,9 +68,13 @@ $conn = $db->getConnection();
  <div class="card-body">
  
                             <h5 class="card-title">' . htmlspecialchars($row["product_name"]) . '</h5>
-                            <p class="card-text">' . htmlspecialchars($row["description"]) . '</p>
+                            
                             <h5 class="card-text">Rs. ' . htmlspecialchars($row["product_price"]) . '</h5>
-                            <a href="viewProduct.php?product_id=' . htmlspecialchars($row["product_id"]) . '&farm_id='.htmlspecialchars($row["farm_id"]). ' " class="btn btn-primary">Buy</a>
+                            
+                            <p class="card-text">
+    <span class="badge bg-success">Per ' . htmlspecialchars($row["unit"]) . '</span>
+</p>
+                            <a href="viewProduct.php?product_id=' . htmlspecialchars($row["product_id"]) . '&farm_id=' . htmlspecialchars($row["farm_id"]) . ' " class="btn btn-primary">Buy</a>
                         
                             </div>
                     </div>
