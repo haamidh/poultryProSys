@@ -209,7 +209,7 @@ $frame->first_part($farm);
                                                         <?php echo htmlspecialchars($supplier['sup_name']); ?>
                                                     </option>
                                                 <?php endforeach; ?>
-                                            </select>  
+                                            </select>
                                             <small class="text-danger"><?php echo $supErr ?></small>
                                         </div>
                                     </div>
@@ -272,11 +272,8 @@ $frame->first_part($farm);
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col text-center mt-3">
-                                    <button type="submit" class="btn btn-primary">Add Batch</button>
-                                    
-                                </div>
+                            <div class="row" style="text-align:center;">
+                                <input type="submit" class="btn btn-primary" name="submit" value="Add Batch">
                             </div>
                         </form>
                     </div>
@@ -300,7 +297,7 @@ $frame->first_part($farm);
         if (priceValue.length > 0 && !regex.test(priceValue)) {
             priceError.textContent = "Price not valid";
             priceInput.classList.add("is-invalid");
-        } 
+        }
 
         priceInput.value = priceValue.replace(/[^0-9.]/g, '');
 
