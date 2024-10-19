@@ -3,7 +3,6 @@ class OrderDetails {
 
     private $conn;
     private $table_name = "order_details";
-    // Properties
     private $order_num;
     private $first_name;
     private $last_name;
@@ -12,8 +11,6 @@ class OrderDetails {
     private $address;
     private $city;
 
-
-    // Constructor
     public function __construct($db) {
         $this->conn = $db;
     }
@@ -74,8 +71,6 @@ class OrderDetails {
                   (order_num, first_name, last_name, email, phone_number, address, city) 
                   VALUES (:order_num, :first_name, :last_name, :email, :phone_number, :address, :city)";
         $stmt = $this->conn->prepare($query);
-
-        // Bind parameters
         
         $stmt->bindParam(':order_num', $order_num);
         $stmt->bindParam(':first_name', $this->first_name);
@@ -85,8 +80,6 @@ class OrderDetails {
         $stmt->bindParam(':address', $this->address);
         $stmt->bindParam(':city', $this->city);
         
-
-        // Execute the query
         if ($stmt->execute()) {
             return true;
         }

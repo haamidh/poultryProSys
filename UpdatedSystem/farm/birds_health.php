@@ -20,7 +20,7 @@ $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 $frame = new Frame();
 $frame->first_part($farm);
 
-$batchErr = $dateErr = $supErr = $ageErr = $typeErr = $priceErr = $numErr = "";
+$batchErr = $num1Err = $num2Err= "";
 $errors = false;
 
 try {
@@ -79,41 +79,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $no_deaths = $_POST['no_deaths'];
     $description = $_POST['description'];
 
-    try {
-        $query = $con->prepare('INSERT INTO health_status (user_id, batch_id, no_illness, no_deaths, description) VALUES (:user_id, :batch_id, :no_illness, :no_deaths, :description)');
-        $query->bindParam(':user_id', $user_id);
-        $query->bindParam(':batch_id', $batch_id);
-        $query->bindParam(':no_illness', $no_illness);
-        $query->bindParam(':no_deaths', $no_deaths);
-        $query->bindParam(':description', $description);
 
-        if (!Validation::validateTextField($batch, $batchErr)) {
-            $errors = true;
-        }
+    if (empty($batch_id)) {
+        $batchErr = "*Please select batch";
+        $errors = true;
+    }
 
-        if (empty($batch_id)) {
-            $batchErr = "*Please select batch";
-            $errors = true;
-        }
+    if (!Validation::validateNumberField($no_illness, $num1Err)) {
+        $num1Err = "*Number of ill birds must be a valid number";
+        $errors = true;
+    }
 
-        if (!Validation::validateNumberField($age, $ageErr)) {
-            $errors = true;
-        }
+    if (!Validation::validateNumberField($no_deaths, $num2Err)) {
+        $num2Err = "*Number of dead birds must be a valid number";
+        $errors = true;
+    }
 
-        if (empty($bird_type)) {
-            $birdErr = "*Please select bird type";
-            $errors = true;
-        }
 
-        if ($query->execute()) {
-            echo "<script>window.location.href = 'birds_health.php?batch_id=$batch_id';</script>";
-            exit();
-        } else {
-            $error_message = "Failed to add bird health status.";
+    if (!$errors) {
+
+        try {
+            $query = $con->prepare('INSERT INTO health_status (user_id, batch_id, no_illness, no_deaths, description) VALUES (:user_id, :batch_id, :no_illness, :no_deaths, :description)');
+            $query->bindParam(':user_id', $user_id);
+            $query->bindParam(':batch_id', $batch_id);
+            $query->bindParam(':no_illness', $no_illness);
+            $query->bindParam(':no_deaths', $no_deaths);
+            $query->bindParam(':description', $description);
+
+            if ($query->execute()) {
+                echo "<script>window.location.href = 'birds_health.php?batch_id=$batch_id';</script>";
+                exit();
+            } else {
+                $error_message = "Failed to add bird health status.";
+            }
+        } catch (PDOException $e) {
+            error_log("Error: " . $e->getMessage());
+            $error_message = "An unexpected error occurred. Please try again later.";
         }
-    } catch (PDOException $e) {
-        error_log("Error: " . $e->getMessage());
-        $error_message = "An unexpected error occurred. Please try again later.";
     }
 }
 ?>
@@ -149,21 +151,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <option value="" disabled selected>Select Batch</option>
                                     <?php foreach ($batches as $batch) : ?>
                                         <option value="<?php echo htmlspecialchars($batch['batch_id']); ?>"
-                                                <?php if (isset($selected_batch_id) && $selected_batch_id == $batch['batch_id']) echo 'selected'; ?>>
-                                                    <?php echo htmlspecialchars($batch['batch']); ?>
+                                            <?php if (isset($selected_batch_id) && $selected_batch_id == $batch['batch_id']) echo 'selected'; ?>>
+                                            <?php echo htmlspecialchars($batch['batch']); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
+                                <small class="text-danger"><?php echo $batchErr ?></small>
                             </div>
 
                             <div class="col-12">
                                 <label for="no_illness" class="form-label">No of ill birds:</label>
                                 <input class="form-control" type="number" name="no_illness" id="no_illness" required>
+                                <small class="text-danger"><?php echo $num1Err ?></small>
                             </div>
 
                             <div class="col-12">
                                 <label for="no_deaths" class="form-label">No of dead birds:</label>
                                 <input class="form-control" type="number" name="no_deaths" id="no_deaths" required>
+                                <small class="text-danger"><?php echo $num2Err ?></small>
                             </div>
 
                             <div class="col-12 mb-3">
@@ -206,11 +211,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         data: {
             labels: ['Healthy', 'Ill', 'Dead'],
             datasets: [{
-                    label: 'Bird Health Status',
-                    data: [totalGoodHealth, totalIllness, totalDeaths],
-                    backgroundColor: ['#198754', '#ffc107', '#dc3545'],
-                    borderWidth: 1
-                }]
+                label: 'Bird Health Status',
+                data: [totalGoodHealth, totalIllness, totalDeaths],
+                backgroundColor: ['#198754', '#ffc107', '#dc3545'],
+                borderWidth: 1
+            }]
         },
         options: {
             responsive: true,
@@ -218,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function (tooltipItem) {
+                        label: function(tooltipItem) {
                             return tooltipItem.label + ': ' + tooltipItem.raw;
                         }
                     }

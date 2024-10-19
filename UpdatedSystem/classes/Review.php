@@ -7,12 +7,11 @@ class Review {
     private $rating_data;
     private $user_review;
 
-    // Constructor to initialize database connection
     public function __construct($db) {
         $this->conn = $db;
     }
 
-    // Setters for private properties
+    //Setters
     public function setUserId($user_id) {
         $this->user_id = $user_id;
     }
@@ -25,7 +24,7 @@ class Review {
         $this->user_review = $user_review;
     }
 
-    // Getters for private properties
+    //Getters
     public function getUserId() {
         return $this->user_id;
     }
@@ -38,9 +37,7 @@ class Review {
         return $this->user_review;
     }
 
-    // Insert review method using getters
     public function insertReview() {
-        // Prepare the SQL statement
         $sql = "INSERT INTO reviews (user_id, rating, comment, created_at) 
                 VALUES (:user_id, :rating_data, :user_review, NOW())";
         $stmt = $this->conn->prepare($sql);
@@ -49,12 +46,10 @@ class Review {
         $rating_data = $this->getRatingData();
         $user_review = $this->getUserReview();
 
-        // Bind parameters using the variables
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':rating_data', $rating_data);
         $stmt->bindParam(':user_review', $user_review);
 
-        // Execute and check if successful
         if ($stmt->execute()) {
             return true;
         } else {
@@ -109,18 +104,14 @@ class Review {
     }
 
     public function deleteReview($review_id) {
-        // Use the actual table name in the query
         $query = "DELETE FROM reviews WHERE review_id = :review_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the feedback_id parameter
         $stmt->bindParam(':review_id', $review_id);
 
-        // Execute the query
         if ($stmt->execute()) {
             return true;
         } else {
-            // Debugging output
             print_r($stmt->errorInfo());
             return false;
         }

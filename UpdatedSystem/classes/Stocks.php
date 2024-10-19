@@ -25,6 +25,8 @@ class Stocks {
         return " AND $table_alias.created_at BETWEEN :from_date AND :to_date";
     }
 
+    
+    //Function to get all from stock
     public function getAllStockData($from_date, $to_date) {
         $dateCondition = $this->buildDateCondition($from_date, $to_date, 'b');
 
@@ -54,6 +56,7 @@ class Stocks {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Function to get total stock amount
     public function getTotalStockAmount($from_date, $to_date) {
         $dateCondition = $this->buildDateCondition($from_date, $to_date, 'b');
 
@@ -79,6 +82,8 @@ class Stocks {
         return $result ? $result['total_amount'] : 0;
     }
 
+    
+    //Function to get all medicine stock
     public function getAllMedicineStockData($from_date, $to_date) {
         $dateCondition = $this->buildDateCondition($from_date, $to_date, 'b');
 
@@ -108,6 +113,7 @@ class Stocks {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Function to get all medicine stock amount
     public function getTotalMedicineStockAmount($from_date, $to_date) {
         $dateCondition = $this->buildDateCondition($from_date, $to_date, 'b');
 
@@ -133,6 +139,7 @@ class Stocks {
         return $result ? $result['total_amount'] : 0;
     }
 
+    //Function to get all product stock
     public function getAllProductStockData($from_date, $to_date) {
         $dateCondition = $this->buildDateCondition($from_date, $to_date, 'ps');
 
@@ -162,6 +169,7 @@ class Stocks {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Function to get all product stock amount
     public function getTotalProductStockAmount($from_date, $to_date) {
         $dateCondition = $this->buildDateCondition($from_date, $to_date, 'ps');
 

@@ -1,16 +1,5 @@
     <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of miscellaneous
- *
- * @author user
- */
 class MisExpenses {
     private $conn;
     private $table_name = "miscellaneous";
@@ -104,7 +93,6 @@ class MisExpenses {
 
     //         $stmt = $this->conn->prepare($query);
 
-    //         // Bind values
     //         $stmt->bindParam(':user_id', $this->user_id);
     //         $stmt->bindParam(':category_id', $this->category_id);
     //         $stmt->bindParam(':expense_name', $this->expense_name);
@@ -163,7 +151,6 @@ class MisExpenses {
     //         $query = "DELETE FROM " . $this->table_name . " WHERE id = :id AND user_id = :user_id";
     //         $stmt = $this->conn->prepare($query);
 
-    //         // Bind values
     //         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     //         $stmt->bindParam(':user_id', $this->user_id);
 
@@ -179,7 +166,8 @@ class MisExpenses {
     // }
 
     // Retrieve expenses for a specific user
-    // create miscellenous expenses
+    
+    //Function to get all from miscellenous expenses
     public function read($user_id) {
         try {
             $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
@@ -198,14 +186,13 @@ class MisExpenses {
     
     
     public function create($user_id) {
-        // SQL query to insert the record
         $query = "INSERT INTO " . $this->table_name . " 
                   (user_id, category_id, expense_name, handled_by, expense_amount, misc_description, payment_method, date)
                   VALUES (:user_id, :category_id, :expense_name, :handled_by, :expense_amount, :misc_description, :payment_method, :date)";
         
         $stmt = $this->conn->prepare($query);
         
-        // Sanitize input to prevent XSS and other vulnerabilities
+        // Sanitize input 
         $this->Category_id     = htmlspecialchars(strip_tags($this->category_id));
         $this->expense_name     = htmlspecialchars(strip_tags($this->expense_name));
         $this->handled_by       = htmlspecialchars(strip_tags($this->handled_by));
@@ -214,17 +201,15 @@ class MisExpenses {
         $this->payment_method   = htmlspecialchars(strip_tags($this->payment_method));
         $this->date             = htmlspecialchars(strip_tags($this->date));
         
-        // Bind parameters to the prepared statement
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->bindParam(':category_id', $this->category_id, PDO::PARAM_INT); // Assuming category_id is an integer
+        $stmt->bindParam(':category_id', $this->category_id, PDO::PARAM_INT);
         $stmt->bindParam(':expense_name', $this->expense_name);
         $stmt->bindParam(':handled_by', $this->handled_by);
         $stmt->bindParam(':expense_amount', $this->expense_amount);
         $stmt->bindParam(':misc_description', $this->misc_description);
         $stmt->bindParam(':payment_method', $this->payment_method);
-        $stmt->bindParam(':date', $this->date);  // Corrected this to match the column name
+        $stmt->bindParam(':date', $this->date);  
         
-        // Execute the query
         return $stmt->execute();
     }
     
@@ -232,7 +217,7 @@ class MisExpenses {
 
     public function miscellaneousExpensesExists($user_id)
 {
-    // Modify the query to remove spaces and make it case-insensitive
+    //to remove spaces and make it case-insensitive
     $query = "SELECT expense_id FROM " . $this->table_name . " 
           WHERE LOWER(REPLACE(expense_name, ' ', '')) = LOWER(REPLACE(:expense_name, ' ', '')) 
           AND user_id = :user_id 

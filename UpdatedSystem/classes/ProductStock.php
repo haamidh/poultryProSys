@@ -18,7 +18,7 @@ class ProductStock implements crud {
         $this->conn = $db;
     }
 
-    // Getters
+    //Getters
     function getUser_id() {
         return $this->user_id;
     }
@@ -47,7 +47,7 @@ class ProductStock implements crud {
         return $this->total;
     }
 
-    // Setters
+    //Setters
     function setUser_id($user_id) {
         $this->user_id = $user_id;
     }
@@ -76,13 +76,12 @@ class ProductStock implements crud {
         $this->total = $total;
     }
 
-    // CRUD methods
+    //Function to create product stock
     public function create($user_id) {
         $query = "INSERT INTO " . $this->table_name . " (user_id, product_id, batch_id,no_birds,  quantity, unit_price, total) 
                   VALUES (:user_id, :product_id, :batch_id,:no_birds, :quantity, :unit_price, :total)";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':product_id', $this->product_id);
         $stmt->bindParam(':quantity', $this->quantity);
@@ -94,6 +93,7 @@ class ProductStock implements crud {
         return $stmt->execute();
     }
 
+    //Function to get all from product stock
     public function read($user_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -102,6 +102,7 @@ class ProductStock implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Function to get one from product stock
     public function readOne($ps_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE ps_id = :ps_id LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
@@ -129,7 +130,6 @@ class ProductStock implements crud {
               WHERE ps_id = :ps_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':ps_id', $ps_id);
         $stmt->bindParam(':product_id', $this->product_id);
         $stmt->bindParam(':batch_id', $this->batch_id);
@@ -140,19 +140,12 @@ class ProductStock implements crud {
 
         return $stmt->execute();
 
-//        try {
-//            return $stmt->execute();
-//        } catch (PDOException $e) {
-//            echo "Error updating product stock: " . $e->getMessage();
-//            return false;
-//        }
     }
 
     public function delete($ps_id) {
         $query = "DELETE FROM " . $this->table_name . " WHERE ps_id = :ps_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':ps_id', $ps_id);
 
         return $stmt->execute();

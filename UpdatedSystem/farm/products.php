@@ -26,6 +26,10 @@ $product = new Product($con);
 $success_message = '';
 $error_message = '';
 
+$nameErr = $unitErr = $categoryErr = $priceErr  = $leastErr = "";
+$errors = false;
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product_name = $_POST['product_name'];
     $unit = $_POST['unit'];
@@ -33,6 +37,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $selling_price = number_format($_POST['selling_price'], 2);
     $least_quantity = number_format($_POST['least_quantity'], 2);
     $description = $_POST['description'];
+
+
+    if (!Validation::validateTextField($product_name, $nameErr)) {
+        $errors = true;
+    }
+
+    if (empty($unit)) {
+        $unitErr = "*Please select unit";
+        $errors = true;
+    }
+
+    if (!Validation::validateNumberField($category_id, $categoryErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateAmount($selling_price, $priceErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateDecimalField($least_quantity, $leastErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateNumberField($quantity, $numErr)) {
+        $errors = true;
+    }
+
 
     // Initialize variables for file upload
     $target_file = 'default_image.jpg';
@@ -71,21 +102,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->setLeastQuantity($least_quantity);
     $product->setDescription($description);
 
-    if ($product->productExists($user_id)) {
-        $error_message = "This product already exists";
-    } else {
 
-        // Create a new product
-        if ($product->create($user_id)) {
-            $success_message = "Added successfully.";
+    if (!$errors) {
+
+        if ($product->productExists($user_id)) {
+            $error_message = "This product already exists";
         } else {
-            $error_message = "Failed to add.";
+
+            // Create a new product
+            if ($product->create($user_id)) {
+                $success_message = "Added successfully.";
+            } else {
+                $error_message = "Failed to add.";
+            }
         }
     }
 }
 
 // Fetch product categories for dropdown
-function fetchCategories($con) {
+function fetchCategories($con)
+{
     $query = $con->prepare('SELECT * FROM product_categories');
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -128,7 +164,8 @@ $products = $product->read($user_id);
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <input type="text" name="product_name" class="form-control" required>
+                                            <input type="text" name="product_name" id="product_name" class="form-control" required onkeyup="validateProductName()">
+                                            <small class="text-danger" id="nameErr"><?php echo $nameErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +175,7 @@ $products = $product->read($user_id);
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <select name="category_id" class="form-control" required>
+                                            <select name="category_id" id="category_id" class="form-control" required onchange="validateCategory()">
                                                 <option value="" disabled selected>Select Category</option>
                                                 <?php foreach ($categories as $category) { ?>
                                                     <option value="<?= $category['category_id'] ?>">
@@ -146,6 +183,7 @@ $products = $product->read($user_id);
                                                     </option>
                                                 <?php } ?>
                                             </select>
+                                            <small class="text-danger" id="categoryErr"><?php echo $categoryErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -158,7 +196,8 @@ $products = $product->read($user_id);
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <input type="number" name="selling_price" class="form-control" required>
+                                            <input type="text" name="selling_price" id="priceInput" class="form-control" required onkeyup="validatePrice()">
+                                            <small class="text-danger" id="priceError"><?php echo $priceErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -172,12 +211,17 @@ $products = $product->read($user_id);
                                         <div class="row mb-3 px-3">
                                             <div class="col-sm-6 form-check">
                                                 <input type="radio" class="form-check-input" name="unit" value="kilogram" id="kilogram" required>
-                                                <label class="form-check-label" for="Kg">kg</label>
+                                                <label class="form-check-label" for="kilogram">kg</label>
                                             </div>
                                             <div class="col-sm-6 form-check">
                                                 <input type="radio" class="form-check-input" name="unit" value="piece" id="pieces" required>
+<<<<<<< Updated upstream
                                                 <label class="form-check-label" for="Pieces">Pieces</label>
+=======
+                                                <label class="form-check-label" for="pieces">Pieces</label>
+>>>>>>> Stashed changes
                                             </div>
+                                            <small class="text-danger"><?php echo $unitErr ?></small>
                                         </div>
                                     </div>
 
@@ -200,7 +244,8 @@ $products = $product->read($user_id);
                                     <div class="row">
                                         <label class="col-sm-6 col-form-label">Notification Threshold:</label>
                                         <div class="col-sm-12">
-                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity">
+                                            <input type="text" class="form-control" id="least_quantity" name="least_quantity" required onkeyup="validateLeastQuantity()">
+                                            <small class="text-danger" id="quantityErr"><?php echo $leastErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -222,6 +267,7 @@ $products = $product->read($user_id);
                             </div>
 
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -254,7 +300,7 @@ $products = $product->read($user_id);
                                     $serialnum = 0;
                                     foreach ($products as $product) {
                                         $serialnum++;
-                                        ?>
+                                    ?>
                                         <tr>
                                             <th><?php echo $serialnum; ?></th>
                                             <td><?php echo $product['product_name']; ?></td>
@@ -311,15 +357,97 @@ $products = $product->read($user_id);
 
                 // If the input matches any of these values, show the row
                 if (
-                        nameValue.toUpperCase().indexOf(filter) > -1 ||
-                        priceValue.toUpperCase().indexOf(filter) > -1 ||
-                        unitValue.toUpperCase().indexOf(filter) > -1
-                        ) {
+                    nameValue.toUpperCase().indexOf(filter) > -1 ||
+                    priceValue.toUpperCase().indexOf(filter) > -1 ||
+                    unitValue.toUpperCase().indexOf(filter) > -1
+                ) {
                     rows[i].style.display = "";
                 } else {
                     rows[i].style.display = "none";
                 }
             }
+        }
+    }
+
+    function validatePrice() {
+        const priceInput = document.getElementById('priceInput');
+        const priceError = document.getElementById('priceError');
+        const priceValue = priceInput.value;
+
+        const regex = /^(0|[1-9]\d*)(\.\d{1,2})?$/;
+
+        priceError.textContent = "";
+        priceInput.classList.remove("is-invalid");
+
+        if (priceValue.length > 0 && !regex.test(priceValue)) {
+            priceError.textContent = "Price not valid";
+            priceInput.classList.add("is-invalid");
+        }
+
+        priceInput.value = priceValue.replace(/[^0-9.]/g, '');
+
+        if (priceInput.value.length > 0 && priceInput.value[0] === '.') {
+            priceError.textContent = "Price cannot start with a decimal point.";
+            priceInput.classList.add("is-invalid");
+            priceInput.value = "";
+        }
+    }
+
+    function validateProductName() {
+        const productNameInput = document.getElementById('product_name');
+        const nameErr = document.getElementById('nameErr');
+        const productNameValue = productNameInput.value;
+
+        const regex = /^[a-zA-Z\s]{3,}$/; // Minimum 3 alphabetic characters, allows spaces
+
+        nameErr.textContent = "";
+        productNameInput.classList.remove("is-invalid");
+
+        if (productNameValue.length > 0 && !regex.test(productNameValue)) {
+            nameErr.textContent = "Product name not valid (only letters and spaces, at least 3 characters).";
+            productNameInput.classList.add("is-invalid");
+            productNameInput.value = productNameValue.replace(/[^a-zA-Z\s]/g, '');
+        }
+    }
+
+    function validateCategory() {
+        const categoryInput = document.getElementById('category_id');
+        const categoryErr = document.getElementById('categoryErr');
+        const categoryValue = categoryInput.value;
+
+        const regex = /^[1-9]\d*$/; // Only positive numbers
+
+        categoryErr.textContent = "";
+        categoryInput.classList.remove("is-invalid");
+
+        if (categoryValue.length > 0 && !regex.test(categoryValue)) {
+            categoryErr.textContent = "Category ID not valid (must be a positive number).";
+            categoryInput.classList.add("is-invalid");
+            categoryInput.value = categoryValue.replace(/[^0-9]/g, '');
+        }
+    }
+
+    function validateLeastQuantity() {
+        const quantityInput = document.getElementById('least_quantity');
+        const quantityErr = document.getElementById('quantityErr');
+        const quantityValue = quantityInput.value;
+
+        const regex = /^(0|[1-9]\d*)(\.\d{1,2})?$/; // Allows positive numbers with up to two decimal places
+
+        quantityErr.textContent = "";
+        quantityInput.classList.remove("is-invalid");
+
+        if (quantityValue.length > 0 && !regex.test(quantityValue)) {
+            quantityErr.textContent = "Quantity not valid (must be a positive number with up to two decimal places).";
+            quantityInput.classList.add("is-invalid");
+            quantityInput.value = quantityValue.replace(/[^0-9.]/g, ''); // Replace invalid characters
+        }
+
+        // Additional check to prevent starting with a decimal
+        if (quantityInput.value.length > 0 && quantityInput.value[0] === '.') {
+            quantityErr.textContent = "Quantity cannot start with a decimal point.";
+            quantityInput.classList.add("is-invalid");
+            quantityInput.value = "";
         }
     }
 </script>

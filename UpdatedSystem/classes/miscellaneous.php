@@ -1,16 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of miscellaneous
- *
- * @author user
- */
 class miscellaneous {
     
     private $conn;
@@ -56,6 +45,7 @@ class miscellaneous {
         $this->category_description = $category_description;
     }
 
+    //Function to get all from miscellaneous
    public function create($user_id) {
 $query="INSERT INTO " . $this->table_name . " (user_id, category_name,category_description) VALUES (:user_id, :category_name, :category_description)";
 $stmt = $this->conn->prepare($query);
@@ -64,7 +54,6 @@ $stmt = $this->conn->prepare($query);
 $this->category_name = htmlspecialchars(strip_tags($this->category_name));
 $this->category_description = htmlspecialchars(strip_tags($this->category_description));
 
-// Bind parameters
 $stmt->bindParam(':user_id', $user_id);
 $stmt->bindParam(':category_name', $this->category_name);
 $stmt->bindParam(':category_description', $this->category_description);
@@ -72,6 +61,7 @@ $stmt->bindParam(':category_description', $this->category_description);
 return $stmt->execute();
 }
 
+//Function to get all from miscellaneous
 public function read($user_id)
 {
     $query = "SELECT * FROM " . $this->table_name . " WHERE user_id= :user_id";
@@ -83,7 +73,7 @@ public function read($user_id)
 
 public function miscellaneousExists($user_id)
 {
-    // Modify the query to remove spaces and make it case-insensitive
+    //to remove spaces and make it case-insensitive
     $query = "SELECT category_id FROM " . $this->table_name . " 
           WHERE LOWER(REPLACE(category_name, ' ', '')) = LOWER(REPLACE(:category_name, ' ', '')) 
           AND user_id = :user_id 
