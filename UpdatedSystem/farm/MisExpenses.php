@@ -184,7 +184,7 @@ $misEx = $misEx->read($user_id);
                             <strong style="font-size:25px;">Miscellaneous Expenses Details</strong>
                         </h5>
                         <div class="input-group" style="width: 250px;">
-                            <input type="text" id="searchSupplierInput" class="form-control" placeholder="Search category..." onkeyup="searchcategory()">
+                            <input type="text" id="searchSupplierInput" class="form-control" placeholder="Search Expenses name..." onkeyup="searchcategory()">
                             <span class="input-group-text">
                                 <i class="bi bi-search" style="color: #3E497A;"></i>
                             </span>
@@ -206,7 +206,7 @@ $misEx = $misEx->read($user_id);
                                 <tbody>
                                     <?php
                                     $serialnum = 0;
-                                    foreach ($misExpense as $misEx) {
+                                    foreach ($misEx as $misEx) {
                                         $serialnum++;
                                         ?>
                                         <tr>

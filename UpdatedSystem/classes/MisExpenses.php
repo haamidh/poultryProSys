@@ -229,6 +229,15 @@ class MisExpenses {
     $stmt->execute();
 
     return $stmt->rowCount() > 0;
+
+
+}
+
+public function delete($category_id) {
+    $query = "DELETE FROM " . $this->table_name . " WHERE category_id= :category_id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':category_id', $category_id);
+    return $stmt->execute();
 }
    }
 
