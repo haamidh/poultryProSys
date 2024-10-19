@@ -81,7 +81,7 @@ class BuyFeed implements crud
         $this->total = $total;
     }
 
-    // Function to create new feed
+    //Function to create new feed
     public function create($user_id)
     {
         $query = "INSERT INTO " . $this->table_name . " (user_id, feed_id, sup_id, unit_price, quantity, total) 
@@ -98,7 +98,7 @@ class BuyFeed implements crud
         return $stmt->execute();
     }
 
-    //Function to retrieve all from buy feed
+    //Function to get all from buy feed
     public function read($user_id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";

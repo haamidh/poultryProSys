@@ -21,7 +21,7 @@ class Expenses {
     }
 
     public function getBirdData() {
-        // Query to get birds data
+        //get birds data
         $query = "SELECT * FROM birds WHERE user_id = :user_id";
         if ($this->from_date && $this->to_date) {
             $query .= " AND date BETWEEN :from_date AND :to_date";
@@ -36,12 +36,11 @@ class Expenses {
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Instantiate the Bird class if needed
-        $bird = new Bird($this->db); // Assuming you pass the database connection to Bird class
+        $bird = new Bird($this->db);
 
         foreach ($results as &$result) {
             $result['type'] = 'bird';
-            $result['date'] = $result['date'];
+            $result['date'] = $result['created_at'];
             $result['detail'] = "Import " . $result['bird_type'];
             $result['paid_to'] = $bird->getSupplier($result['sup_id'], $this->db);
             $result['amount'] = $result['total_cost'];
@@ -132,7 +131,7 @@ class Expenses {
 
         $all_data = array_merge($bird_data, $medicine_data, $feed_data, $misc_data);
 
-        // Sort data by date
+        //Sort data by date
         usort($all_data, function ($a, $b) {
             return strtotime($b['date']) - strtotime($a['date']);
         });

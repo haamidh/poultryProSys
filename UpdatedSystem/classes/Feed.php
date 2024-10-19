@@ -60,7 +60,7 @@ class Feed implements crud
         $this->description = $description;
     }
 
-    // Create a new feed
+    //Function to create new feed
     public function create($user_id)
     {
         $query = "INSERT INTO " . $this->table_name . " (user_id, feed_name,least_quantity, description) VALUES (:user_id, :feed_name,:least_quantity, :description)";
@@ -71,7 +71,6 @@ class Feed implements crud
         $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-        // Bind parameters
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':feed_name', $this->feed_name);
         $stmt->bindParam(':least_quantity', $this->least_quantity);
@@ -80,7 +79,7 @@ class Feed implements crud
         return $stmt->execute();
     }
 
-    // Read feeds by user ID
+    //Function to get all from feed
     public function read($user_id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
@@ -90,7 +89,7 @@ class Feed implements crud
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Read a single feed by ID
+    //Function to get one raw from feed
     public function readOne($feed_id)
     {
         $query = "SELECT feed_name,least_quantity, description FROM " . $this->table_name . " WHERE feed_id = :feed_id";
@@ -110,7 +109,6 @@ class Feed implements crud
         return $row;
     }
 
-    // Update a feed
     public function update($feed_id)
     {
         $query = "UPDATE " . $this->table_name . " SET feed_name = :feed_name,least_quantity=:least_quantity, description = :description WHERE feed_id = :feed_id";
@@ -122,7 +120,6 @@ class Feed implements crud
         $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-        // Bind values
         $stmt->bindParam(':feed_id', $feed_id);
         $stmt->bindParam(':feed_name', $this->feed_name);
         $stmt->bindParam(':least_quantity', $this->least_quantity);
@@ -131,35 +128,28 @@ class Feed implements crud
         return $stmt->execute();
     }
 
-    // Delete a feed
     public function delete($feed_id)
     {
         $query = "DELETE FROM " . $this->table_name . " WHERE feed_id = :feed_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the feed_id parameter
         $stmt->bindParam(':feed_id', $feed_id);
 
-        // Execute the query
         return $stmt->execute();
     }
 
     // Get the name of a feed by ID
     public function getFeedName($feed_id)
     {
-        // Prepare the SQL query
         $query = "SELECT feed_name FROM " . $this->table_name . " WHERE feed_id = :feed_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the parameters
         $stmt->bindParam(':feed_id', $feed_id);
 
-        // Execute the query
         if ($stmt->execute()) {
-            // Fetch the result
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Check if a result was returned
+            // Check result
             if ($result) {
                 return $result['feed_name'];
             } else {
@@ -172,7 +162,6 @@ class Feed implements crud
 
     public function getAllSuppliers($user_id)
     {
-        // Prepare the SQL query
         $query = "SELECT sup_id,sup_name FROM supplier WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -189,7 +178,7 @@ class Feed implements crud
         $total_stock_value = 0;
         $available_stock = 0;
 
-        // Initialize remaining stock array
+        // get remaining stock
         foreach ($purchases as $purchase) {
             $remaining_stock[] = [
                 'buyfeed_id' => $purchase['buyfeed_id'],
@@ -199,7 +188,6 @@ class Feed implements crud
             ];
         }
 
-        // Apply usage to stock using FIFO
         foreach ($usage as $used) {
             $remaining_quantity = $used['quantity'];
             foreach ($remaining_stock as &$stock) {
@@ -219,7 +207,7 @@ class Feed implements crud
             }
         }
 
-        // Calculate total remaining stock value
+        //Calculate total remaining stock
         for ($i = 0; $i < count($remaining_stock); $i++) {
             if ($remaining_stock[$i]['remaining'] > 0) {
                 $total_stock_value += $remaining_stock[$i]['remaining'] * $remaining_stock[$i]['unit_price'];
@@ -236,7 +224,7 @@ class Feed implements crud
 
     public function feedExists($user_id)
     {
-        // Modify the query to remove spaces and make it case-insensitive
+        //remove spaces and make it case-insensitive
         $query = "SELECT feed_id FROM " . $this->table_name . " 
               WHERE LOWER(REPLACE(feed_name, ' ', '')) = LOWER(REPLACE(:feed_name, ' ', '')) 
               AND user_id = :user_id 

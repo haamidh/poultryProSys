@@ -20,7 +20,7 @@ class Incomes {
         $this->user_id = $user_id;
         $this->from_date = $from_date;
         $this->to_date = $to_date;
-        $this->product = $product; // Store it as a property
+        $this->product = $product;
     }
 
     public function getOrderData() {
