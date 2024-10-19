@@ -9,7 +9,7 @@ class Product implements crud {
     private $user_id;
     private $product_name;
     private $category_id;
-    private $product_price; // Changed from selling_price to product_price
+    private $product_price; 
     private $unit;
     private $product_img;
     private $least_quantity;
@@ -19,7 +19,7 @@ class Product implements crud {
         $this->conn = $db;
     }
 
-    // Getters and Setters
+    //Getters
     function getUser_id() {
         return $this->user_id;
     }
@@ -51,6 +51,7 @@ class Product implements crud {
         return $this->description;
     }
 
+    //Setters
     function setUser_id($user_id) {
         $this->user_id = $user_id;
     }
@@ -83,13 +84,12 @@ class Product implements crud {
         $this->description = $description;
     }
 
-    // Create Product
+    //Function to create product
     public function create($user_id) {
         $query = "INSERT INTO " . $this->table_name . " (farm_id, product_name, unit, category_id, product_price, product_img, least_quantity, description) 
               VALUES (:user_id, :product_name, :unit, :category_id, :product_price, :product_img,:least_quantity, :description)";
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters using bindValue
         $stmt->bindValue(':user_id', $user_id);
         $stmt->bindValue(':product_name', $this->product_name);
         $stmt->bindValue(':unit', $this->unit);
@@ -102,7 +102,7 @@ class Product implements crud {
         return $stmt->execute();
     }
 
-    // Read Products by User ID
+    //Function to get all from product
     public function read($user_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE farm_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -111,7 +111,7 @@ class Product implements crud {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Read One Product by ID
+    //Function to get one from product
     public function readOne($product_id) {
         $query = "SELECT product_name, unit, category_id, product_price, product_img,least_quantity, description
                   FROM " . $this->table_name . "
@@ -136,7 +136,6 @@ class Product implements crud {
         return $row;
     }
 
-    // Update Product
     public function update($product_id) {
         $query = "UPDATE " . $this->table_name . " 
               SET product_name = :product_name, 
@@ -159,7 +158,6 @@ class Product implements crud {
         $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-        // Bind values using bindValue
         $stmt->bindValue(':product_name', $this->product_name);
         $stmt->bindValue(':category_id', $this->category_id);
         $stmt->bindValue(':unit', $this->unit);
@@ -178,31 +176,24 @@ class Product implements crud {
         }
     }
 
-    // Delete Product
     public function delete($product_id) {
         $query = "DELETE FROM " . $this->table_name . " WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the product_id parameter
         $stmt->bindValue(':product_id', $product_id);
 
         return $stmt->execute();
     }
 
     public function getProductName($product_id) {
-        // Prepare the SQL query
         $query = "SELECT product_name FROM " . $this->table_name . " WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the parameters
         $stmt->bindParam(':product_id', $product_id);
 
-        // Execute the query
         if ($stmt->execute()) {
-            // Fetch the result
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Check if a result was returned
             if ($result) {
                 return $result['product_name'];
             } else {
@@ -215,19 +206,15 @@ class Product implements crud {
     
 
     public function getProductPrice($product_id) {
-        // Prepare the SQL query
         $query = "SELECT product_price FROM " . $this->table_name . " WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the parameters
         $stmt->bindParam(':product_id', $product_id);
 
-        // Execute the query
         if ($stmt->execute()) {
-            // Fetch the result
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Check if a result was returned
+            // Check result
             if ($result) {
                 return $result['product_price'];
             } else {
@@ -239,19 +226,14 @@ class Product implements crud {
     }
     
     public function getProductUnit($product_id) {
-        // Prepare the SQL query
         $query = "SELECT unit FROM " . $this->table_name . " WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the parameters
         $stmt->bindParam(':product_id', $product_id);
 
-        // Execute the query
         if ($stmt->execute()) {
-            // Fetch the result
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Check if a result was returned
             if ($result) {
                 return $result['unit'];
             } else {
@@ -286,17 +268,13 @@ class Product implements crud {
     }
 
     public function getAllBatches($user_id) {
-        // Prepare the SQL query
         $query = "SELECT batch_id, batch FROM birds WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the parameters
         $stmt->bindParam(':user_id', $user_id);
 
-        // Execute the query
         $stmt->execute();
 
-        // Fetch all results
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
@@ -312,7 +290,7 @@ class Product implements crud {
     }
 
     public function productExists($user_id) {
-        // Modify the query to remove spaces and make it case-insensitive
+        //to remove spaces and make it case-insensitive
         $query = "SELECT product_id FROM " . $this->table_name . " 
               WHERE LOWER(REPLACE(product_name, ' ', '')) = LOWER(REPLACE(:product_name, ' ', '')) 
               AND farm_id = :user_id 

@@ -14,7 +14,7 @@ class Incomes {
     private $to_date;
     private $product;
 
-    // Pass the $product object through the constructor
+    //create constructor method
     public function __construct($db, $user_id, $product, $from_date = '', $to_date = '') {
         $this->conn = $db;
         $this->user_id = $user_id;
@@ -23,6 +23,7 @@ class Incomes {
         $this->product = $product;
     }
 
+    //get order data related to user
     public function getOrderData() {
         $query = "SELECT * FROM orders WHERE farm_id = :user_id";
         if ($this->from_date && $this->to_date) {
@@ -37,7 +38,6 @@ class Incomes {
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Use the $this->product to get the product name
         foreach ($results as &$result) {
             $result['type'] = 'order';
             $result['date'] = $result['ordered_date'];
@@ -68,10 +68,8 @@ class Incomes {
     }
 
     public function getDailyIncome() {
-        // Convert `to_date` to include one extra day
         $adjusted_to_date = date('Y-m-d', strtotime($this->to_date . ' +1 day'));
 
-        // Calculate the date 30 days before the adjusted `to_date`
         $start_date = date('Y-m-d', strtotime($adjusted_to_date . ' -30 days'));
 
         $query = "SELECT DATE(ordered_date) AS day, SUM(total) AS total
@@ -86,8 +84,8 @@ class Incomes {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindValue(':status', 1);
-        $stmt->bindParam(':start_date', $start_date); // Use the calculated start date
-        $stmt->bindParam(':to_date', $adjusted_to_date); // Use the adjusted `to_date`
+        $stmt->bindParam(':start_date', $start_date); 
+        $stmt->bindParam(':to_date', $adjusted_to_date); 
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

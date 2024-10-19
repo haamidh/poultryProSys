@@ -57,7 +57,7 @@ class Medicine implements crud
         $this->description = $description;
     }
 
-    // Create a new feed
+    //Function to create medicine
     public function create($user_id)
     {
         $query = "INSERT INTO " . $this->table_name . " (user_id, med_name,least_quantity, description) VALUES (:user_id, :med_name,:least_quantity, :description)";
@@ -68,7 +68,6 @@ class Medicine implements crud
         $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-        // Bind parameters
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':med_name', $this->med_name);
         $stmt->bindParam(':least_quantity', $this->least_quantity);
@@ -77,7 +76,7 @@ class Medicine implements crud
         return $stmt->execute();
     }
 
-    // Read feeds by user ID
+    //Function to get all from medicine
     public function read($user_id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
@@ -87,7 +86,7 @@ class Medicine implements crud
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Read a single feed by ID
+    //Function to get one from buy feed
     public function readOne($med_id)
     {
         $query = "SELECT med_name,least_quantity, description FROM " . $this->table_name . " WHERE med_id = :med_id";
@@ -107,7 +106,6 @@ class Medicine implements crud
         return $row;
     }
 
-    // Update a feed
     public function update($feed_id)
     {
         $query = "UPDATE " . $this->table_name . " SET med_name = :med_name, least_quantity=:least_quantity, description = :description WHERE med_id = :med_id";
@@ -119,7 +117,6 @@ class Medicine implements crud
         $this->least_quantity = htmlspecialchars(strip_tags($this->least_quantity));
         $this->description = htmlspecialchars(strip_tags($this->description));
 
-        // Bind values
         $stmt->bindParam(':med_id', $feed_id);
         $stmt->bindParam(':med_name', $this->med_name);
         $stmt->bindParam(':least_quantity', $this->least_quantity);
@@ -128,35 +125,28 @@ class Medicine implements crud
         return $stmt->execute();
     }
 
-    // Delete a feed
     public function delete($med_id)
     {
         $query = "DELETE FROM " . $this->table_name . " WHERE med_id = :med_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the feed_id parameter
         $stmt->bindParam(':med_id', $med_id);
 
-        // Execute the query
         return $stmt->execute();
     }
 
-    // Get the name of a feed by ID
+    //Function to get medname
     public function getMedName($med_id)
     {
-        // Prepare the SQL query
         $query = "SELECT med_name FROM " . $this->table_name . " WHERE med_id = :med_id";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the parameters
         $stmt->bindParam(':med_id', $med_id);
 
-        // Execute the query
         if ($stmt->execute()) {
-            // Fetch the result
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Check if a result was returned
+            // Check result
             if ($result) {
                 return $result['med_name'];
             } else {
@@ -169,7 +159,6 @@ class Medicine implements crud
 
     public function getAllSuppliers($user_id)
     {
-        // Prepare the SQL query
         $query = "SELECT sup_id,sup_name FROM supplier WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -186,7 +175,7 @@ class Medicine implements crud
         $total_stock_value = 0;
         $available_stock = 0;
 
-        // Initialize remaining stock array
+        //get remaining stock array
         foreach ($purchases as $purchase) {
             $remaining_stock[] = [
                 'buyMed_id' => $purchase['buyMedicine_id'],
@@ -196,7 +185,6 @@ class Medicine implements crud
             ];
         }
 
-        // Apply usage to stock using FIFO
         foreach ($usage as $used) {
             $remaining_quantity = $used['quantity'];
             foreach ($remaining_stock as &$stock) {
@@ -216,7 +204,7 @@ class Medicine implements crud
             }
         }
 
-        // Calculate total remaining stock value
+        // Calculate total remaining stock
         for ($i = 0; $i < count($remaining_stock); $i++) {
             if ($remaining_stock[$i]['remaining'] > 0) {
                 $total_stock_value += $remaining_stock[$i]['remaining'] * $remaining_stock[$i]['unit_price'];
@@ -233,7 +221,7 @@ class Medicine implements crud
 
     public function medicineExists($user_id)
     {
-        // Modify the query to remove spaces and make it case-insensitive
+        //remove spaces and make it case-insensitive
         $query = "SELECT med_id FROM " . $this->table_name . " 
               WHERE LOWER(REPLACE(med_name, ' ', '')) = LOWER(REPLACE(:med_name, ' ', '')) 
               AND user_id = :user_id 

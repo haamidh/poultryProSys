@@ -48,6 +48,7 @@ class Notification {
         return $notifications;
     }
 
+    //feed count
     public function getFeedNotificationCount() {
         $query = "SELECT COUNT(*) AS notification_count FROM feed WHERE 
             (SELECT COALESCE(SUM(quantity), 0) FROM buy_feed WHERE feed_id = feed.feed_id) - 
@@ -61,6 +62,7 @@ class Notification {
         return $row['notification_count'];
     }
 
+    //feed
     public function getFeedNotifications() {
         $query = "SELECT feed_name FROM feed WHERE 
             (SELECT COALESCE(SUM(quantity), 0) FROM buy_feed WHERE feed_id = feed.feed_id) - 
@@ -79,6 +81,7 @@ class Notification {
         return $notifications;
     }
 
+    //product count
     public function getProductsNotificationCount() {
         $query = "
        SELECT COUNT(*) AS notification_count
@@ -98,9 +101,10 @@ class Notification {
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $row['notification_count'] ?? 0; // If no row is returned, default to 0
+        return $row['notification_count'] ?? 0; //default is 0
     }
 
+    //product 
     public function getProductsNotifications() {
         $query = "
        SELECT p.product_name, p.least_quantity, SUM(ps.quantity) - COALESCE(SUM(o.quantity), 0) AS available_stock
@@ -124,7 +128,7 @@ class Notification {
         return $notifications;
     }
 
-    // New method to get the total notification count
+    //total count
     public function getAllNotificationCount() {
         $med_count = $this->getMedNotificationCount();
         $feed_count = $this->getFeedNotificationCount();
@@ -133,14 +137,13 @@ class Notification {
         return $med_count + $feed_count + $product_count;
     }
 
-    // New method to get all notifications combined
+    //total 
     public function getAllNotifications() {
         $med_notifications = $this->getMedNotifications();
         $feed_notifications = $this->getFeedNotifications();
         $product_notifications = $this->getProductsNotifications();
 
-        // Merging the notifications from all sources
-        return array_merge($med_notifications, $feed_notifications, $product_notifications);
+        return array_merge($med_notifications, $feed_notifications, $product_notifications);// Merging all notifications
     }
 
 }
