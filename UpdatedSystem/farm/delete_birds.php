@@ -20,20 +20,20 @@ $db = $database->getConnection();
 
 $bird = new Bird($db);
 
-if (isset($_GET['delete'])) {
-    $batch_id = $_GET['delete'];
+if (isset($_GET['batch_id'])) {
+    $batch_id = $_GET['batch_id'];
     
    
     if ($bird->delete($batch_id)) {
         
-        header("Location: birds.php");
+        header("Location: birds.php?deleted successfull");
         
     } else {
         echo "Failed to delete batch.";
     }
     exit();
 } else {
-    header("Location: birds.php");
+    header("Location: birds.php?mistale");
     exit();
 }
 ?>

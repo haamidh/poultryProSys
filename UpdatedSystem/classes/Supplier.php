@@ -130,9 +130,10 @@ class Supplier {
     }
 
     // Method to read all suppliers
-    public function readAll() {
-        $query = "SELECT sup_id, sup_name, address, mobile, city, email FROM " . $this->table_name;
+    public function readAll($user_id) {
+        $query = "SELECT sup_id, sup_name, address, mobile, city, email FROM " . $this->table_name . " WHERE user_id=:user_id";
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

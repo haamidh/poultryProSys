@@ -5,6 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../classes/config.php';
 require_once '../classes/Bird.php';
 require_once '../classes/checkLogin.php';
+require_once '../classes/Validation.php';
+
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -30,6 +32,10 @@ $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $suppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$batchErr = $dateErr = $supErr = $ageErr = $typeErr = $priceErr = $numErr = "";
+$errors = false;
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = htmlspecialchars(strip_tags($_POST['user_id']));
     $batch = htmlspecialchars(strip_tags($_POST['batch']));
@@ -51,12 +57,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bird->setTotalCost($total_cost);
     $bird->setDate($date);
 
-    if ($bird->create($user_id)) {
-        header("Location: birds.php?message=New batch added successfully.");
-        exit();
-    } else {
-        $error_message = "Something went wrong. Please try again.";
-        echo $error_message;
+    if (!Validation::validateTextField($batch, $batchErr)) {
+        $errors = true;
+    }
+
+    if (empty($bird->setSupId($sup_id))) {
+        $supErr = "*Please select supplier";
+        $errors = true;
+    }
+
+    if (!Validation::validateNumberField($age, $ageErr)) {
+        $errors = true;
+    }
+
+    if (empty($bird_type)) {
+        $birdErr = "*Please select bird type";
+        $errors = true;
+    }
+
+    if (!Validation::validateAmount($unit_price, $priceErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateNumberField($quantity, $numErr)) {
+        $errors = true;
+    }
+
+    if (!$errors) {
+        if ($bird->create($user_id)) {
+            header("Location: birds.php?message=New batch added successfully.");
+            exit();
+        } else {
+            $error_message = "Something went wrong. Please try again.";
+            echo $error_message;
+        }
     }
 }
 
@@ -155,6 +189,7 @@ $frame->first_part($farm);
                                         <label class="col-sm-3 col-form-label">Batch:</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="batch" value="<?php echo $next_batch; ?>" readonly>
+                                            <small class="text-danger"><?php echo $batchErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -163,6 +198,7 @@ $frame->first_part($farm);
                                         <label class="col-sm-3 col-form-label">Date:</label>
                                         <div class="col-sm-9">
                                             <input type="date" class="form-control" name="date" required>
+                                            <small class="text-danger"><?php echo $dateErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -181,7 +217,8 @@ $frame->first_part($farm);
                                                         <?php echo htmlspecialchars($supplier['sup_name']); ?>
                                                     </option>
                                                 <?php endforeach; ?>
-                                            </select>    
+                                            </select>  
+                                            <small class="text-danger"><?php echo $supErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -190,6 +227,7 @@ $frame->first_part($farm);
                                         <label class="col-sm-3 col-form-label">Age:</label>
                                         <div class="col-sm-9">
                                             <input type="number" class="form-control" name="age" id="age" required>
+                                            <small class="text-danger"><?php echo $ageErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -206,6 +244,7 @@ $frame->first_part($farm);
                                         <input class="form-check-input" type="radio" name="bird_type" value="HEN" required>
                                         <label class="form-check-label">Hen</label>
                                     </div>
+                                    <small class="text-danger"><?php echo $typeErr ?></small>
                                 </div>
 
                             </div>
@@ -217,6 +256,7 @@ $frame->first_part($farm);
                                         <label class="col-sm-4 col-form-label">Unit Price:</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" name="unit_price" id="unitPrice" required>
+                                            <small class="text-danger"><?php echo $priceErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -225,6 +265,7 @@ $frame->first_part($farm);
                                         <label class="col-sm-5 col-form-label">Number of Birds:</label>
                                         <div class="col-sm-7">
                                             <input type="number" class="form-control" name="quantity" id="quantity" required>
+                                            <small class="text-danger"><?php echo $numErr ?></small>
                                         </div>
                                     </div>
                                 </div>

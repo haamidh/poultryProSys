@@ -58,7 +58,7 @@ $stmt->execute();
 $cities = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Read all suppliers
-$suppliers = $supplier->readAll();
+$suppliers = $supplier->readAll($user_id);
 ?>
 <style>
     .form-label {

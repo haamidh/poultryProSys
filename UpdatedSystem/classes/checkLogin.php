@@ -14,9 +14,9 @@ class CheckLogin
             exit();
         }
 
-        // Call the checkStatus function
+        // CheckStatus and checkAdmin
         self::checkStatus($_SESSION['user_id'], $_SESSION['status']);
-
+        
         // Verify user existence in database and role
         $database = new Database();
         $db = $database->getConnection();
@@ -27,6 +27,10 @@ class CheckLogin
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if($_SESSION['role']=='admin'){
+        self::checkAdmin($_SESSION['user_id'], $user['is_admin']);
+        }
 
         if ($user) {
             return $user;
@@ -51,6 +55,21 @@ class CheckLogin
         if ($status == 0) {
             // User is blocked
             header("Location: login.php?status=blocked");
+            exit();
+        }
+    }
+    
+    public static function checkAdmin($user_id, $is_admin)
+    {
+        // Ensure session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Verify the admin
+        if ($is_admin == 0) {
+            
+            header("Location: ../login.php?status=Unautherized login");
             exit();
         }
     }

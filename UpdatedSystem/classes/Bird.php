@@ -105,6 +105,7 @@ class Bird implements crud {
         $this->date = $date;
     }
 
+    //Function to get next batch
     public function getNextBatch($user_id) {
         $query = "SELECT MAX(batch) as max_batch FROM " . $this->table_name . " WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -122,6 +123,7 @@ class Bird implements crud {
         return 'B ' . str_pad($number, 3, '0', STR_PAD_LEFT);
     }
 
+    //Function to create new batch
     public function create($user_id) {
         $query = "INSERT INTO " . $this->table_name . " (user_id, batch, sup_id, bird_type, age, unit_price, quantity, total_cost, date) VALUES (:user_id, :batch, :sup_id, :bird_type, :age, :unit_price, :quantity, :total_cost, :date)";
         $stmt = $this->conn->prepare($query);
@@ -139,6 +141,7 @@ class Bird implements crud {
         return $stmt->execute();
     }
 
+    //Function to retrieve all batches
     public function read($user_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -146,7 +149,6 @@ class Bird implements crud {
         $stmt->execute();
         $all_birds = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Sort data by date
         usort($all_birds, function ($a, $b) {
             return strtotime($b['date']) - strtotime($a['date']);
         });
@@ -154,6 +156,7 @@ class Bird implements crud {
         return $all_birds;
     }
 
+    //Function to retrieve all data of one batch
     public function readOne($batch_id) {
         $query = "SELECT batch, sup_id, bird_type, age, unit_price, quantity, total_cost, date 
                   FROM " . $this->table_name . " 
@@ -179,13 +182,12 @@ class Bird implements crud {
         return $row;
     }
 
-    // Method to update a batch of birds
+    // Function to update a batch
     public function update($batch_id) {
         $query = "UPDATE " . $this->table_name . " SET sup_id = :sup_id,  bird_type = :bird_type, age= :age, unit_price = :unit_price, quantity = :quantity, total_cost = :total_cost, date = :date WHERE batch_id = :batch_id ";
 
         $stmt = $this->conn->prepare($query);
 
-        // Sanitize input
         $this->sup_id = htmlspecialchars(strip_tags($this->sup_id));
         $this->bird_type = htmlspecialchars(strip_tags($this->bird_type));
         $this->age = htmlspecialchars(strip_tags($this->age));
@@ -194,7 +196,6 @@ class Bird implements crud {
         $this->total_cost = htmlspecialchars(strip_tags($this->total_cost));
         $this->date = htmlspecialchars(strip_tags($this->date));
 
-        // Bind values
         $stmt->bindParam(':batch_id', $batch_id);
         $stmt->bindParam(':sup_id', $this->sup_id);
         $stmt->bindParam(':bird_type', $this->bird_type);
@@ -210,14 +211,13 @@ class Bird implements crud {
         return false;
     }
 
+    //Function to delete a batch
     public function delete($batch_id) {
         $query = "DELETE FROM " . $this->table_name . " WHERE batch_id = :batch_id ";
         $stmt = $this->conn->prepare($query);
 
-        // Bind the batch_id parameter
         $stmt->bindParam(':batch_id', $batch_id);
 
-        // Execute the query
         if ($stmt->execute()) {
             return true;
         } else {
@@ -225,6 +225,7 @@ class Bird implements crud {
         }
     }
 
+    //Function to retrieve only the batch of specific batch
     public function getBatch($batch_id) {
         $query = "SELECT batch FROM " . $this->table_name . " WHERE batch_id = :batch_id";
 
@@ -238,7 +239,8 @@ class Bird implements crud {
 
         return $batch['batch'];
     }
-    
+
+     //Function to retrieve all data of one batch
     public function getBatchDetails($batch_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE batch_id = :batch_id";
 
@@ -253,7 +255,7 @@ class Bird implements crud {
         return $batch;
     }
 
-    // Method to get the health status for a specific batch ID
+    //Function to get the health status of a specific batch
     public function getHealthStatus($batch_id) {
         $query = "SELECT * FROM health_status WHERE batch_id = :batch_id";
 
@@ -268,7 +270,7 @@ class Bird implements crud {
         return $healthStatus;
     }
 
-    // Method to get product details for a specific batch ID
+    //Function to get product details of a specific batch
     public function getProductDetails($batch_id) {
         $query = "SELECT * FROM product_stock WHERE batch_id = :batch_id";
 
@@ -283,6 +285,7 @@ class Bird implements crud {
         return $productDetails;
     }
 
+    //Function to get the production birds of the specific batch
     public function getProductionBirds($batch_id) {
         $query = "SELECT SUM(no_birds) as total_birds FROM product_stock WHERE batch_id = :batch_id";
         $stmt = $this->conn->prepare($query);
@@ -324,7 +327,7 @@ class Bird implements crud {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['unit_price'] : null;
     }
-    
+
     public function getHealthDetails($status_id) {
         $query = "SELECT * FROM health_status WHERE status_id = :status_id";
 

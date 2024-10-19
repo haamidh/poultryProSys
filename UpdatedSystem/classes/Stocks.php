@@ -203,5 +203,27 @@ class Stocks {
         ];
     }
 
+    public function getProductAvailableQuantity($product_id) {
+        $query = "
+        SELECT p.product_name AS detail, 
+               SUM(ps.quantity - COALESCE(o.quantity, 0)) AS available_quantity
+        FROM product_stock ps
+        JOIN products p ON ps.product_id = p.product_id
+        LEFT JOIN orders o ON ps.product_id = o.product_id AND ps.created_at <= o.created_at
+        WHERE ps.user_id = :farm_id
+        AND ps.product_id = :product_id
+        GROUP BY p.product_id, p.product_name
+        ORDER BY p.product_name
+    ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':farm_id', $this->farm_id);
+        $stmt->bindParam(':product_id', $product_id);
+
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);  // Return only a single product's quantity
+    }
+
 }
+
 ?>
