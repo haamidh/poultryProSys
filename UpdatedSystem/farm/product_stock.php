@@ -148,6 +148,8 @@ $frame->first_part($farm);
                                     </div>
                                 </div>
                                 <?php
+                            }else{
+                                $no_birds=0;
                             }
                             ?>
 

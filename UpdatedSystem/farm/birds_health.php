@@ -4,6 +4,8 @@ if (session_status() == PHP_SESSION_NONE)
 
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
+require_once '../classes/Validation.php';
+
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -17,6 +19,9 @@ $con = $database->getConnection();
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 $frame = new Frame();
 $frame->first_part($farm);
+
+$batchErr = $dateErr = $supErr = $ageErr = $typeErr = $priceErr = $numErr = "";
+$errors = false;
 
 try {
     // Fetch all batches for the dropdown
@@ -81,6 +86,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $query->bindParam(':no_illness', $no_illness);
         $query->bindParam(':no_deaths', $no_deaths);
         $query->bindParam(':description', $description);
+
+        if (!Validation::validateTextField($batch, $batchErr)) {
+            $errors = true;
+        }
+
+        if (empty($batch_id)) {
+            $batchErr = "*Please select batch";
+            $errors = true;
+        }
+
+        if (!Validation::validateNumberField($age, $ageErr)) {
+            $errors = true;
+        }
+
+        if (empty($bird_type)) {
+            $birdErr = "*Please select bird type";
+            $errors = true;
+        }
 
         if ($query->execute()) {
             echo "<script>window.location.href = 'birds_health.php?batch_id=$batch_id';</script>";

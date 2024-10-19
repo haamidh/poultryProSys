@@ -6,7 +6,6 @@ require_once '../classes/config.php';
 require_once '../classes/Bird.php';
 require_once '../classes/checkLogin.php';
 require_once '../classes/Validation.php';
-
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -15,16 +14,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
 }
 
 $user_id = $_SESSION['user_id'];
-
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 
 $database = new Database();
 $db = $database->getConnection();
 
 $bird = new Bird($db);
-
 $next_batch = $bird->getNextBatch($user_id);
-
 
 $query = "SELECT sup_id,sup_name FROM supplier WHERE user_id = :user_id";
 $stmt = $db->prepare($query);
@@ -35,12 +31,11 @@ $suppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $batchErr = $dateErr = $supErr = $ageErr = $typeErr = $priceErr = $numErr = "";
 $errors = false;
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = htmlspecialchars(strip_tags($_POST['user_id']));
     $batch = htmlspecialchars(strip_tags($_POST['batch']));
     $sup_id = htmlspecialchars(strip_tags($_POST['sup_id']));
-    $age = htmlspecialchars(strip_tags($_POST['age'])); // Correctly retrieve the age
+    $age = htmlspecialchars(strip_tags($_POST['age']));
     $bird_type = htmlspecialchars(strip_tags($_POST['bird_type']));
     $unit_price = htmlspecialchars(strip_tags($_POST['unit_price']));
     $quantity = htmlspecialchars(strip_tags($_POST['quantity']));
@@ -111,7 +106,6 @@ $frame->first_part($farm);
         margin-top: 50px;
     }
 
-
     .form-control {
         border-radius: 8px;
         padding: 10px 15px;
@@ -173,7 +167,6 @@ $frame->first_part($farm);
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
                         <h5 class="card-title p-2 text-white mb-0"><strong style="font-size:25px;">Add New Batch</strong></h5>
-
                     </div>
                     <div class="card-body">
                         <form id="batchForm" action="add_birds.php" method="post">
@@ -203,7 +196,6 @@ $frame->first_part($farm);
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="row px-2">
                                 <div class="col">
@@ -235,8 +227,8 @@ $frame->first_part($farm);
 
                             <div class="row px-2 mb-2">
                                 <div class="form-group">
-                                    <label class=" col-form-label">Type:</label>
-                                    <div class="form-check form-check-inline mx-5" >
+                                    <label class="col-form-label">Type:</label>
+                                    <div class="form-check form-check-inline mx-5">
                                         <input class="form-check-input" type="radio" name="bird_type" value="CHICK" required>
                                         <label class="form-check-label">Chick</label>
                                     </div>
@@ -246,50 +238,45 @@ $frame->first_part($farm);
                                     </div>
                                     <small class="text-danger"><?php echo $typeErr ?></small>
                                 </div>
-
                             </div>
-
 
                             <div class="row px-2">
                                 <div class="col">
                                     <div class="row">
                                         <label class="col-sm-4 col-form-label">Unit Price:</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="unit_price" id="unitPrice" required>
-                                            <small class="text-danger"><?php echo $priceErr ?></small>
+                                            <input type="text" class="form-control" name="unit_price" id="priceInput" required onkeyup="validatePrice()">
+                                            <small id="priceError" class="text-danger"></small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <label class="col-sm-5 col-form-label">Number of Birds:</label>
-                                        <div class="col-sm-7">
-                                            <input type="number" class="form-control" name="quantity" id="quantity" required>
+                                        <label class="col-sm-4 col-form-label">Quantity:</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control" name="quantity" id="quantity" required onkeyup="calculateTotalCost()">
                                             <small class="text-danger"><?php echo $numErr ?></small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-
-                            <div class="row px-2 justify-content-center">
-                                <label class="col-sm-2 col-form-label text-center">Total:</label>
-                                <div class="col-sm-4">
-                                    <input type="text" class="form-control text-center" name="total_cost" id="totalCost" readonly required>
+                            <div class="row px-2">
+                                <div class="col">
+                                    <div class="row">
+                                        <label class="col-sm-4 col-form-label">Total Cost:</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="total_cost" id="totalCost" readonly>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-
-
-
-
-
-                            <div class="row" style="text-align:center;">
-                                <input type="submit" class="btn btn-primary" name="submit" value="Add">
-                            </div>
-
-                            <div class="row mt-2" style="text-align:center;">
-                                <a href="birds.php" class="btn btn-danger">Back</a>
+                            <div class="row">
+                                <div class="col text-center mt-3">
+                                    <button type="submit" class="btn btn-primary">Add Batch</button>
+                                    
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -298,32 +285,42 @@ $frame->first_part($farm);
         </div>
     </div>
 </main>
-<script>
-    // Get references to input fields
-    const unitPriceInput = document.getElementById('unitPrice');
-    const quantityInput = document.getElementById('quantity');
-    const totalCostInput = document.getElementById('totalCost');
-    const supIdSelect = document.getElementById('sup_id');
-    const supNameInput = document.getElementById('sup_name');
 
-    // Calculate total cost when unit price or quantity changes
-    unitPriceInput.addEventListener('input', calculateTotalCost);
-    quantityInput.addEventListener('input', calculateTotalCost);
+<script>
+    function validatePrice() {
+        const priceInput = document.getElementById('priceInput');
+        const priceError = document.getElementById('priceError');
+        const priceValue = priceInput.value;
+
+        const regex = /^(0|[1-9]\d*)(\.\d{1,2})?$/;
+
+        priceError.textContent = "";
+        priceInput.classList.remove("is-invalid");
+
+        if (priceValue.length > 0 && !regex.test(priceValue)) {
+            priceError.textContent = "Price not valid";
+            priceInput.classList.add("is-invalid");
+        } 
+
+        priceInput.value = priceValue.replace(/[^0-9.]/g, '');
+
+        if (priceInput.value.length > 0 && priceInput.value[0] === '.') {
+            priceError.textContent = "Price cannot start with a decimal point.";
+            priceInput.classList.add("is-invalid");
+        }
+        calculateTotalCost();
+    }
 
     function calculateTotalCost() {
-        // Get values of unit price and quantity
-        const unitPrice = parseFloat(unitPriceInput.value);
-        const quantity = parseFloat(quantityInput.value);
+        const priceInput = document.getElementById('priceInput').value;
+        const quantityInput = document.getElementById('quantity').value;
+        const totalCostInput = document.getElementById('totalCost');
 
-        // Calculate total cost
-        const totalCost = unitPrice * quantity;
-
-        // Update total cost input field
-        totalCostInput.value = totalCost.toFixed(2); // Assuming you want to display the total with 2 decimal places
+        if (priceInput && quantityInput) {
+            const totalCost = parseFloat(priceInput) * parseInt(quantityInput);
+            totalCostInput.value = totalCost.toFixed(2); // Format to two decimal places
+        } else {
+            totalCostInput.value = ''; // Clear total cost if inputs are invalid
+        }
     }
 </script>
-
-
-<?php
-$frame->last_part();
-?>
