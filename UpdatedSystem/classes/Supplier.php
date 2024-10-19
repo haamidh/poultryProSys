@@ -5,7 +5,8 @@ class Supplier {
     private $conn;
     private $table_name = "supplier";
     // Properties
-    private $sup_id;
+    private $sup_id;    
+    private $user_id;
     private $sup_name;
     private $address;
     private $mobile;
@@ -41,7 +42,12 @@ class Supplier {
     public function setEmail($email) {
         $this->email = $email;
     }
+    
+    function setUser_id($user_id) {
+        $this->user_id = $user_id;
+    }
 
+    
     // Getter methods
     public function getSup_id() {
         return $this->sup_id;
@@ -66,14 +72,20 @@ class Supplier {
     public function getEmail() {
         return $this->email;
     }
+    
+    function getUser_id() {
+        return $this->user_id;
+    }
 
+    
     // Method to create a new supplier
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . " (sup_name, address, mobile, city, email) VALUES (:sup_name, :address, :mobile, :city, :email)";
+        $query = "INSERT INTO " . $this->table_name . " (sup_name, user_id, address, mobile, city, email) VALUES (:sup_name, :user_id, :address, :mobile, :city, :email)";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
-        $stmt->bindParam(':sup_name', $this->sup_name);
+        $stmt->bindParam(':sup_name', $this->sup_name);        
+        $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':address', $this->address);
         $stmt->bindParam(':mobile', $this->mobile);
         $stmt->bindParam(':city', $this->city);
