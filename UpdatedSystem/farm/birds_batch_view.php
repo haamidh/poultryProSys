@@ -8,13 +8,13 @@ require_once '../classes/checkLogin.php';
 require_once '../classes/Bird.php';
 require_once '../classes/Product.php';
 
-// Ensure the user is logged in and has the correct role
+// checking user id and correct role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
     header("Location: ../login.php");
     exit();
 }
 
-// Retrieve the user ID and batch ID from the session and query parameters
+//get user id and batch id 
 $user_id = $_SESSION["user_id"];
 $batch_id = isset($_GET['batch_id']) ? $_GET['batch_id'] : '';
 
@@ -23,7 +23,7 @@ if (empty($batch_id)) {
     exit();
 }
 
-// Check login and fetch farm data
+// Check login and get farm data
 $farm = CheckLogin::checkLoginAndRole($user_id, 'farm');
 
 $frame = new Frame();
@@ -42,20 +42,19 @@ $productDetails = $bird->getProductDetails($batch_id);
 if ($batch) {
     $supplierName = Bird::getSupplier($batch['sup_id'], $db);
 
-    // Calculate batch age in days
+    //Calculating batch age in days
     $importDate = new DateTime($batch['date']);
     $currentDate = new DateTime();
     $interval = $currentDate->diff($importDate);
     $batchAgeDays = $interval->days + (int) $batch['age'];
 
-    // Initialize totals for product details
     $totalQuantity = 0;
     $totalValue = 0.0;
 
     $totalIllness = 0;
     $totalDeaths = 0;
 
-    // Calculate total product details
+    //Calculating total product details
     if ($productDetails) {
         foreach ($productDetails as $product) {
             $totalQuantity += $product['quantity'];
@@ -73,7 +72,7 @@ if ($batch) {
     $production_birds = $bird->getProductionBirds($batch_id);
     $available_birds = $total_birds - ($production_birds + $totalIllness + $totalDeaths);
 
-    // Calculate Gross Profit
+    //Calculating Gross Profit
     $grossProfit = $totalValue - (float) $batch['total_cost'];
     ?>
 
@@ -89,7 +88,7 @@ if ($batch) {
 
                         <div class="row">
                             <?php
-                            // Displaying batch details
+                            // Display batch details
                             $details = [
                                 'Batch' => htmlspecialchars($batch['batch']),
                                 'Import Date' => htmlspecialchars($batch['date']),
@@ -182,7 +181,6 @@ if ($batch) {
                             <?php endif; ?>
                         </div>
 
-                        <!-- Chart Section -->
                         <div class="mt-5 mb-5">
                             <h4>Health Trend Chart</h4>
                             <canvas id="healthTrendChart" width="400" height="200"></canvas>
@@ -197,7 +195,7 @@ if ($batch) {
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Prepare data for health trend chart (unchanged)
+        //get data for health trend chart 
         const healthData = {
             labels: [<?php
                         foreach ($healthStatus as $status)

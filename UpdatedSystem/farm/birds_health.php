@@ -26,7 +26,6 @@ try {
     $stmt->execute();
     $batches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Initialize variables for chart data
     $totalGoodHealth = 0;
     $totalIllness = 0;
     $totalDeaths = 0;
