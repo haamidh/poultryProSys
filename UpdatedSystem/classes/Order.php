@@ -361,6 +361,22 @@ class Order {
             return $farm_id . $updatedId;
         }
     }
+
+    function getCustomerOrders($user_id){
+        $query = "SELECT * FROM " . $this->table_name . " WHERE cus_id = :cus_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':cus_id', $user_id);
+        $stmt->execute();
+        $all_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Sort data by date
+        usort($all_orders, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
+        });
+
+        return $all_orders;
+    }
     
 }
 

@@ -96,7 +96,7 @@ $medicines = $med->read($user_id);
 
                             <div class="mb-3">
                                 <label class="form-label">Notification Threshold:</label>
-                                <input type="text" class="form-control" id="least_quantity" name="least_quantity">
+                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" required>
                             </div>
 
                             <div class="mb-3">
