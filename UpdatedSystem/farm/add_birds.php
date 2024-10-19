@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors = true;
     }
 
-    if (empty($bird->setSupId($sup_id))) {
+    if (empty($sup_id)) {
         $supErr = "*Please select supplier";
         $errors = true;
     }
