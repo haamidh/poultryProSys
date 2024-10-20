@@ -1,6 +1,7 @@
 <?php
 
-class User {
+class User
+{
 
     private $conn;
     private $table_name = "user";
@@ -15,11 +16,13 @@ class User {
     public $status;
     public $created_at;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function emailExists() {
+    public function emailExists()
+    {
         $query = "SELECT user_id FROM " . $this->table_name . " WHERE email = :email LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $this->email);
@@ -27,7 +30,8 @@ class User {
         return $stmt->rowCount() > 0;
     }
 
-    public function register() {
+    public function register()
+    {
         $query = "INSERT INTO " . $this->table_name . " (username, role, address, city, mobile, email, password,status) VALUES (:username, :role, :address, :city, :mobile, :email, :password, :status)";
         $stmt = $this->conn->prepare($query);
 
@@ -57,7 +61,8 @@ class User {
         return false;
     }
 
-    public function login() {
+    public function login()
+    {
         $query = "SELECT user_id, username, password,role,status FROM " . $this->table_name . " WHERE email = :email";
         $stmt = $this->conn->prepare($query);
 
@@ -79,7 +84,8 @@ class User {
         return false;
     }
 
-    public function getAllFarms() {
+    public function getAllFarms()
+    {
         $query = "SELECT * FROM user WHERE role = :role";
         $stmt = $this->conn->prepare($query);
         $role = 'farm';
@@ -88,8 +94,9 @@ class User {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    
-    public function getAllCustomers() {
+
+    public function getAllCustomers()
+    {
         $query = "SELECT * FROM user WHERE role = :role";
         $stmt = $this->conn->prepare($query);
         $role = 'customer';
@@ -99,4 +106,13 @@ class User {
         return $result;
     }
 
+    public function userDetails($user_id)
+    {
+        $query = "SELECT * FROM user WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

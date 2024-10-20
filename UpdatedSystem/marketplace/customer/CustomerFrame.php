@@ -1,11 +1,13 @@
 <?php
 
-class CustomerFrame {
+class CustomerFrame
+{
 
     public function __construct() {}
 
-    public function first_part($customer) {
-        ?>
+    public function first_part($customer)
+    {
+?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -21,22 +23,15 @@ class CustomerFrame {
                 }
 
                 .nav-item:hover {
-                    background-color: #16a085;
-                }
-
-                .dropdown-item {
-                    font-weight: bold;
-                }
-
-                .dropdown-item:hover {
-                    background-color: #16a085;
-                    color: white;
+                    background-color: #508C9B;
+                    /* Lighter shade of teal for hover effect */
+                    color: #ffffff;
                 }
             </style>
         </head>
 
         <body>
-            <nav class="navbar navbar-expand-lg" style="background-color: #1abc9c;">
+            <nav class="navbar navbar-expand-lg" style="background-color: #bdc3c7;">
                 <div class="container-fluid p-0">
                     <div class="navbar-brand text-center mx-auto">
                         <h4 style="font-weight: bold; font-size: 20px;"><?php echo strtoupper(htmlspecialchars($customer['username'])); ?></h4>
@@ -51,7 +46,7 @@ class CustomerFrame {
             <div class="container-fluid p-0">
                 <div class="row g-0">
                     <nav class="col-lg-2 col-md-3 col-sm-4">
-                        <div class="navbar-collapse collapse show p-3 vh-100" id="navbarNavDropdown" style="background-color: #16a085;">
+                        <div class="navbar-collapse collapse show p-3 vh-100" id="navbarNavDropdown" style="background-color: #1e656d;">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link text-white" href="dashboard.php">
@@ -63,11 +58,13 @@ class CustomerFrame {
                                         <i class="bi bi-cart-fill"></i> Orders
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" href="profile.php">
-                                        <i class="bi bi-person-fill"></i> Profile
+                                    <a class="nav-link text-white" href="http://localhost/poultryProSys/UpdatedSystem/marketplace.php">
+                                        <i class="bi bi-shop"></i> Marketplace
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a href="../../logout.php" class="nav-link text-white">
                                         <i class="bi bi-box-arrow-right"></i> Logout
@@ -76,17 +73,18 @@ class CustomerFrame {
                             </ul>
                         </div>
                     </nav>
-                    <?php
-                }
+                <?php
+            }
 
-                public function last_part() {
-                    ?>
+            public function last_part()
+            {
+                ?>
                 </div>
             </div>
         </body>
 
         </html>
-        <?php
-    }
-}
+<?php
+            }
+        }
 ?>

@@ -43,13 +43,14 @@ if (!empty($row)) { // Check if product found
                 <div class="col-md-10">
                     <div class="card">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 d-flex align-items-center justify-content-center">
                                 <div class="images p-3">
                                     <div class="image-container text-center p-4">
                                         <img src="<?php echo !empty($row['product_img']) ? $row['product_img'] : 'default_image.jpg'; ?>" alt="Product Image">
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center ">
                                 <div class="product p-4">
                                     <div class="mt-4 mb-3">
