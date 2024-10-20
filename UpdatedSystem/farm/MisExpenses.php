@@ -83,15 +83,151 @@ $misEx = $misEx->read($user_id);
 <head>
     <title>Expenses</title>
     <style>
-        .form-label {
-            text-align: left;
-            display: block;
-            /* Ensures it behaves like a block-level element */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f8fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
         }
 
         .card {
             border: none;
             border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background-color: #356854;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .card-body {
+            background-color: #F5F5F5;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            height: 45px;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+
+        .form-label {
+            text-align: left;
+            display: block;
+            font-weight: bold;
+        }
+
+        .btn {
+            background-color: #3E497A;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #2c3665;
+        }
+
+        .table-responsive {
+            margin-top: 20px;
+        }
+
+        .table {
+            width: 100%;
+            background-color: #fff;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .table thead {
+            background-color: #3E497A;
+            color: white;
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .table tbody tr {
+            background-color: #fff;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f0f2f5;
+        }
+
+        .table tbody tr td {
+            border-top: 1px solid #e9ecef;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .input-group input {
+            border-radius: 5px;
+            height: 45px;
+            padding: 10px;
+        }
+
+        .input-group span {
+            background-color: white;
+            border: none;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .card-header {
+                padding: 10px;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .form-control {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -99,179 +235,151 @@ $misEx = $misEx->read($user_id);
 <body>
     <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
         <div class="container">
-            <div class="row my-5 text-center">
+            <div class="row my-5">
 
-                <div class="col-lg-5 col-md-10 col-12 mb-3 px-5">
+                <!-- Expense Form Section -->
+                <div class="col-lg-5 col-md-10 col-12 mb-3">
                     <div class="card shadow">
-                        <div class="card-header p-3 text-center" style="background-color: #356854;">
+                        <div class="card-header" style="background-color: #356854;">
                             <h5 class="card-title text-white mb-0">
-                                <strong style="font-size: 24px;">Add Expenses </strong>
+                                <strong style="font-size: 24px;">Add Expenses</strong>
                             </h5>
                         </div>
-                        <div class="card-body" style="background-color: #F5F5F5;"></div>
-
-
-                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-
-                            <div class="col-sm-6">
-                                <div class="row">
-                                    <label class="col-sm-8 col-form-label">Select Category:</label>
+                        <div class="card-body" style="background-color: #F5F5F5;">
+                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                                <div class="mb-3">
+                                    <label for="category_id" class="form-label">Select Category:</label>
+                                    <select name="category_id" class="form-control" required>
+                                        <option disabled selected>Select Category</option>
+                                        <?php foreach ($categories as $category) { ?>
+                                            <option value="<?= $category['category_id'] ?>">
+                                                <?= $category['category_name'] ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <select name="category_id" class="form-control" required>
-                                            <option disabled selected>Select Category</option>
-                                            <?php foreach ($categories as $category) { ?>
-                                                <option value="<?= $category['category_id'] ?>">
-                                                    <?= $category['category_name'] ?>
-                                                </option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="expense_name" class="form-label">Expense Name</label>
+                                    <input type="text" class="form-control" id="expense_name" name="expense_name" placeholder="e.g: transportation, light bill" required>
                                 </div>
-                            </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="staticEmail" class="form-control">Expense_name</label>
-                        <input type="text" class="form-control" id="expense_name"
-                            placeholder="e.g : transportation,lightbill" name="expense_name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="staticEmail" class="form-control">Handled_by</label>
-                        <input type="text" class="form-control" id="handled_by" name="handled_by">
+                                <div class="mb-3">
+                                    <label for="handled_by" class="form-label">Handled By</label>
+                                    <input type="text" class="form-control" placeholder="Name of the person who performed this expense" id="handled_by" name="handled_by" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="expense_amount" class="form-label">Expense Amount</label>
+                                    <input type="number" class="form-control" id="expense_amount" name="expense_amount" placeholder="e.g: Rs.100/=" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="misc_description" class="form-label">Miscellaneous Description</label>
+                                    <input type="text" class="form-control" id="misc_description" name="misc_description" placeholder="Enter description">
+                                </div>
+                                <div class="mb-3">
+    <label for="payment_method" class="form-label">Payment Method</label>
+    <select class="form-control" id="payment_method" name="payment_method" required>
+        <option value="" disabled selected>Select Payment Method</option>
+        <option value="cheque">Cheque</option>
+        <option value="cash">Cash</option>
+        <option value="card">Card</option>
+        <option value="online">Online Payment</option>
+        <option value="bank_transfer">Bank Transfer</option>
+    </select>
+</div>
 
+                                <div class="mb-3">
+                                    <label for="date" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="date" name="date" required>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <input type="submit" class="btn" value="Submit">
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="staticEmail" class="form-control">Expense_amount</label>
-                        <input type="text" class="form-control" id="expense_amount" placeholder="e.g : Rs.100/="
-                            name="expense_amount">
-
-                    </div>
-                    <!-- <div class="mb-3">
-        <label for="inputPassword" class="form-control">category_description</label>
-          <input type="text" class="form-control" id="category_description" name="category_description" placeholder="detailed description">
-      </div> -->
-                    <div class="mb-3">
-                        <label for="category_description" class="form-control">Misc_description</label>
-                        <input type="text" class="form-control" id="misc_description" name="misc_description"
-                            placeholder="detailed description">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="category_description" class="form-control">Payment_method</label>
-                        <input type="text" class="form-control" id="payment_method" name="payment_method"
-                            placeholder="cheque,cash,card">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="date" class="form-control">Date</label>
-                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter the date"required>
-                            
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <input type="submit" id="submit" value="submit">
-                    </div>
-
-
-                    </form>
                 </div>
-                <!-- Supplier Details Section -->
+
+                <!-- Miscellaneous Expenses Details Section -->
                 <div class="col-lg-7 col-md-10 col-12 mb-3">
-                <div class="card shadow">
-                    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
-                        <h5 class="card-title text-white mb-0">
-                            <strong style="font-size:25px;">Miscellaneous Expenses Details</strong>
-                        </h5>
-                        <div class="input-group" style="width: 250px;">
-                            <input type="text" id="searchSupplierInput" class="form-control" placeholder="Search Expenses name..." onkeyup="searchcategory()">
-                            <span class="input-group-text">
-                                <i class="bi bi-search" style="color: #3E497A;"></i>
-                            </span>
+                    <div class="card shadow">
+                        <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
+                            <h5 class="card-title text-white mb-0">
+                                <strong style="font-size: 25px;">Miscellaneous Expenses Details</strong>
+                            </h5>
+                            <div class="input-group" style="width: 250px;">
+                                <input type="text" id="searchSupplierInput" class="form-control" placeholder="Search Expenses name..." onkeyup="searchMiscellaneous()">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search" style="color: #3E497A;"></i>
+                                </span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0 table-striped table-bordered text-center">
-                                <thead style="background-color: #3E497A; color: white;">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Expenses Name</th>
-                                        <th scope="col">Handled By</th>
-                                        <th scope="col">Misc_amount</th>
-                                        <th scope="col" style="width:32%">Option</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $serialnum = 0;
-                                    foreach ($misEx as $misEx) {
-                                        $serialnum++;
-                                        ?>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0 table-striped table-bordered text-center">
+                                    <thead style="background-color: #3E497A; color: white;">
                                         <tr>
-                                            <th><?php echo $serialnum; ?></th>
-                                            <td><?php echo $misEx['expense_name']; ?></td>
-                                            <td><?php echo $misEx['handled_by']; ?></td>
-                                            <td><?php echo $misEx['expense_amount']; ?></td>
-                                            <td>
-                                                <a href="edit_MisExpenses.php?category_id=<?php echo  $misEx['category_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
-                                                <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $misEx['category_id']; ?>)">Delete</button>
-                                            </td>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Expense Name</th>
+                                            <th scope="col">Handled By</th>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col" style="width: 32%">Option</th>
                                         </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $serialnum = 0;
+                                        foreach ($misEx as $misEx) {
+                                            $serialnum++;
+                                        ?>
+                                            <tr>
+                                                <th><?php echo $serialnum; ?></th>
+                                                <td><?php echo $misEx['expense_name']; ?></td>
+                                                <td><?php echo $misEx['handled_by']; ?></td>
+                                                <td><?php echo $misEx['expense_amount']; ?></td>
+                                                <td>
+                                                    <a href="edit_MisExpenses.php?expense_id=<?php echo $misEx['expense_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
+                                                    <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $misEx['expense_id']; ?>)">Delete</button>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
 
             </div>
         </div>
-        </div>
+    </main>
 
-        </main>
-
-        <!-- Confirmation for Deletion -->
-<script>
-    function myFunction(category_id) {
-        if (confirm("Are you sure you want to delete this Expense?")) {
-            window.location.href = "delete_MisExpenses.php?category_id=" + category_id;
+    <!-- Confirmation for Deletion -->
+    <script>
+        function myFunction(category_id) {
+            if (confirm("Are you sure you want to delete this Expense?")) {
+                window.location.href = "delete_MisExpenses.php?category_id=" + category_id;
+            }
         }
-    }
 
-    function searchMiscellenous() {
-        var input = document.getElementById("searchMiscellenousInput");
-        var filter = input.value.toUpperCase();
-        var table = document.querySelector(".table");
-        var rows = table.getElementsByTagName("tr");
+        function searchMiscellaneous() {
+            var input = document.getElementById("searchSupplierInput");
+            var filter = input.value.toUpperCase();
+            var table = document.querySelector(".table");
+            var rows = table.getElementsByTagName("tr");
 
-        for (var i = 1; i < rows.length; i++) {
-            var supplierName = rows[i].getElementsByTagName("td")[0];
-            var contact = rows[i].getElementsByTagName("td")[1];
-            var email = rows[i].getElementsByTagName("td")[2];
-
-            if (expensename || contact || email) {
-                var nameValue = expensename.textContent ||expensename.innerText;
-                var contactValue = contact.textContent || contact.innerText;
-                var emailValue = email.textContent || email.innerText;
-
-                if (
-                        nameValue.toUpperCase().indexOf(filter) > -1 ||
-                        contactValue.toUpperCase().indexOf(filter) > -1 ||
-                        emailValue.toUpperCase().indexOf(filter) > -1
-                        ) {
-                    rows[i].style.display = "";
-                } else {
-                    rows[i].style.display = "none";
+            for (var i = 1; i < rows.length; i++) {
+                var expenseName = rows[i].getElementsByTagName("td")[1];
+                if (expenseName) {
+                    var nameValue = expenseName.textContent || expenseName.innerText;
+                    if (nameValue.toUpperCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
                 }
             }
         }
-    }
-</script>
-
+    </script>
 
 </body>
 

@@ -25,20 +25,20 @@ $frame->first_part($farm);
 $misEx = new MisExpenses($con);
 
 // Get category ID from GET request
-$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
+$expense_id = isset($_GET['expense_id']) ? $_GET['expense_id'] : '';
 
-if ($category_id) {
+if ($expense_id) {
     // Get expense details
-    $category_details = $misEx->readOne($category_id);
-    if ($category_details) {
+    $expense_details = $misEx->readOneExpense($expense_id);
+    if ($expense_details) {
         // Set values for form fields
-        $category_id = $category_details['category_id'];
-        $expense_name = $category_details['expense_name'];
-        $handled_by = $category_details['handled_by'];
-        $expense_amount = $category_details['expense_amount'];
-        $misc_description = $category_details['misc_description'];
-        $payment_method = $category_details['payment_method'];
-        $date = $category_details['date'];
+        $expense_id = $expense_details['expense_id'];
+        $expense_name = $expense_details['expense_name'];
+        $handled_by = $expense_details['handled_by'];
+        $expense_amount = $expense_details['expense_amount'];
+        $misc_description = $expense_details['misc_description'];
+        $payment_method = $expense_details['payment_method'];
+        $date = $expense_details['date'];
     } else {
         echo "No category found with the provided ID.";
         exit();
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $misEx->setDate($_POST['date']);
 
     // Update the expense
-    if ($misEx->update($category_id)) {
+    if ($misEx->update($expense_id)) {
         header("Location: MisExpenses.php?msg=Category Updated Successfully");
         ob_end_flush();
         exit();
@@ -91,19 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="row p-2">
                             <div class="col">
                                 <div class="row">
-                                    <label class="col-sm-8 col-form-label">Select Category:</label>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <select name="category_id" class="form-control" required>
-                                            <option disabled>Select Category</option>
-                                            <?php foreach ($categories as $category) { ?>
-                                                <option value="<?= $category['category_id']; ?>" <?= ($category['category_id'] == $category_id) ? 'selected' : ''; ?>>
-
-                                                    <?= $category['category_name']; ?>
-                                                </option>
-                                            <?php } ?>
-                                        </select>
+                                    
                                     </div>
                                 </div>
                             </div>
