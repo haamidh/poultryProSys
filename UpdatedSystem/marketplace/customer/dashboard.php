@@ -92,6 +92,17 @@ $customerDetails = $user->userDetails($user_id);  // Fetch customer details
         text-align: center;
         /* Center text horizontally */
     }
+
+    .list-group-item {
+        background-color: #f8f9fa;
+        /* Light background color for list items */
+        transition: background-color 0.3s ease;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9ecef;
+        /* Slightly darker on hover */
+    }
 </style>
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 overflow-auto">
@@ -99,26 +110,46 @@ $customerDetails = $user->userDetails($user_id);  // Fetch customer details
         <div class="row my-4 text-center">
             <div class="col-lg-5 col-md-5 col-12 mb-3">
                 <div>
-                    <img src="../../images/abdul.jpeg" alt="Profile Image" class="profile-image"> <!-- Default image -->
+                    <img src="../../images/profile.png" alt="Profile Image" class="profile-image"> <!-- Default image -->
                 </div>
             </div>
 
             <!-- Display Customer Details -->
-            <div class="col-lg-6 col-md-7 col-12 mb-3 mt-5">
-                <div class="card">
+            <div class="col-lg-6 col-md-7 col-12 mb-3 mt-2 ">
+                <div class="card shadow-lg border-0">
                     <div class="card-body">
-                        <h5 class="card-title">Customer Details</h5>
+                        <h5 class="card-title text-center text-success">Customer Details</h5>
+                        <hr>
                         <?php if (!empty($customerDetails)) : ?>
-                            <p><strong>Name:</strong> <?php echo htmlspecialchars($customerDetails['username']); ?></p> <!-- No [0] needed -->
-                            <p><strong>Email:</strong> <?php echo htmlspecialchars($customerDetails['email']); ?></p>
-                            <p><strong>Phone:</strong> <?php echo htmlspecialchars($customerDetails['mobile']); ?></p>
-                            <p><strong>Address:</strong> <?php echo htmlspecialchars($customerDetails['address']); ?></p>
+                            <div class="list-group">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Name:</strong>
+                                    <span><?php echo htmlspecialchars($customerDetails['username']); ?></span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Email:</strong>
+                                    <span><?php echo htmlspecialchars($customerDetails['email']); ?></span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Phone:</strong>
+                                    <span><?php echo htmlspecialchars($customerDetails['mobile']); ?></span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Address:</strong>
+                                    <span><?php echo htmlspecialchars($customerDetails['address']); ?></span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>City:</strong>
+                                    <span><?php echo htmlspecialchars($customerDetails['city']); ?></span>
+                                </div>
+                            </div>
                         <?php else : ?>
-                            <p>No customer details available.</p>
+                            <p class="text-center">No customer details available.</p>
                         <?php endif; ?>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </main>
