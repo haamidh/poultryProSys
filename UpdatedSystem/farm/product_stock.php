@@ -36,7 +36,7 @@ $errors = false;
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
-    $batch_id = isset($_POST['batch_id']) ? $_POST['batch_id'] : null;
+    $batch_id = isset($_POST['batch_id']) ? $_POST['batch_id'] : 7;
     $no_birds = isset($_POST['no_birds']) ? $_POST['no_birds'] : 0;
     $quantity = $_POST['quantity'];
     $unit_price = $_POST['unit_price'];
