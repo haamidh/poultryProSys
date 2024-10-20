@@ -108,7 +108,7 @@ $miscellaneous = $mis->read($user_id);
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
 
                             <div class="mb-3">
-                                <label for="staticEmail" class="form-control">category_name</label>
+                                <label for="staticEmail" class="form-control">Category Name</label>
                                 <input type="text" class="form-control" id="category_name"
                                     placeholder="e.g : transportation" name="category_name">
                             </div>
