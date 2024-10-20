@@ -5,6 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../classes/config.php';
 require_once '../classes/Product.php';
 require '../classes/Stocks.php';
+require_once '../classes/Order.php';
+require_once '../classes/OrderDetails.php';
 
 require_once 'Frame.php';
 require_once '../classes/checkLogin.php';
@@ -30,7 +32,58 @@ $con = $db->getConnection();
 
 $product = new Product($con);
 $products = $product->read($user_id);
-// $product_details = $product->readOne($product_id);
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['add_order'])) {
+        $product_id = $_POST['product_id'];
+        $farm_id = $user_id;
+        $quantity = number_format($_POST['quantity'], 2);
+        $unit_price = $_POST['productPriceInput'];
+        $total = number_format($_POST['totalAmountInput'], 2);
+
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+        $city = $_POST['city'];
+
+        $order = new Order($con);
+        $orderDetails = new OrderDetails($con);
+        $order_num = $order->generateOrderNum($con,$user_id);
+        $order->setOrder_num($order_num);
+        $order->setCus_id(40);
+        $order->setProduct_id($product_id);
+        $order->setFarm_id($farm_id);
+        $order->setQuantity($quantity);
+        $order->setUnit_price($unit_price);
+        $order->setTotal($total);
+        $order->setStatus(1);
+        if($order->create()){
+            $success_message = "Order Created Successfully.";
+        } else {
+            $error_message = "Failed to Create Order";
+        }
+
+        $orderDetails->setOrder_num($order_num);
+        $orderDetails->setFirst_name($first_name);
+        $orderDetails->setLast_name($last_name);
+        $orderDetails->setEmail($email);
+        $orderDetails->setPhone_number($phone);
+        $orderDetails->setAddress($address);
+        $orderDetails->setCity($city);
+
+        if($orderDetails->create($order_num,$phone)){
+            $success_message = "Order Created Successfully.";
+        } else {
+            $error_message = "Failed to Create Order";
+        }
+
+
+    }
+
+}
 
 ?>
 
@@ -69,120 +122,132 @@ $products = $product->read($user_id);
 
                             <!-- Add Order Form -->
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                                <div class="mb-3">
-                                    <label class="form-label">Select Product</label>
-                                    <select name="product_id" id="product_id" class="form-control" required onchange="updateProductDetails()">
-                                        <option value="" disabled selected>-- Select Product --</option>
-                                        <?php foreach ($products as $singleProduct) {
-                                            // Get the stock availability for each product
-                                            $Stocks = new Stocks($con, $user_id);
-                                            $itemStock = $Stocks->getProductAvailableQuantity($singleProduct['product_id']);
-                                        ?>
-                                            <option value="<?= $singleProduct['product_id'] ?>"
-                                                data-image="../<?= $singleProduct['product_img'] ?>"
-                                                data-price="<?= $singleProduct['product_price'] ?>"
-                                                data-stock="<?= $itemStock ?>"
-                                                data-unit="<?= $singleProduct['unit'] ?>">
-                                                <?= $singleProduct['product_name'] ?>
-                                            </option>
-                                        <?php } ?>
-                                    </select>
+    <div class="mb-3">
+        <label class="form-label">Select Product</label>
+        <select name="product_id" id="product_id" class="form-control" required onchange="updateProductDetails()">
+            <option value="" disabled selected>-- Select Product --</option>
+            <?php foreach ($products as $singleProduct) {
+                // Get the stock availability for each product
+                $Stocks = new Stocks($con, $user_id);
+                $itemStock = $Stocks->getProductAvailableQuantity($singleProduct['product_id']);
+            ?>
+                <option value="<?= $singleProduct['product_id'] ?>"
+                    data-image="../<?= $singleProduct['product_img'] ?>"
+                    data-price="<?= $singleProduct['product_price'] ?>"
+                    data-stock="<?= $itemStock ?>"
+                    data-unit="<?= $singleProduct['unit'] ?>">
+                    <?= $singleProduct['product_name'] ?>
+                </option>
+            <?php } ?>
+        </select>
+    </div>
 
-                                </div>
-                                <div class="card-body text-center" style="background-color: white;">
-                                    <img id="productImage" src="" alt="Product Image" style="max-width: 150px; max-height: 150px;" />
-                                </div>
-                                <script>
-                                    function updateProductDetails() {
-                                        // Get the selected option element
-                                        var selectElement = document.getElementById("product_id");
-                                        var selectedOption = selectElement.options[selectElement.selectedIndex];
+    <div class="card-body text-center" style="background-color: white;">
+        <img id="productImage" src="" alt="Product Image" style="max-width: 150px; max-height: 150px;" />
+    </div>
 
-                                        // Get the data attributes for image, price, and stock
-                                        var productImage = selectedOption.getAttribute("data-image");
-                                        var productPrice = parseFloat(selectedOption.getAttribute("data-price"));
-                                        var availableStock = parseInt(selectedOption.getAttribute("data-stock"));
-                                        var stockUnit = selectedOption.getAttribute("data-unit");
+    <script>
+        function updateProductDetails() {
+            var selectElement = document.getElementById("product_id");
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
 
-                                        // Update the image
-                                        var imageElement = document.getElementById("productImage");
-                                        imageElement.src = productImage ? productImage : ""; // Fallback to empty if no image
+            var productImage = selectedOption.getAttribute("data-image");
+            var productPrice = parseFloat(selectedOption.getAttribute("data-price"));
+            var availableStock = parseInt(selectedOption.getAttribute("data-stock"));
+            var stockUnit = selectedOption.getAttribute("data-unit");
 
-                                        // Update the price display
-                                        var priceElement = document.getElementById("productPrice");
-                                        priceElement.textContent = productPrice ? "Price: Rs. " + productPrice : "Price not available";
+            var imageElement = document.getElementById("productImage");
+            imageElement.src = productImage ? productImage : "";
 
-                                        // Set the product price in the hidden input
-                                        document.getElementById("productPriceInput").value = productPrice;
+            var priceElement = document.getElementById("productPrice");
+            priceElement.textContent = productPrice ? "Price: Rs. " + productPrice : "Price not available";
 
-                                        // Update the available stock
-                                        var stockElement = document.getElementById("availableStock");
-                                        stockElement.textContent = availableStock ? "Available Stock: " + availableStock : "Stock not available";
+            document.getElementById("productPriceInput").value = productPrice;
 
-                                        // Update the unit
-                                        var stockUnitElement = document.getElementById("stockUnit");
-                                        stockUnitElement.textContent = stockUnit ? "" + stockUnit : "";
+            var stockElement = document.getElementById("availableStock");
+            stockElement.textContent = availableStock ? "Available Stock: " + availableStock : "Stock not available";
 
-                                        // Set max value for the quantity input field based on available stock
-                                        var quantityInput = document.getElementById("quantity");
-                                        if (availableStock && availableStock > 0) {
-                                            quantityInput.max = availableStock;
-                                            quantityInput.value = Math.min(1, availableStock); // Default to 1 or lower if no stock
-                                            quantityInput.disabled = false; // Enable input if stock is available
-                                        } else {
-                                            quantityInput.max = 0;
-                                            quantityInput.value = 0; // No stock available
-                                            quantityInput.disabled = true; // Disable input if no stock
-                                        }
+            var stockUnitElement = document.getElementById("stockUnit");
+            stockUnitElement.textContent = stockUnit ? "" + stockUnit : "";
 
-                                        // Add an event listener to the quantity input to calculate total amount
-                                        quantityInput.addEventListener('input', function() {
-                                            var quantity = parseInt(this.value);
-                                            var quantity = parseFloat(this.value);
-                                            var totalAmount = quantity * productPrice;
-                                            document.getElementById("totalAmountInput").value = totalAmount.toFixed(2); // Set total amount in the hidden input
-                                        });
-                                    }
-                                </script>
+            var quantityInput = document.getElementById("quantity");
+            if (availableStock && availableStock > 0) {
+                quantityInput.max = availableStock;
+                quantityInput.value = Math.min(1, availableStock);
+                quantityInput.disabled = false;
+            } else {
+                quantityInput.max = 0;
+                quantityInput.value = 0;
+                quantityInput.disabled = true;
+            }
 
-                                <div class="mb-3">
-                                    <p id="productPrice" style="font-weight: bold;"></p>
-                                    <input type="hidden" id="productPriceInput" name="productPriceInput" value="">
+            quantityInput.addEventListener('input', function () {
+                var quantity = parseFloat(this.value) || 0; // Allow decimal numbers
+                var totalAmount = quantity * productPrice;
+                document.getElementById("totalAmountInput").value = totalAmount.toFixed(2); // Set total amount
+            });
+        }
+    </script>
 
+    <div class="mb-3">
+        <p id="productPrice" style="font-weight: bold;"></p>
+        <input type="hidden" id="productPriceInput" name="productPriceInput" value="">
+    </div>
 
-                                </div>
+    <div class="mb-3">
+        <p id="availableStock" style="font-weight: bold;"></p>
+        <p id="stockUnit" style="font-weight: bold;"></p>
+    </div>
 
-                                <div class="mb-3">
+    <div class="mb-3 row">
+        <div class="col-md-6">
+            <label class="form-label">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" class="form-control" min="1" max="" placeholder="Select quantity">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label"><strong>Total:</strong></label>
+            <input type="number" id="totalAmountInput" class="form-control" name="totalAmountInput" value="" readonly>
+        </div>
+    </div>
 
-                                    <p id="availableStock" style="font-weight: bold;">
-                                    <p id="stockUnit" style="font-weight: bold;"></p>
-                                    </p>
+    <!-- New Section for Billing Details -->
+    <div class="mb-3">
+        <label class="form-label"><strong>Billing Details</strong></label>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label class="form-label">First Name:</label>
+                <input type="text" name="first_name" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label">Last Name:</label>
+                <input type="text" name="last_name" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label">Email:</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label">Phone Number:</label>
+                <input type="tel" name="phone" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label">Address:</label>
+                <input type="text" name="address" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label">City:</label>
+                <input type="text" name="city" class="form-control" required>
+            </div>
+        </div>
+    </div>
 
-                                </div>
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-success btn-block" name="add_order">Confirm Order</button>
+        <button type="reset" class="btn btn-danger btn-block" name="reset_order">Reset Order</button>
+    </div>
+</form>
 
-
-                                <div class="mb-3 row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Quantity:</label>
-                                        <input type="number" id="quantity" class="form-control" min="1" max="" placeholder="Select quantity">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><strong>Total:</strong></label>
-                                        <input type="number" id="totalAmountInput" class="form-control" name="totalAmountInput" value="" readonly>
-                                    </div>
-                                </div>
-
-                                
-
-                                <div class="mb-3">
-                                    <label class="form-label">Description:</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                                </div>
-
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary btn-block" name="add_med">Add Medicine</button>
-                                </div>
-                            </form>
 
                         </div>
                     </div>
