@@ -116,9 +116,9 @@ class Expenses {
         foreach ($results as &$result) {
             $result['type'] = 'miscellaneous';
             $result['date'] = $result['created_at'];
-            $result['detail'] = "Import " . $result['misc_name'];
-            $result['paid_to'] = $bird->getSupplier($result['sup_id'], $this->db);
-            $result['amount'] = $result['total'];
+            $result['detail'] = $result['expense_name'];
+            // $result['paid_to'] = $bird->getSupplier($result['sup_id'], $this->db);
+            $result['amount'] = $result['expense_amount'];
         }
         return $results;
     }
