@@ -86,6 +86,14 @@ class OrderDetails {
         return false;
     }
 
+    public function getBillingDetails($order_id){
+        $query = "SELECT * FROM " . $this->table_name . " WHERE order_id = :order_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':order_id', $order_id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 }
 
