@@ -4,18 +4,11 @@ require '../classes/config.php';
 require 'marketPlaceCRUD.php';
 
 if (!isset($_SESSION['user_id'])) {
-    // User is not logged in
     $_SESSION['error_message'] = "Please Login before purchasing";
-    // header("Location: login.php");
-    // exit();
 }
 
-// Check if the user is logged in but their role is not 'customer'
 if ($_SESSION['role'] !== 'customer') {
-    // If the user is logged in but not a customer, show the 'Login as customer' message
     $_SESSION['error_message'] = "Please Login as a customer before purchasing";
-    // header("Location: login.php");
-    // exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -47,17 +40,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'city' => $city
     );
 
-    // Set the expiry duration (in seconds)
-    $expiry_duration = 5 * 60;  // 5 minutes
+    $expiry_duration = 5 * 60; // 5 minutes
 
-    // Check if 'order_details' session array exists and has a 'created_at' key
     if (isset($_SESSION['billing_details']) && isset($_SESSION['billing_details']['created_at'])) {
-        // Calculate the time elapsed since the session array was created
         $time_elapsed = time() - $_SESSION['billing_details']['created_at'];
-
-        // If the time elapsed exceeds the expiry duration, clear the session data
         if ($time_elapsed > $expiry_duration) {
-            unset($_SESSION['billing_details']);  // delete the session array
+            unset($_SESSION['billing_details']);
         }
     }
 }
@@ -78,14 +66,81 @@ $hash = strtoupper(
 );
 ?>
 
-<html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="../header.css">
-<link rel="stylesheet" href="../marketplacestyle.css">
-<title>MarketPlace - PoultryPro</title>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../header.css">
+    <link rel="stylesheet" href="../marketplacestyle.css">
+    <title>MarketPlace - PoultryPro</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Poppins', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 15px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        h1, h4 {
+            font-weight: 600;
+        }
+        .btn-success {
+            background-color: #28a745;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 1rem;
+        }
+        .form-control[readonly] {
+            background-color: #f8f8f8;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 30px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -94,7 +149,7 @@ $hash = strtoupper(
     <div class="container">
         <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="https://images.unsplash.com/photo-1523350165414-082d792c4bcc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="" width="72" height="72">
-            <h1>Confirm Order</h1>
+            <h1 class="text-uppercase">Confirm Order</h1>
         </div>
     </div>
 
@@ -141,32 +196,32 @@ $hash = strtoupper(
                             <div class="row">
                                 <div class="col mb-3">
                                     <label for="first_name">First Name</label>
-                                    <input type="text" name="first_name" class="form-control" value="<?php echo $first_name ?>" readonly aria-label="First name">
+                                    <input type="text" name="first_name" class="form-control" value="<?php echo $first_name ?>" readonly>
                                 </div>
                                 <div class="col mb-3">
                                     <label for="last_name">Last Name</label>
-                                    <input type="text" name="last_name" class="form-control" value="<?php echo $last_name ?>" readonly aria-label="Last name">
+                                    <input type="text" name="last_name" class="form-control" value="<?php echo $last_name ?>" readonly>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label for="email">Email</label>
-                                <input type="text" name="email" class="form-control" value="<?php echo $email ?>" readonly aria-label="email">
+                                <input type="text" name="email" class="form-control" value="<?php echo $email ?>" readonly>
                             </div>
 
                             <div class="mb-3">
                                 <label for="phone">Phone</label>
-                                <input type="number" name="phone" class="form-control" value="<?php echo $phone ?>" readonly aria-label="phone">
+                                <input type="number" name="phone" class="form-control" value="<?php echo $phone ?>" readonly>
                             </div>
 
                             <div class="mb-3">
                                 <label for="address">Address</label>
-                                <input type="text" name="address" class="form-control" value="<?php echo $address ?>" readonly aria-label="Address">
+                                <input type="text" name="address" class="form-control" value="<?php echo $address ?>" readonly>
                             </div>
 
                             <div class="mb-3">
                                 <label for="city">City</label>
-                                <input type="text" name="city" class="form-control" value="<?php echo $city ?>" readonly aria-label="City">
+                                <input type="text" name="city" class="form-control" value="<?php echo $city ?>" readonly>
                             </div>
 
                             <input type="hidden" name="country" value="">
@@ -181,27 +236,21 @@ $hash = strtoupper(
                 </div>
             </form>
         </div>
-
-        <div class="d-grid gap-2">
-            
-        </div>
     </div>
 
     <script>
-        // Function to display an error message as an alert and redirect to the login page
         function showError(message) {
             if (message) {
                 alert(message);
-                window.location.href = "login.php"; // Redirect to the login page after clicking OK
+                window.location.href = "login.php";
             }
         }
 
-        // Wait for the page to fully load before showing the alert
         window.onload = function() {
             <?php
             if (isset($_SESSION['error_message'])) {
                 echo "showError('" . $_SESSION['error_message'] . "');";
-                unset($_SESSION['error_message']); // Clear the error message after displaying it
+                unset($_SESSION['error_message']);
             }
             ?>
         };
