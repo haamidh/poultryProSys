@@ -253,12 +253,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </div>
 
-                <!-- Medicine Details Section -->
+                <!-- Order Details Section -->
                 <div class="col-lg-7 col-md-10 col-12 mb-3">
                     <div class="card shadow">
                         <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #3E497A;">
                             <h5 class="card-title text-white mb-0">
-                                <strong style="font-size:25px;">Medicine Details</strong>
+                                <strong style="font-size:25px;">Order Details</strong>
                             </h5>
                             <div class="input-group" style="width: 250px;">
                                 <input type="text" id="searchMedInput" class="form-control" placeholder="Search medicine..." onkeyup="searchMedicine()">
@@ -281,22 +281,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $serialnum = 0;
-                                        foreach ($medicines as $medicine) {
-                                            $serialnum++;
+                                        // $serialnum = 0;
+                                        // foreach ($medicines as $medicine) {
+                                        //     $serialnum++;
                                         ?>
                                             <tr>
-                                                <th><?php echo $serialnum; ?></th>
-                                                <td><?php echo $medicine['med_name']; ?></td>
-                                                <td><?php echo $medicine['description']; ?></td>
+                                                <th><?php //echo $serialnum; ?></th>
+                                                <td><?php //echo $medicine['med_name']; ?></td>
+                                                <td><?php //echo $medicine['description']; ?></td>
                                                 <td>
-                                                    <a href="buy_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-primary text-dark py-1 px-2"><i class="bi bi-plus-square-fill" style="font-size:18px;"></i></a>
-                                                    <a href="use_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-warning text-dark py-1 px-2"><i class="bi bi-dash-square-fill" style="font-size:18px;"></i></a>
-                                                    <a href="edit_medicine.php?med_id=<?php echo $medicine['med_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
-                                                    <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $medicine['med_id']; ?>)">Delete</button>
+                                                    <a href="buy_medicine.php?med_id=<?php //echo $medicine['med_id']; ?>" class="btn btn-primary text-dark py-1 px-2"><i class="bi bi-plus-square-fill" style="font-size:18px;"></i></a>
+                                                    <a href="use_medicine.php?med_id=<?php //echo $medicine['med_id']; ?>" class="btn btn-warning text-dark py-1 px-2"><i class="bi bi-dash-square-fill" style="font-size:18px;"></i></a>
+                                                    <a href="edit_medicine.php?med_id=<?php //echo $medicine['med_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
+                                                    <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php //echo $medicine['med_id']; ?>)">Delete</button>
                                                 </td>
                                             </tr>
-                                        <?php } ?>
+                                        <?php // } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -311,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Confirmation for Deletion -->
     <script>
         function myFunction(med_id) {
-            if (confirm("Are you sure you want to delete this medicine?")) {
+            if (confirm("Are you sure you want to delete this order?")) {
                 window.location.href = "delete_medicine.php?med_id=" + med_id;
             }
         }
