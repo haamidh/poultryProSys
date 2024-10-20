@@ -85,7 +85,7 @@ class ProductStock implements crud {
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':product_id', $this->product_id);
         $stmt->bindParam(':quantity', $this->quantity);
-        $stmt->bindParam(':batch_id', $this->batch_id);
+        $stmt->bindParam(':batch_id', $this->batch_id, PDO::PARAM_INT);
         $stmt->bindParam(':no_birds', $this->no_birds);
         $stmt->bindParam(':unit_price', $this->unit_price);
         $stmt->bindParam(':total', $this->total);

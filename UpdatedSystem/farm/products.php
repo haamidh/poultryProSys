@@ -6,6 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once '../classes/Product.php';
+require_once '../classes/Validation.php';
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -60,10 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors = true;
     }
 
-    if (!Validation::validateNumberField($quantity, $numErr)) {
-        $errors = true;
-    }
-
+   
 
     // Initialize variables for file upload
     $target_file = 'default_image.jpg';
@@ -215,11 +213,8 @@ $products = $product->read($user_id);
                                             </div>
                                             <div class="col-sm-6 form-check">
                                                 <input type="radio" class="form-check-input" name="unit" value="piece" id="pieces" required>
-<<<<<<< Updated upstream
                                                 <label class="form-check-label" for="Pieces">Pieces</label>
-=======
-                                                <label class="form-check-label" for="pieces">Pieces</label>
->>>>>>> Stashed changes
+
                                             </div>
                                             <small class="text-danger"><?php echo $unitErr ?></small>
                                         </div>
@@ -398,17 +393,22 @@ $products = $product->read($user_id);
         const nameErr = document.getElementById('nameErr');
         const productNameValue = productNameInput.value;
 
-        const regex = /^[a-zA-Z\s]{3,}$/; // Minimum 3 alphabetic characters, allows spaces
+        const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]{2,}$/;
 
         nameErr.textContent = "";
         productNameInput.classList.remove("is-invalid");
 
         if (productNameValue.length > 0 && !regex.test(productNameValue)) {
-            nameErr.textContent = "Product name not valid (only letters and spaces, at least 3 characters).";
+            nameErr.textContent = "Product name not valid (must start with a letter and be at least 3 characters).";
             productNameInput.classList.add("is-invalid");
-            productNameInput.value = productNameValue.replace(/[^a-zA-Z\s]/g, '');
+
+            const correctedValue = productNameValue.replace(/^[^a-zA-Z]+/, '').replace(/[^a-zA-Z0-9\s-_]/g, '');
+
+            productNameInput.value = correctedValue;
         }
     }
+
+
 
     function validateCategory() {
         const categoryInput = document.getElementById('category_id');

@@ -46,6 +46,9 @@ if ($product_id) {
     exit();
 }
 
+$nameErr = $unitErr = $categoryErr = $priceErr  = $leastErr = "";
+$errors = false;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product_name = $_POST['product_name'];
     $unit = $_POST['unit'];
@@ -53,6 +56,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $selling_price = number_format($_POST['selling_price'], 2);
     $least_quantity = number_format($_POST['least_quantity'], 2);
     $description = $_POST['description'];
+
+    if (!Validation::validateTextField($product_name, $nameErr)) {
+        $errors = true;
+    }
+
+    if (empty($unit)) {
+        $unitErr = "*Please select unit";
+        $errors = true;
+    }
+
+    if (!Validation::validateNumberField($category_id, $categoryErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateAmount($selling_price, $priceErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateDecimalField($least_quantity, $leastErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateNumberField($quantity, $numErr)) {
+        $errors = true;
+    }
 
     // Initialize variables for file upload
     $target_file = 'default_image.jpg';
@@ -89,16 +117,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->setLeastQuantity($least_quantity);
     $product->setDescription($description);
 
-    // Update the product
-    if ($product->update($product_id)) {
-        $success_message = "Product updated successfully.";
-    } else {
-        $error_message = "Failed to update product.";
+    if (!$errors) {
+        // Update the product
+        if ($product->update($product_id)) {
+            $success_message = "Product updated successfully.";
+        } else {
+            $error_message = "Failed to update product.";
+        }
     }
 }
 
 // Fetch product categories for dropdown
-function fetchCategories($con) {
+function fetchCategories($con)
+{
     $query = $con->prepare('SELECT * FROM product_categories');
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -142,6 +173,7 @@ $categories = fetchCategories($con);
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <input type="text" name="product_name" class="form-control" value="<?php echo htmlspecialchars($product_name); ?>" required>
+                                            <small class="text-danger" id="nameErr"><?php echo $nameErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -158,6 +190,7 @@ $categories = fetchCategories($con);
                                                     </option>
                                                 <?php } ?>
                                             </select>
+                                            <small class="text-danger" id="categoryErr"><?php echo $categoryErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -171,6 +204,7 @@ $categories = fetchCategories($con);
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <input type="text" name="selling_price" class="form-control" value="<?php echo htmlspecialchars($product_price); ?>" required>
+                                            <small class="text-danger" id="priceError"><?php echo $priceErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -190,6 +224,7 @@ $categories = fetchCategories($con);
                                                 <input type="radio" class="form-check-input" name="unit" value="pieces" id="pieces" <?= $unit == 'pieces' ? 'checked' : '' ?> required>
                                                 <label class="form-check-label" for="pieces">Pieces</label>
                                             </div>
+                                            <small class="text-danger"><?php echo $unitErr ?></small>
                                         </div>
                                     </div>
 
@@ -218,6 +253,7 @@ $categories = fetchCategories($con);
                                         <label class="col-sm-6 col-form-label">Notification Threshold:</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="least_quantity" name="least_quantity" value="<?php echo htmlspecialchars($least_quantity); ?>">
+                                            <small class="text-danger" id="quantityErr"><?php echo $leastErr ?></small>
                                         </div>
                                     </div>
                                 </div>

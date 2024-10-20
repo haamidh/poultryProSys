@@ -5,6 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once '../classes/Product.php';
+require_once '../classes/Validation.php';
 require_once '../classes/ProductStock.php';
 require_once 'Frame.php';
 
@@ -30,13 +31,31 @@ $unit_price = 0;
 $quantity = '';
 $total = '';
 
+$batchErr = $numErr = $quantyErr = $priceErr  = "";
+$errors = false;
+
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
-    $batch_id = $_POST['batch_id'];
+    $batch_id = isset($_POST['batch_id']) ? $_POST['batch_id'] : null;
     $no_birds = isset($_POST['no_birds']) ? $_POST['no_birds'] : 0;
     $quantity = $_POST['quantity'];
     $unit_price = $_POST['unit_price'];
     $total = $_POST['total'];
+
+
+    
+    if (!Validation::validateNumberField($no_birds, $numErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateDecimalField($quantity, $quantyErr)) {
+        $errors = true;
+    }
+
+    if (!Validation::validateAmount($unit_price, $priceErr)) {
+        $errors = true;
+    }
+
 
     $productStock->setUser_id($user_id);
     $productStock->setProduct_id($product_id);
@@ -46,13 +65,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_product'])) {
     $productStock->setUnit_price($unit_price);
     $productStock->setTotal($total);
 
-    if ($productStock->create($user_id)) {
-        $success_message = "Added to stock successfully.";
-        // Redirect to the same page to avoid resubmission on refresh
-        header("Location: " . $_SERVER['PHP_SELF'] . "?product_id=" . $product_id);
-        exit();
-    } else {
-        $error_message = "Failed to add to stock.";
+    if (!$errors) {
+        if ($productStock->create($user_id)) {
+            $success_message = "Added to stock successfully.";
+            // Redirect to the same page to avoid resubmission on refresh
+            header("Location: " . $_SERVER['PHP_SELF'] . "?product_id=" . $product_id);
+            exit();
+        } else {
+            $error_message = "Failed to add to stock.";
+        }
     }
 }
 
@@ -72,14 +93,12 @@ $frame->first_part($farm);
 ?>
 
 <style>
-
     .card {
 
         border: none;
         border-radius: 10px;
 
     }
-
 </style>
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
@@ -128,7 +147,8 @@ $frame->first_part($farm);
                                                     </option>
                                                 <?php endforeach; ?>
                                                 <option value="">No batch</option>
-                                            </select>    
+                                            </select>
+                                            <small class="text-danger" id="batchErr"><?php echo $batchErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -136,18 +156,19 @@ $frame->first_part($farm);
 
                             <?php
                             if ($product_unit == 'kilogram') {
-                                ?>
+                            ?>
                                 <div class="row p-2">
                                     <div class="col">
                                         <div class="row mb-3">
                                             <label class="col-sm-3 col-form-label">Used Birds:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="no_birds" id="no_birds"  required>
+                                                <input type="text" class="form-control" name="no_birds" id="no_birds" required>
+                                                <small class="text-danger" id="numErr"><?php echo $numErr ?></small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <?php
+                            <?php
                             }
                             ?>
 
@@ -157,6 +178,7 @@ $frame->first_part($farm);
                                         <label class="col-sm-3 col-form-label">Restock Quantity:</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="quantity" id="quantity" value="<?php echo htmlspecialchars($quantity); ?>" required>
+                                            <small class="text-danger" id="quantyErr"><?php echo $quantyErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -168,6 +190,7 @@ $frame->first_part($farm);
                                         <label class="col-sm-3 col-form-label">Unit Price:</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" name="unit_price" id="unitPrice" value="<?php echo number_format(htmlspecialchars($unit_price), 2); ?>" readonly>
+                                            <small class="text-danger" id="priceErr"><?php echo $priceErr ?></small>
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +221,7 @@ $frame->first_part($farm);
 
 
 
-            <div class="col-lg-6 col-md-10 col-12 mb-3 px-5 py-5 my-5 justify-content-center" >
+            <div class="col-lg-6 col-md-10 col-12 mb-3 px-5 py-5 my-5 justify-content-center">
                 <div class="card mx-auto shadow">
                     <div class="card-header p-2 text-center" style="background-color: #1E8449;">
                         <h5 class="card-title text-white"><span style="font-weight: bold;font-size: 24px;">Stock Available</span></h5>
