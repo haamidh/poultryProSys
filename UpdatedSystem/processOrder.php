@@ -21,6 +21,88 @@ $total = $quantity * $product_price;
     <link rel="stylesheet" href="header.css">
     <title>MarketPlace - PoultryPro</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Poppins', sans-serif;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 30px;
+        }
+        .images img {
+            width: 100%;
+            max-width: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        .product h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .product h6 {
+            font-size: 1.5rem;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .about {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        .sizes h6 {
+            font-size: 1.1rem;
+            color: #28a745;
+            font-weight: 600;
+        }
+        .cart .btn-danger {
+            background-color: #dc3545;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 10px 40px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0px 8px 15px rgba(220, 53, 69, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        .fa-heart, .fa-share-alt {
+            cursor: pointer;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+        .fa-heart:hover {
+            color: #e74c3c;
+        }
+        .fa-share-alt:hover {
+            color: #007bff;
+        }
+        .cart {
+            margin-top: 30px;
+        }
+        @media (max-width: 768px) {
+            .images img {
+                max-width: 200px;
+            }
+            .product h3 {
+                font-size: 1.6rem;
+            }
+            .product h6 {
+                font-size: 1.2rem;
+            }
+            .sizes h6 {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
@@ -29,10 +111,10 @@ $total = $quantity * $product_price;
             <div class="col-md-10">
                 <div class="card">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6 d-flex justify-content-center">
                             <div class="images p-3">
                                 <div class="image-container text-center p-4">
-                                    <img src="<?php echo $row['product_img'] ?>" alt="Product Image" width="250" />
+                                    <img src="<?php echo $row['product_img'] ?>" alt="Product Image" />
                                 </div>
                             </div>
                         </div>

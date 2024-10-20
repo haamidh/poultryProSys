@@ -61,6 +61,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../header.css">
     <title>MarketPlace - PoultryPro</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 1rem;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 15px rgba(0, 123, 255, 0.2);
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h5 {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .text-uppercase {
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 30px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -69,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container my-5">
         <div class="text-center mb-4">
             <img class="d-block mx-auto mb-4" src="https://images.unsplash.com/photo-1523350165414-082d792c4bcc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="" width="72" height="72">
-            <h1>Checkout Form</h1>
+            <h1 class="text-uppercase">Checkout Form</h1>
             <p class="lead">Please fill in the details below to complete your order.</p>
         </div>
 

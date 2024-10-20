@@ -48,10 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: farm/dashboard.php");
                     exit();
                 case "customer":
-                    header("Location: marketplace.php");
+                    header("Location: marketplace/customer/dashboard.php");
                     exit();
                 default:
-
                     header("Location: login.php");
                     exit();
             }

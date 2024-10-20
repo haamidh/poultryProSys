@@ -25,6 +25,7 @@ $farm_id = $_SESSION['order_details'][0]['farm_id'];
 $order_num = $order->generateOrderNum($con, $farm_id);
 
 
+
 // Check if the order has already been placed
 if (!isset($_SESSION['order_created'])) {
   // Extract order details from session
@@ -33,6 +34,9 @@ if (!isset($_SESSION['order_created'])) {
   $quantity = $_SESSION['order_details'][0]['quantity'];
   $unit_price = $_SESSION['order_details'][0]['product_price'];
   $total_amount = $_SESSION['order_details'][0]['total'];
+
+  
+
   $status = 1;
 
   $first_name = $_SESSION['billing_details'][0]['first_name'];
@@ -62,7 +66,9 @@ if (!isset($_SESSION['order_created'])) {
   $order_details->setAddress($address);
   $order_details->setCity($city);
 
+  $service_fee = $total_amount * 5/100;
   $order_details->create($order_num,$phone);
+  $order->addOrderPayments($service_fee, $order_num);
 
   // Create the order in the database
   $order->create();

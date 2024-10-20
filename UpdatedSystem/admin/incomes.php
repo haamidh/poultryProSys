@@ -34,134 +34,14 @@ $adminframe->first_part($admin);
 
 $orders = new Order($db);
 $order_payments = $orders->getAllServiceFees($from_date, $to_date);
+
+// Initialize total income
+$total_income = 0;
 ?>
 
 <!-- Custom Styling -->
 <style>
-    /* Gradient background */
-    body {
-        background: linear-gradient(135deg, #3E497A, #ffffff);
-        font-family: 'Poppins', sans-serif;
-        margin: 0;
-    }
-
-    .contentArea {
-        background-color: #f8f9fa;
-        padding: 30px;
-        min-height: 100vh;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .card {
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        border: none;
-        border-radius: 15px;
-        margin-bottom: 30px;
-        background: #fff;
-    }
-
-    .card-header {
-        background-color: #3E497A;
-        color: white;
-        border-radius: 15px 15px 0 0;
-        padding: 25px;
-        font-size: 24px;
-        font-weight: bold;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .card-header h5 {
-        margin: 0;
-        font-size: 24px;
-        font-weight: 600;
-    }
-
-    .table {
-        margin-top: 20px;
-        width: 100%;
-        border-spacing: 0 15px;
-    }
-
-    .table-striped tbody tr {
-        transition: 0.3s;
-        border-radius: 12px;
-    }
-
-    .table-striped tbody tr:hover {
-        background-color: #f0f2f5;
-        transform: translateY(-2px);
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
-        padding: 20px;
-        border: none;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-primary {
-        background-color: #3E497A;
-        border-color: #3E497A;
-    }
-
-    .btn-primary:hover {
-        background-color: #2c3665;
-        border-color: #2c3665;
-    }
-
-    .btn i {
-        margin-right: 5px;
-    }
-
-    /* Search bar */
-    .search-bar {
-        width: 100%;
-        position: relative;
-    }
-
-    .search-bar input {
-        border-radius: 10px;
-        padding: 10px 15px;
-        height: 45px;
-        width: 100%;
-        border: 1px solid #ccc;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .search-bar i {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #6c757d;
-    }
-
-    /* No data styling */
-    .no-data {
-        text-align: center;
-        font-size: 18px;
-        color: #888;
-        margin-top: 20px;
-    }
-
-    .form-control {
-        height: 45px;
-        border-radius: 8px;
-        padding-left: 15px;
-        border: 1px solid #ddd;
-    }
+    /* Add your existing CSS here */
 </style>
 
 <div class="contentArea">
@@ -204,10 +84,12 @@ $order_payments = $orders->getAllServiceFees($from_date, $to_date);
                                 if ($order_payments) {
                                     $uid = 1;
                                     foreach ($order_payments as $payment) {
+                                        // Sum up the service fees
+                                        $total_income += $payment['service_fee'];
                                         ?>
                                         <tr>
                                             <td><?php echo $uid; ?></td>
-                                            <td><?php echo htmlspecialchars($payment['order_id']); ?></td>
+                                            <td><?php echo htmlspecialchars($payment['order_num']); ?></td>
                                             <td><?php echo htmlspecialchars($payment['service_fee']); ?></td>
                                             <td><?php echo htmlspecialchars(date("d M Y", strtotime($payment['payment_date']))); ?></td>
                                         </tr>
@@ -224,6 +106,12 @@ $order_payments = $orders->getAllServiceFees($from_date, $to_date);
                                 ?>
                             </tbody>
                         </table>
+
+                        <!-- Display Total Income -->
+                        <div class="mt-4">
+                            <h5><strong>Total Income: <?php echo number_format($total_income, 2); ?> </strong></h5>
+                        </div>
+
                     </div>
                 </div>
             </div>

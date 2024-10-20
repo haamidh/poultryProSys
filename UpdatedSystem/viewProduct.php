@@ -34,6 +34,133 @@ if (!empty($row)) { // Check if product found
         <link rel="stylesheet" href="header.css">
         <title>MarketPlace - PoultryPro</title>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <style>
+            body {
+                background-color: #f7f7f7;
+                font-family: 'Poppins', sans-serif;
+            }
+
+            .card {
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+            }
+
+            .images img {
+                width: 100%;
+                max-height: 400px;
+                object-fit: cover;
+                border-radius: 15px;
+            }
+
+            .product h3 {
+                font-size: 2rem;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .product h6 {
+                font-size: 1.5rem;
+                color: #007bff;
+                font-weight: 500;
+                margin-top: 10px;
+            }
+
+            .about {
+                font-size: 1rem;
+                color: #666;
+                margin-top: 10px;
+            }
+
+            .sizes h6 {
+                font-size: 1.1rem;
+                color: #28a745;
+                font-weight: 600;
+            }
+
+            .quantity-input {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                font-size: 1.1rem;
+            }
+
+            .quantity-btn {
+                cursor: pointer;
+                font-size: 1.5rem;
+                padding: 5px 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #f1f1f1;
+                transition: background-color 0.3s ease;
+            }
+
+            .quantity-btn:hover {
+                background-color: #ddd;
+            }
+
+            #quantity {
+                width: 60px;
+                text-align: center;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            .btn-custom {
+                background-color: #007bff;
+                color: #fff;
+                font-size: 1.1rem;
+                font-weight: 600;
+                border-radius: 50px;
+                padding: 10px 40px;
+                border: none;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+                box-shadow: 0px 8px 15px rgba(0, 123, 255, 0.2);
+            }
+
+            .btn-custom:hover {
+                background-color: #0056b3;
+                transform: translateY(-2px);
+            }
+
+            .btn-custom:focus {
+                outline: none;
+                box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.4);
+            }
+
+            .cart {
+                margin-top: 30px;
+            }
+
+            .product-description {
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+            .container {
+                padding-top: 50px;
+            }
+
+            @media (max-width: 768px) {
+                .images img {
+                    max-height: 250px;
+                }
+
+                .product h3 {
+                    font-size: 1.6rem;
+                }
+
+                .product h6 {
+                    font-size: 1.2rem;
+                }
+
+                .sizes h6 {
+                    font-size: 1rem;
+                }
+            }
+        </style>
     </head>
 
     <body>
@@ -51,7 +178,7 @@ if (!empty($row)) { // Check if product found
                                 </div>
                             </div>
 
-                            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center ">
+                            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center">
                                 <div class="product p-4">
                                     <div class="mt-4 mb-3">
                                         <span class="text-uppercase text-muted">PoultryPro</span>
@@ -62,7 +189,7 @@ if (!empty($row)) { // Check if product found
                                     </div>
                                     <p class="about"><?php echo $row['description']; ?></p>
                                     <div class="sizes mt-5">
-                                        <h6 class="text">Available Stock: <?php echo $product_quantity; ?>
+                                        <h6 class="text">Available Stock: <?php echo $product_quantity; ?> 
                                             <?php if ($product_qty_num > 0) { ?>
                                                 <?php echo $row['unit']; ?>s
                                         </h6>
@@ -81,7 +208,6 @@ if (!empty($row)) { // Check if product found
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         <!-- Buy Button -->
                                         <div class="cart mt-4 align-items-center">
