@@ -7,6 +7,7 @@ require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once 'Frame.php';
 require_once '../classes/Supplier.php';
+require_once '../classes/Validation.php';
 
 // Check if user is logged in and has the correct role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -22,12 +23,14 @@ $frame = new Frame();
 $frame->first_part($farm);
 
 $supplier = new Supplier($con);
+$supErr = $addressErr = $cityErr = $mobileErr = $emailErr = "";
+$errors = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_supplier'])) {
         $sup_name = $_POST['sup_name'];
         $address = $_POST['address'];
-        $city = $_POST['city'];
+        $city = isset($_POST['city'])? $_POST['city']:null;
         $mobile = $_POST['mobile'];  // Changed from 'mobile' to 'contact'
         $email = $_POST['email'];
 
@@ -38,16 +41,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $supplier->setMobile($mobile);  // Changed from 'setMobile' to 'setContact'
         $supplier->setEmail($email);
 
-        if ($supplier->supplierExists($user_id)) {
-            $error_message = "This supplier already exists";
-        } else if ($supplier->supplierEmailExists($user_id)) {
-            $error_message = "This supplier email already exists";
-        } else {
+        if (!Validation::validateTextField($sup_name, $supErr)) {
+            $errors = true;
+        }
 
-            if ($supplier->create()) {
-                $success_message = "Supplier added successfully.";
+        if (!Validation::validateAddressField($address, $addressErr)) {
+            $errors = true;
+        }
+        
+        if (empty($city)) {
+            $cityErr = "*Please select city";
+            $errors = true;
+        }
+
+        if (!Validation::validateMobile($mobile, $mobileErr)) {
+            $errors = true;
+        }
+
+        if (!Validation::validateEmail($email, $emailErr)) {
+            $errors = true;
+        }
+
+        if (!$errors) {
+            if ($supplier->supplierExists($user_id)) {
+                $error_message = "This supplier already exists";
+            } else if ($supplier->supplierEmailExists($user_id)) {
+                $error_message = "This supplier email already exists";
             } else {
-                $error_message = "Failed to add supplier.";
+    
+                if ($supplier->create()) {
+                    $success_message = "Supplier added successfully.";
+                } else {
+                    $error_message = "Failed to add supplier.";
+                }
             }
         }
     }
@@ -99,16 +125,18 @@ $suppliers = $supplier->readAll($user_id);
                             <div class="mb-3">
                                 <label class="form-label">Supplier Name:</label>
                                 <input type="text" class="form-control" id="sup_name" name="sup_name" required>
+                                <small class="text-danger"><?php echo $supErr ?></small>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Address:</label>
                                 <input type="text" class="form-control" id="address" name="address" required>
+                                <small class="text-danger"><?php echo $addressErr ?></small>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">City:</label>
-                                <select class="form-select" name="city" id="city" required>
+                                <select class="form-select" name="city" id="city" >
                                     <option value="" disabled selected>Select city</option>
                                     <?php foreach ($cities as $city) : ?>
                                         <option value="<?php echo htmlspecialchars($city['city']); ?>">
@@ -116,16 +144,19 @@ $suppliers = $supplier->readAll($user_id);
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
+                                <small class="text-danger"><?php echo $cityErr ?></small>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Contact:</label>
                                 <input type="text" class="form-control" id="contact" name="mobile" required>
+                                <small class="text-danger"><?php echo $mobileErr ?></small>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Email:</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
+                                <small class="text-danger"><?php echo $emailErr ?></small>
                             </div>
 
                             <div class="d-grid gap-2">
