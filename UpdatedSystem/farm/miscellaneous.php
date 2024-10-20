@@ -8,6 +8,7 @@ require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once 'Frame.php';
 require_once '../classes/miscellaneous.php';
+require '../classes/Validation.php';
 
 // Check if user is logged in and has the correct role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -24,6 +25,9 @@ $frame->first_part($farm);
 
 $mis = new miscellaneous($con);
 $mis->setUser_id($user_id);
+
+$textErr = "";
+$errors = false;
 
 /*if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category_name=$_POST["category_name"];
@@ -43,16 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $mis->setCategory_name($category_name);
     $mis->setCategory_description($category_description);
 
-    // Call the create method to insert the new category
-    if ($mis->miscellaneousExists($user_id)) {
-        $error_message = "This expense already exists";
-    } else {
-        if ($mis->create($user_id)) {
-            $success_message = "Expense added successfully.";
+    if (!Validation::validateTextField($category_name, $textErr)) {
+        $errors = true;
+    }
+
+    if (!$errors){
+        // Call the create method to insert the new category
+        if ($mis->miscellaneousExists($user_id)) {
+            $error_message = "This expense already exists";
         } else {
-            $error_message = "Failed to add the expense.";
+            if ($mis->create($user_id)) {
+                $success_message = "Expense added successfully.";
+            } else {
+                $error_message = "Failed to add the expense.";
+            }
         }
     }
+    
 }
 
 
@@ -110,7 +121,8 @@ $miscellaneous = $mis->read($user_id);
                             <div class="mb-3">
                                 <label for="staticEmail" class="form-control">Category Name</label>
                                 <input type="text" class="form-control" id="category_name"
-                                    placeholder="e.g : transportation" name="category_name">
+                                    placeholder="e.g : transportation" name="category_name" onkeyup="validateCategoryName()">
+                                <small id="nameError" class="text-danger"><?php echo $textErr ?></small>
                             </div>
                             <!-- <div class="mb-3">
     <label for="inputPassword" class="form-control">category_description</label>
@@ -143,5 +155,27 @@ $miscellaneous = $mis->read($user_id);
 
 
 </body>
+<script>
 
+    function validateCategoryName() {
+        const categoryNameInput = document.getElementById('category_name');
+        const nameErr = document.getElementById('nameError'); // Updated ID to match HTML
+        const categoryNameValue = categoryNameInput.value;
+
+        const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]{2,}$/;
+
+        nameErr.textContent = "";
+        categoryNameInput.classList.remove("is-invalid");
+
+        if (categoryNameValue.length > 0 && !regex.test(categoryNameValue)) {
+            nameErr.textContent = "Category name not valid (must start with a letter and be at least 3 characters).";
+            categoryNameInput.classList.add("is-invalid");
+
+            const correctedValue = categoryNameValue.replace(/^[^a-zA-Z]+/, '').replace(/[^a-zA-Z0-9\s-_]/g, '');
+
+            categoryNameInput.value = correctedValue;
+        }
+    }
+
+</script>
 </html>
