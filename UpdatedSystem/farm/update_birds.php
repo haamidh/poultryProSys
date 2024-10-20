@@ -6,6 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../classes/config.php';
 require_once '../classes/Bird.php';
 require_once '../classes/checkLogin.php';
+require '../classes/Validation.php';
 require_once 'Frame.php';
 
 // Ensure the user is logged in

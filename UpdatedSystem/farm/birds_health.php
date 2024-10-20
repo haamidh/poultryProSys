@@ -90,11 +90,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors = true;
     }
 
-    if (!Validation::validateNumberField($no_deaths, $num2Err)) {
+    //validate no of deaths
+    if (Validation::validateNumberField($no_deaths, $num2Err)==0) { //check number is 0 or not(if 0 then return 0 then !0 is be true)
+        $errors = false;
+    }
+    elseif(!Validation::validateNumberField($no_deaths, $num2Err)){
         $num2Err = "*Number of dead birds must be a valid number";
         $errors = true;
     }
-
 
     if (!$errors) {
 
