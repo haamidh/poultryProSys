@@ -212,31 +212,37 @@ class Stocks {
     }
 
     public function getProductAvailableQuantity($product_id) {
+        // First, get the total stock quantity from the product_stock table
         $query = "
         SELECT p.product_name AS detail, 
-               SUM(ps.quantity - COALESCE(o.quantity, 0)) AS available_quantity
+               SUM(ps.quantity) AS total_quantity,
+               (SELECT COALESCE(SUM(o.quantity), 0)
+                FROM orders o
+                WHERE o.product_id = ps.product_id) AS ordered_quantity
         FROM product_stock ps
         JOIN products p ON ps.product_id = p.product_id
-        LEFT JOIN orders o ON ps.product_id = o.product_id AND ps.created_at <= o.created_at
         WHERE ps.user_id = :farm_id
         AND ps.product_id = :product_id
         GROUP BY p.product_id, p.product_name
-        ORDER BY p.product_name
-    ";
-
+        ";
+    
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':farm_id', $this->farm_id);
         $stmt->bindParam(':product_id', $product_id);
-
+    
         $stmt->execute();
-        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if ($result === false || !isset($result['available_quantity'])) {
+        if ($result === false || !isset($result['total_quantity'])) {
             return 0; 
         }
-    
-        return $result['available_quantity'];
+        
+        // Calculate available quantity by subtracting ordered quantity from total stock
+        $available_quantity = $result['total_quantity'] - $result['ordered_quantity'];
+        
+        return $available_quantity > 0 ? $available_quantity : 0; // Return 0 if quantity is negative
     }
+    
 
 }
 

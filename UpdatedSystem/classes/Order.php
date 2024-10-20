@@ -349,6 +349,10 @@ class Order {
 
         return $all_orders;
     }
+
+    function addNewManualOrder($user_id){
+        
+    }
     
 }
 
