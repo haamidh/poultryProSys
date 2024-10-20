@@ -70,7 +70,8 @@ $feeds = $feed->read($user_id);
 <style>
     .form-label {
         text-align: left;
-        display: block; /* Ensures it behaves like a block-level element */
+        display: block;
+        /* Ensures it behaves like a block-level element */
     }
 
     .card {
@@ -79,7 +80,6 @@ $feeds = $feed->read($user_id);
         border-radius: 10px;
 
     }
-
 </style>
 
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
@@ -112,13 +112,13 @@ $feeds = $feed->read($user_id);
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                             <div class="mb-3">
                                 <label class="form-label">Feed Name:</label>
-                                <input type="text" class="form-control" id="feed_name" name="feed_name" required oninput="validateName(this)">
+                                <input type="text" class="form-control" id="feed_name" name="feed_name" required onkeyup="validateFeedName()">
                                 <small id="nameError" class="text-danger"><?php echo $textErr ?></small>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Notification Threshold:</label>
-                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" required oninput="validateNotifyField(this)">
+                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" required onkeyup="validateLeastQuantity()">
                                 <small id="notifyError" class="text-danger"><?php echo $notifyErr ?></small>
                             </div>
 
@@ -168,7 +168,7 @@ $feeds = $feed->read($user_id);
                                     $serialnum = 0;
                                     foreach ($feeds as $feed) {
                                         $serialnum++;
-                                        ?>
+                                    ?>
                                         <tr>
                                             <th><?php echo $serialnum; ?></th>
                                             <td><?php echo $feed['feed_name']; ?></td>
@@ -215,9 +215,9 @@ $feeds = $feed->read($user_id);
                 var descriptionValue = description.textContent || description.innerText;
 
                 if (
-                        nameValue.toUpperCase().indexOf(filter) > -1 ||
-                        descriptionValue.toUpperCase().indexOf(filter) > -1
-                        ) {
+                    nameValue.toUpperCase().indexOf(filter) > -1 ||
+                    descriptionValue.toUpperCase().indexOf(filter) > -1
+                ) {
                     rows[i].style.display = "";
                 } else {
                     rows[i].style.display = "none";
@@ -226,6 +226,47 @@ $feeds = $feed->read($user_id);
         }
     }
 
+    function validateFeedName() {
+        const feedNameInput = document.getElementById('feed_name');
+        const nameErr = document.getElementById('nameError'); // Updated ID to match HTML
+        const feedNameValue = feedNameInput.value;
 
+        const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]{2,}$/;
+
+        nameErr.textContent = "";
+        feedNameInput.classList.remove("is-invalid");
+
+        if (feedNameValue.length > 0 && !regex.test(feedNameValue)) {
+            nameErr.textContent = "Feed name not valid (must start with a letter and be at least 3 characters).";
+            feedNameInput.classList.add("is-invalid");
+
+            const correctedValue = feedNameValue.replace(/^[^a-zA-Z]+/, '').replace(/[^a-zA-Z0-9\s-_]/g, '');
+
+            feedNameInput.value = correctedValue;
+        }
+    }
+
+    function validateLeastQuantity() {
+        const quantityInput = document.getElementById('least_quantity');
+        const quantityErr = document.getElementById('notifyError'); // Updated ID to match HTML
+        const quantityValue = quantityInput.value;
+
+        const regex = /^(0|[1-9]\d*)(\.\d{1,2})?$/; // Allows positive numbers with up to two decimal places
+
+        quantityErr.textContent = "";
+        quantityInput.classList.remove("is-invalid");
+
+        if (quantityValue.length > 0 && !regex.test(quantityValue)) {
+            quantityErr.textContent = "Quantity not valid (must be a positive number with up to two decimal places).";
+            quantityInput.classList.add("is-invalid");
+            quantityInput.value = quantityValue.replace(/[^0-9.]/g, ''); // Replace invalid characters
+        }
+
+        // Additional check to prevent starting with a decimal
+        if (quantityInput.value.length > 0 && quantityInput.value[0] === '.') {
+            quantityErr.textContent = "Quantity cannot start with a decimal point.";
+            quantityInput.classList.add("is-invalid");
+            quantityInput.value = "";
+        }
+    }
 </script>
-<script src="script.js"></script>
