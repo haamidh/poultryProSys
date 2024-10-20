@@ -78,12 +78,12 @@ $frame->first_part($farm);
                                     $uid = 1;
 
                                     foreach ($orders as $row) {
-                                        $billingDetail = $billingDetails->getBillingDetails($row['product_id']);
+                                        $billingDetail = $billingDetails->getBillingDetails($row['order_num']);
                                     ?>
                                         <tr>
                                             <td><?php echo $uid; ?></td>
-                                            <td><?php echo htmlspecialchars($billingDetail['firstname']); ?></td>
-                                            <td><?php echo htmlspecialchars($billingDetail['address']); ?>.",".<?php echo htmlspecialchars($result['city']); ?></td>
+                                            <td><?php echo htmlspecialchars($billingDetail['first_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($billingDetail['address']); ?> <?php echo htmlspecialchars($billingDetail['city']); ?></td>
                                             <td style="text-align:center;"><?php echo htmlspecialchars($order->getProduct($row['product_id'])); ?></td>
                                             <td style="text-align:right;"><?php echo number_format((float) $row['quantity'], 2, '.', ''); ?></td>
                                             <td style="text-align:right;"><?php echo number_format((float) $row['unit_price'], 2, '.', ''); ?></td>
