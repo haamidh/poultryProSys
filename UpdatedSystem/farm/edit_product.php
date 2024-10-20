@@ -6,6 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once '../classes/Product.php';
+require '../classes/Validation.php';
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -78,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors = true;
     }
 
-    if (!Validation::validateNumberField($quantity, $numErr)) {
+    if (!Validation::validateNumberField($least_quantity, $numErr)) {
         $errors = true;
     }
 
