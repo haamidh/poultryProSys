@@ -215,7 +215,7 @@ $misEx = $misEx->read($user_id);
                                             <td><?php echo $misEx['handled_by']; ?></td>
                                             <td><?php echo $misEx['expense_amount']; ?></td>
                                             <td>
-                                                <a href="edit_MisExpenses.php?sup_id=<?php echo  $misEx['category_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
+                                                <a href="edit_MisExpenses.php?category_id=<?php echo  $misEx['category_id']; ?>" class="btn btn-success text-light py-1 px-2">Edit</a>
                                                 <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $misEx['category_id']; ?>)">Delete</button>
                                             </td>
                                         </tr>
