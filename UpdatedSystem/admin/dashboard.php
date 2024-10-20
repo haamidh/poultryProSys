@@ -11,7 +11,7 @@ require_once '../classes/Order.php';
 
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 $database = new Database();

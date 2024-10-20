@@ -248,7 +248,7 @@ class Order {
     }
 
     public function getAllServiceFees($from_date, $to_date) {
-        $query = "SELECT order_id, service_fee, payment_date 
+        $query = "SELECT order_num, service_fee, payment_date 
               FROM order_payments 
               WHERE (:from_date IS NULL OR payment_date >= :from_date)
               AND (:to_date IS NULL OR payment_date <= :to_date)
@@ -352,6 +352,22 @@ class Order {
 
     function addNewManualOrder($user_id){
         
+    }
+
+    function addOrderPayments($service_fee, $order_num){
+        $query = "INSERT INTO order_payments 
+                  (order_num, service_fee, amount) 
+                  VALUES (:order_num, :service_fee, :amount)";
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':order_num',$order_num);
+        $stmt->bindParam(':service_fee', $service_fee);
+        $stmt->bindParam(':amount', $this->total);
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+
     }
     
 }
