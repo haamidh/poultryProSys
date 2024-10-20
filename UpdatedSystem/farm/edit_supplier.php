@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
-require_once '../classes/MisExpenses.php';
+require_once '../classes/Supplier.php';
 require_once 'Frame.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -22,37 +22,38 @@ $frame = new Frame();
 $frame->first_part($farm);
 
 // Instantiate the Supplier class
-$misEx = new MisExpenses($con);
+$suppliers = new Supplier($con);
 // Get supplier ID from GET request
-$misEx = isset($_GET['category_id']) ? $_GET['category_id'] : '';
+$sup_id= isset($_GET['sup_id']) ? $_GET['sup_id'] : '';
 
-
-if ($category_id) {
-    // Get supplier details
-    $expenses_details = $misEx->readOne($category_id);
-    if ($expenses_details ) {
-        $supplier_name = $expenses_details['sup_name'];
-        $supplier_address = $expenses_details['address'];
-        $supplier_contact = $expenses_details['mobile'];  // Changed from 'mobile' to 'contact'
-        $supplier_email = $expenses_details['email'];  // Added if email is needed for form
+if ($sup_id) {
+    // Get product details
+    $supplier_details = $suppliers->readOne($sup_id);
+    if ($supplier_details) {
+        $supplier_name = $supplier_details['sup_name'];
+        $supplier_address= $supplier_details['address'];
+        $supplier_contact = $supplier_details['mobile'];
+        $supplier_email = $supplier_details['email'];
+        
     } else {
-        echo "No Expenses found with the provided ID.";
+        echo "No product found with the provided ID.";
         exit();
     }
 } else {
-    echo "Expenses ID is required.";
+    echo "Product ID is required.";
     exit();
 }
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set supplier properties
-    $supplier->setSup_name($_POST['supplier_name']);
-    $supplier->setAddress($_POST['address']);
-    $supplier->setMobile($_POST['mobile']);  // Changed from 'setMobile' to 'setContact'
-    $supplier->setEmail($_POST['email']);  // Added if email is needed for update
+    $suppliers->setSup_name($_POST['supplier_name']);
+    $suppliers->setAddress($_POST['address']);
+    $suppliers->setMobile($_POST['mobile']);  // Changed from 'setMobile' to 'setContact'
+    $suppliers->setEmail($_POST['email']);  // Added if email is needed for update
 
     // Update supplier details
-    if ($supplier->update($sup_id)) {
+    if ($suppliers->update($sup_id)) {
         header("Location: supplier.php?msg=Supplier Updated Successfully");
         ob_end_flush();
         exit();

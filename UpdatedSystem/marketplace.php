@@ -61,20 +61,65 @@ $conn = $db->getConnection();
             if ($stmt->rowCount() > 0) {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo '
-                <div class="col-md-3">
-                    <div class="card mb-4 market-product">
-                       <img src="' . htmlspecialchars($row["product_img"]) . '" alt="' . htmlspecialchars($row["product_name"]) . '" class="card-img-top p-3" width="200" height="200">
-                        <div class="card-body">
-                            <h5 class="card-title">' . htmlspecialchars($row["product_name"]) . '</h5>
-                            <h5 class="card-text">Rs. ' . htmlspecialchars($row["product_price"]) . '</h5>
-                            <p class="card-text">
-                                <span class="badge bg-success">Per ' . htmlspecialchars($row["unit"]) . '</span>
-                            </p>
-                            <a href="viewProduct.php?product_id=' . htmlspecialchars($row["product_id"]) . '&farm_id=' . htmlspecialchars($row["farm_id"]) . '" class="btn btn-primary">Buy</a>
-                        </div>
-                    </div>
-                </div>
-                ';
+    <style>
+        .market-product {
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .market-product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .card-img-top {
+            border-radius: 10px;
+            object-fit: cover;
+            width: 100%;
+            height: 200px;
+        }
+        .card-title {
+            font-family: "Georgia", serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1.4rem;
+    color: #FFD700;
+    font-weight: 900; /* or 700 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Adds a shadow effect */
+}
+
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <div class="col-md-3">
+        <div class="card mb-4 market-product">
+            <img src="' . htmlspecialchars($row["product_img"]) . '" alt="' . htmlspecialchars($row["product_name"]) . '" class="card-img-top p-3">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                <h5 class="card-title">' . htmlspecialchars($row["product_name"]) . '</h5>
+                <h5 class="card-text">Rs.' . htmlspecialchars(number_format($row["product_price"], 2)) . '</h5>
+                <p class="card-text">
+                    <span class="badge bg-success">Per ' . htmlspecialchars($row["unit"]) . '</span>
+                </p>
+                <a href="viewProduct.php?product_id=' . htmlspecialchars($row["product_id"]) . '&farm_id=' . htmlspecialchars($row["farm_id"]) . '" class="btn btn-primary">Buy</a>
+            </div>
+        </div>
+    </div>';
                 }
             } else {
                 echo '<p>No products found.</p>';
