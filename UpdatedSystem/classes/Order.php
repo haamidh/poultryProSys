@@ -1,6 +1,7 @@
 <?php
 
-class Order {
+class Order
+{
 
     private $conn;
     private $table_name = "orders";
@@ -16,108 +17,132 @@ class Order {
     private $created_at;
     private $order_num;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
     //Setters
-    public function setOrder_id($order_id) {
+    public function setOrder_id($order_id)
+    {
         $this->order_id = $order_id;
     }
 
-    public function setCus_id($cus_id) {
+    public function setCus_id($cus_id)
+    {
         $this->cus_id = $cus_id;
     }
 
-    public function setFarm_id($farm_id) {
+    public function setFarm_id($farm_id)
+    {
         $this->farm_id = $farm_id;
     }
 
-    public function setProduct_id($product_id) {
+    public function setProduct_id($product_id)
+    {
         $this->product_id = $product_id;
     }
 
-    public function setQuantity($quantity) {
+    public function setQuantity($quantity)
+    {
         $this->quantity = $quantity;
     }
 
-    public function setUnit_price($unit_price) {
+    public function setUnit_price($unit_price)
+    {
         $this->unit_price = $unit_price;
     }
 
-    public function setTotal($total) {
+    public function setTotal($total)
+    {
         $this->total = $total;
     }
 
-    public function setStatus($status) {
+    public function setStatus($status)
+    {
         $this->status = $status;
     }
 
-    public function setOrdered_date($ordered_date) {
+    public function setOrdered_date($ordered_date)
+    {
         $this->ordered_date = $ordered_date;
     }
 
-    public function setCreated_at($created_at) {
+    public function setCreated_at($created_at)
+    {
         $this->created_at = $created_at;
     }
 
-    public function setOrder_num($order_num){
+    public function setOrder_num($order_num)
+    {
         $this->order_num = $order_num;
     }
 
     //Getters
-    public function getOrder_id() {
+    public function getOrder_id()
+    {
         return $this->order_id;
     }
 
-    public function getCus_id() {
+    public function getCus_id()
+    {
         return $this->cus_id;
     }
 
-    public function getFarm_id() {
+    public function getFarm_id()
+    {
         return $this->farm_id;
     }
 
-    public function getProduct_id() {
+    public function getProduct_id()
+    {
         return $this->product_id;
     }
 
-    public function getQuantity() {
+    public function getQuantity()
+    {
         return $this->quantity;
     }
 
-    public function getUnit_price() {
+    public function getUnit_price()
+    {
         return $this->unit_price;
     }
 
-    public function getTotal() {
+    public function getTotal()
+    {
         return $this->total;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
-    public function getOrdered_date() {
+    public function getOrdered_date()
+    {
         return $this->ordered_date;
     }
 
-    public function getCreated_at() {
+    public function getCreated_at()
+    {
         return $this->created_at;
     }
 
-    public function getOrder_num(){
+    public function getOrder_num()
+    {
         return $this->order_num;
     }
 
     //function to create a new order
-    public function create() {
+    public function create()
+    {
         $query = "INSERT INTO " . $this->table_name . " 
                   (order_num, cus_id, farm_id, product_id, quantity, unit_price, total, status) 
                   VALUES (:order_num, :cus_id, :farm_id, :product_id, :quantity, :unit_price, :total, :status)";
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(':order_num',$this->order_num);
+        $stmt->bindParam(':order_num', $this->order_num);
         $stmt->bindParam(':cus_id', $this->cus_id);
         $stmt->bindParam(':farm_id', $this->farm_id);
         $stmt->bindParam(':product_id', $this->product_id);
@@ -125,7 +150,7 @@ class Order {
         $stmt->bindParam(':unit_price', $this->unit_price);
         $stmt->bindParam(':total', $this->total);
         $stmt->bindParam(':status', $this->status);
-        
+
 
         if ($stmt->execute()) {
             return true;
@@ -134,7 +159,8 @@ class Order {
     }
 
     //Function to get all from orders
-    public function read($farm_id) {
+    public function read($farm_id)
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE farm_id = :farm_id";
 
         $stmt = $this->conn->prepare($query);
@@ -151,7 +177,8 @@ class Order {
     }
 
     //Function to get one from orders
-    public function readOne($order_id) {
+    public function readOne($order_id)
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE order_id = :order_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':order_id', $order_id);
@@ -159,7 +186,8 @@ class Order {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function update($order_id) {
+    public function update($order_id)
+    {
         $query = "UPDATE " . $this->table_name . " 
                   SET cus_id = :cus_id, farm_id = :farm_id, product_id = :product_id, 
                       quantity = :quantity, unit_price = :unit_price, total = :total, 
@@ -183,7 +211,8 @@ class Order {
         return false;
     }
 
-    public function delete($order_id) {
+    public function delete($order_id)
+    {
         $query = "DELETE FROM " . $this->table_name . " WHERE order_id = :order_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':order_id', $order_id);
@@ -195,7 +224,8 @@ class Order {
     }
 
     //function to get today oders
-    public function todayOrders($date, $farm_id) {
+    public function todayOrders($date, $farm_id)
+    {
         $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE ordered_date = :ordered_date AND farm_id=:farm_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':ordered_date', $date);
@@ -205,10 +235,11 @@ class Order {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             return $row['count'];
         }
-        return 0; 
+        return 0;
     }
 
-    public function getCustomer($cus_id) {
+    public function getCustomer($cus_id)
+    {
         $query = "SELECT username, address,city FROM user WHERE user_id = :cus_id";
         $stmt = $this->conn->prepare($query);
 
@@ -228,7 +259,8 @@ class Order {
         }
     }
 
-    public function getProduct($product_id) {
+    public function getProduct($product_id)
+    {
         $query = "SELECT product_name FROM products WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($query);
 
@@ -247,12 +279,13 @@ class Order {
         }
     }
 
-    public function getAllServiceFees($from_date, $to_date) {
+    public function getAllServiceFees($from_date, $to_date)
+    {
         $query = "SELECT order_num, service_fee, payment_date 
               FROM order_payments 
               WHERE (:from_date IS NULL OR payment_date >= :from_date)
               AND (:to_date IS NULL OR payment_date <= :to_date)
-              ORDER BY payment_date DESC"; 
+              ORDER BY payment_date DESC";
 
         $stmt = $this->conn->prepare($query);
 
@@ -269,7 +302,8 @@ class Order {
         return $result;
     }
 
-    public function getDailyServiceFees($to_date) {
+    public function getDailyServiceFees($to_date)
+    {
 
         $start_date = date('Y-m-d', strtotime($to_date . ' -30 days'));
 
@@ -289,7 +323,8 @@ class Order {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getMonthlyServiceFees($to_date) {
+    public function getMonthlyServiceFees($to_date)
+    {
         // service fees per month
         $query = "SELECT DATE_FORMAT(payment_date, '%Y-%m') AS month, SUM(service_fee) AS total_service_fees
               FROM order_payments
@@ -309,32 +344,33 @@ class Order {
     {
         //get the last order number for the specified farm
         $query = $con->prepare("SELECT order_num FROM " . $this->table_name . " WHERE farm_id = ? ORDER BY order_num DESC LIMIT 1");
-    
+
         //Check query failed
         if (!$query) {
             die("Running Query failed: " . $con->errorInfo()[2]);
         }
-    
+
         $query->bindParam(1, $farm_id, PDO::PARAM_INT);
         $query->execute();
-        
+
         $row = $query->fetch(PDO::FETCH_ASSOC);
-    
+
         //If no previous order number, return a new one
         if (!$row) {
             return $farm_id . '0001';
         } else {
             $lastId = $row['order_num'];
-    
+
             $numSuffix = intval(substr($lastId, -4));
-    
+
             $updatedId = sprintf('%04d', $numSuffix + 1);
-    
+
             return $farm_id . $updatedId;
         }
     }
 
-    function getCustomerOrders($user_id){
+    function getCustomerOrders($user_id)
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE cus_id = :cus_id";
 
         $stmt = $this->conn->prepare($query);
@@ -350,26 +386,31 @@ class Order {
         return $all_orders;
     }
 
-    function addNewManualOrder($user_id){
-        
-    }
-
-    function addOrderPayments($service_fee, $order_num){
+    
+    function addOrderPayments($service_fee, $order_num)
+    {
         $query = "INSERT INTO order_payments 
                   (order_num, service_fee, amount) 
                   VALUES (:order_num, :service_fee, :amount)";
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(':order_num',$order_num);
+        $stmt->bindParam(':order_num', $order_num);
         $stmt->bindParam(':service_fee', $service_fee);
         $stmt->bindParam(':amount', $this->total);
         if ($stmt->execute()) {
             return true;
         }
         return false;
-
     }
-    
-}
 
-?>
+    function getOrder($order_num)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE order_num = :order_num";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':order_num', $order_num);
+        $stmt->execute();
+
+        // Fetch all rows (if multiple items in the order)
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}

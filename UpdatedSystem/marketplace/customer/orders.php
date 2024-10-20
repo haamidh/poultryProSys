@@ -47,6 +47,7 @@ $products = new Product($db);
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Order Date</th>
+                                    <th scope="col">Option</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,7 +56,7 @@ $products = new Product($db);
                                         <td class="fw-bold"><?php echo htmlspecialchars($order['order_num']); ?></td>
                                         <td><?php echo htmlspecialchars($products->getProductName($order['product_id'])); ?></td>
                                         <td><?php echo htmlspecialchars($order['quantity']); ?></td>
-                                        <td class=" fw-bold">Rs <?php echo htmlspecialchars(number_format($order['total'], 2)); ?></td>
+                                        <td class="fw-bold">Rs <?php echo htmlspecialchars(number_format($order['total'], 2)); ?></td>
                                         <td>
                                             <?php
                                             // Determine status display based on the value of 'status'
@@ -65,6 +66,9 @@ $products = new Product($db);
                                             } elseif ($order['status'] == 0) {
                                                 $statusClass = 'badge bg-danger';
                                                 $statusText = 'Cancelled';
+                                            } else {
+                                                $statusClass = 'badge bg-secondary';
+                                                $statusText = 'Pending';
                                             }
                                             ?>
                                             <span class="<?php echo $statusClass; ?>">
@@ -72,10 +76,10 @@ $products = new Product($db);
                                             </span>
                                         </td>
                                         <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($order['ordered_date']))); ?></td>
+                                        <td><a href="orderReceipt.php?order_num=<?php echo $order['order_num']; ?>&action=download" class="btn btn-success mx-2">Download PDF</a><a href="orderReceipt.php?order_num=<?php echo $order['order_num']; ?>" class="btn btn-success">View PDF</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
-
                         </table>
                     </div>
                 <?php else : ?>
