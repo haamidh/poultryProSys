@@ -76,7 +76,14 @@ $products = new Product($db);
                                             </span>
                                         </td>
                                         <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($order['ordered_date']))); ?></td>
-                                        <td><a href="orderReceipt.php?order_num=<?php echo $order['order_num']; ?>&action=download" class="btn btn-success mx-2">Download PDF</a><a href="orderReceipt.php?order_num=<?php echo $order['order_num']; ?>" class="btn btn-success">View PDF</a></td>
+                                        <td>
+                                            <a href="orderReceipt.php?order_num=<?php echo $order['order_num']; ?>&action=download" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-file-earmark-arrow-down-fill"></i> Download PDF
+                                            </a>
+                                            <a href="orderReceipt.php?order_num=<?php echo $order['order_num']; ?>" class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-eye-fill"></i> View PDF
+                                            </a>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -89,6 +96,7 @@ $products = new Product($db);
                 <?php endif; ?>
             </div>
         </div>
+
     </div>
 </main>
 
