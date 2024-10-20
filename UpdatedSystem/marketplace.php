@@ -23,7 +23,7 @@ $conn = $db->getConnection();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-<body>
+<body style="background-color:azure;">
     <?php include 'includes/header.php'; ?>
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <ol class="carousel-indicators">
@@ -51,7 +51,7 @@ $conn = $db->getConnection();
             <span class="visually-hidden">Next</span>
         </a>
     </div>
-    <div class="container mt-5">
+    <div class="container mt-5" >
         <div class="row">
             <?php
             $sql = "SELECT product_id, product_name, farm_id, unit, category_id, product_price, product_img, description FROM products ORDER BY product_id DESC";
@@ -62,6 +62,10 @@ $conn = $db->getConnection();
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo '
     <style>
+    .tag-container{
+    background-color: #f6f6f6 ;
+     margin: 0px 15px 15px 15px;
+    }
         .market-product {
             border: 2px solid #dee2e6;
             border-radius: 15px;
@@ -86,33 +90,40 @@ $conn = $db->getConnection();
         }
 
         .card-text {
-    font-family: "Courier New", Courier, monospace;
-    font-size: 1.4rem;
-    color: #FFD700;
-    font-weight: 900; /* or 700 */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Adds a shadow effect */
+            font-family: Tahoma, sans-serif;
+            font-size: 1.4rem;
+            color: #FFD700;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 2px 20px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
 
-        .btn-primary {
-            background-color: #007bff;
-            color: #fff;
-            font-weight: bold;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
     </style>
 
-    <div class="col-md-3">
+    <div class="col-md-3 ">
         <div class="card mb-4 market-product">
             <img src="' . htmlspecialchars($row["product_img"]) . '" alt="' . htmlspecialchars($row["product_name"]) . '" class="card-img-top p-3">
-            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center tag-container">
                 <h5 class="card-title">' . htmlspecialchars($row["product_name"]) . '</h5>
-                <h5 class="card-text">Rs.' . htmlspecialchars(number_format($row["product_price"], 2)) . '</h5>
+                <h5 class="card-text">Rs ' . htmlspecialchars(number_format($row["product_price"], 2)) . '</h5>
                 <p class="card-text">
                     <span class="badge bg-success">Per ' . htmlspecialchars($row["unit"]) . '</span>
                 </p>
