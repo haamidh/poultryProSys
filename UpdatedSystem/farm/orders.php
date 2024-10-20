@@ -6,6 +6,7 @@ require_once '../classes/config.php';
 require_once 'Frame.php';
 require_once '../classes/checkLogin.php';
 require_once '../classes/Order.php';
+require_once '../classes/OrderDetails.php';
 
 // Ensure the user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -24,13 +25,14 @@ $frame->first_part($farm);
 ?>
 <style>
     .card-title {
-        font-weight: bold; 
+        font-weight: bold;
         font-size: 18px;
     }
-    .card-text{
-        font-size: 20px; 
+
+    .card-text {
+        font-size: 20px;
         font-weight: bold;
-    }    
+    }
 </style>
 <main class="col-lg-10 col-md-9 col-sm-8 p-0 vh-100 overflow-auto">
     <div class="container">
@@ -67,6 +69,8 @@ $frame->first_part($farm);
                                     $order = new Order($db);
                                     $orders = $order->read($farm['user_id']);
 
+                                    $billingDetails = new OrderDetails($db);
+
                                     if (!$orders) {
                                         $orders = [];
                                     }
@@ -74,12 +78,12 @@ $frame->first_part($farm);
                                     $uid = 1;
 
                                     foreach ($orders as $row) {
-                                        $result = $order->getCustomer($row['cus_id']);
-                                        ?>
+                                        $billingDetail = $billingDetails->getBillingDetails($row['order_num']);
+                                    ?>
                                         <tr>
                                             <td><?php echo $uid; ?></td>
-                                            <td><?php echo htmlspecialchars($result['username']); ?></td>
-                                            <td><?php echo htmlspecialchars($result['address']); ?>.",".<?php echo htmlspecialchars($result['city']); ?></td>
+                                            <td><?php echo htmlspecialchars($billingDetail['first_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($billingDetail['address']); ?> <?php echo htmlspecialchars($billingDetail['city']); ?></td>
                                             <td style="text-align:center;"><?php echo htmlspecialchars($order->getProduct($row['product_id'])); ?></td>
                                             <td style="text-align:right;"><?php echo number_format((float) $row['quantity'], 2, '.', ''); ?></td>
                                             <td style="text-align:right;"><?php echo number_format((float) $row['unit_price'], 2, '.', ''); ?></td>
@@ -94,7 +98,7 @@ $frame->first_part($farm);
                                                 <button class="btn btn-danger text-light py-1 px-2" onclick="myFunction(<?php echo $row['order_id']; ?>)">Delete</button>
                                             </td>
                                         </tr>
-                                        <?php
+                                    <?php
                                         $uid++;
                                     }
                                     ?>
@@ -120,5 +124,4 @@ $frame->last_part();
             window.location.href = "delete_order.php?order_id=" + order_id;
         }
     }
-
 </script>

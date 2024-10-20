@@ -7,6 +7,7 @@ require_once '../classes/config.php';
 require_once '../classes/checkLogin.php';
 require_once 'Frame.php';
 require_once '../classes/Medicine.php';
+require '../classes/Validation.php';
 
 // Check if user is logged in and has the correct role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farm') {
@@ -24,6 +25,9 @@ $frame->first_part($farm);
 $med = new Medicine($con);
 $med->setUser_id($user_id);
 
+$textErr = $notifyErr = "";
+$errors = false;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_med'])) {
         $med_name = $_POST['med_name'];
@@ -34,13 +38,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $med->setLeastQuantity($least_quantity);
         $med->setDescription($description);
 
-        if ($med->medicineExists($user_id)) {
-            $error_message = "This medicine already exists";
-        } else {
-            if ($med->create($user_id)) {
-                $success_message = "Medicine added successfully.";
+        if (!Validation::validateDecimalField($least_quantity, $notifyErr)) {
+            $errors = true;
+        }
+
+        if (!Validation::validateTextField($med_name, $textErr)) {
+            $errors = true;
+        }
+
+        if (!$errors){
+            if ($med->medicineExists($user_id)) {
+                $error_message = "This medicine already exists";
             } else {
-                $error_message = "Failed to add Medicine.";
+                if ($med->create($user_id)) {
+                    $success_message = "Medicine added successfully.";
+                } else {
+                    $error_message = "Failed to add Medicine.";
+                }
             }
         }
     }
@@ -91,12 +105,14 @@ $medicines = $med->read($user_id);
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                             <div class="mb-3">
                                 <label class="form-label">Medicine Name:</label>
-                                <input type="text" class="form-control" id="med_name" name="med_name" required>
+                                <input type="text" class="form-control" id="med_name" name="med_name" required onkeyup="validateMedName()" >
+                                <small id="nameError" class="text-danger"><?php echo $textErr ?></small>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Notification Threshold:</label>
-                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" required>
+                                <input type="text" class="form-control" id="least_quantity" name="least_quantity" required onkeyup="validateLeastQuantity()">
+                                <small id="notifyError" class="text-danger"><?php echo $notifyErr ?></small>
                             </div>
 
                             <div class="mb-3">
@@ -201,4 +217,49 @@ $medicines = $med->read($user_id);
             }
         }
     }
+
+    function validateMedName() {
+        const medNameInput = document.getElementById('med_name');
+        const nameErr = document.getElementById('nameError'); // Updated ID to match HTML
+        const medNameValue = medNameInput.value;
+
+        const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]{2,}$/;
+
+        nameErr.textContent = "";
+        medNameInput.classList.remove("is-invalid");
+
+        if (medNameValue.length > 0 && !regex.test(medNameValue)) {
+            nameErr.textContent = "Medicine name not valid (must start with a letter and be at least 3 characters).";
+            medNameInput.classList.add("is-invalid");
+
+            const correctedValue = medNameValue.replace(/^[^a-zA-Z]+/, '').replace(/[^a-zA-Z0-9\s-_]/g, '');
+
+            medNameInput.value = correctedValue;
+        }
+    }
+
+    function validateLeastQuantity() {
+        const quantityInput = document.getElementById('least_quantity');
+        const quantityErr = document.getElementById('notifyError'); // Updated ID to match HTML
+        const quantityValue = quantityInput.value;
+
+        const regex = /^(0|[1-9]\d*)(\.\d{1,2})?$/; // Allows positive numbers with up to two decimal places
+
+        quantityErr.textContent = "";
+        quantityInput.classList.remove("is-invalid");
+
+        if (quantityValue.length > 0 && !regex.test(quantityValue)) {
+            quantityErr.textContent = "Quantity not valid (must be a positive number with up to two decimal places).";
+            quantityInput.classList.add("is-invalid");
+            quantityInput.value = quantityValue.replace(/[^0-9.]/g, ''); // Replace invalid characters
+        }
+
+        // Additional check to prevent starting with a decimal
+        if (quantityInput.value.length > 0 && quantityInput.value[0] === '.') {
+            quantityErr.textContent = "Quantity cannot start with a decimal point.";
+            quantityInput.classList.add("is-invalid");
+            quantityInput.value = "";
+        }
+    }
+
 </script>

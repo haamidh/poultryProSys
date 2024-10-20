@@ -1,113 +1,117 @@
 /* Background color and card styling */
 body {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 .card {
-    border: none;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease; /* Added transition for card hover effect */
+  border: none;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease; /* Added transition for card hover effect */
 }
 
 /* Hover zoom effect for the card */
 .card:hover {
-    transform: translateY(-5px); /* Lift the card slightly on hover */
+  transform: translateY(-5px); /* Lift the card slightly on hover */
 }
 
 /* Image container for zoom effect */
+.images {
+  height: 100%; /* Make sure the container takes the full height of its parent */
+}
+
 .image-container {
-    position: relative;
-    width: 100%;
-    max-width: 300px;
-    cursor: zoom-in;
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+  height: 100%; /* Ensure the container is full height to apply vertical centering */
 }
 
 .image-container img {
-    width: 100%;
-    transition: transform 0.3s ease-in-out;
+  max-width: 100%; /* Responsive image width */
+  height: auto;
 }
 
 .image-container:hover img {
-    transform: scale(1.5); /* Zoom on hover */
+  transform: scale(1.05); /* Zoom on hover */
 }
 
 /* Quantity input style */
 .quantity-input {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .quantity-input label {
-    font-weight: bold;
-    margin-right: 10px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 /* Styled quantity input buttons */
 .quantity-input input[type="number"] {
-    width: 60px;
-    text-align: center;
-    border: 2px solid #ddd;
-    border-radius: 25px;
-    padding: 5px;
-    font-size: 16px;
-    position: relative;
+  width: 60px;
+  text-align: center;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  padding: 5px;
+  font-size: 16px;
+  position: relative;
 }
 
 /* Style the plus and minus buttons */
 .quantity-input input[type="number"]::-webkit-inner-spin-button,
 .quantity-input input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 .quantity-input .quantity-btn {
-    width: 25px;
-    height: 25px;
-    border: 1px solid #ddd;
-    background-color: #f1f1f1;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    cursor: pointer;
-    margin-left: 5px;
-    margin-right: 5px;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ddd;
+  background-color: #f1f1f1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 /* Button Style */
 .btn-custom {
-    background-color: #ff6f61;
-    color: white;
-    border-radius: 50px;
-    padding: 10px 30px;
-    transition: background-color 0.3s;
+  background-color: #ff6f61;
+  color: white;
+  border-radius: 50px;
+  padding: 10px 30px;
+  transition: background-color 0.3s;
 }
 
 .btn-custom:hover {
-    background-color: #e04b44; /* Changed hover color to a darker shade of the button */
+  background-color: #e04b44; /* Changed hover color to a darker shade of the button */
 }
 
 /* Responsive styles for product cards */
 @media (max-width: 768px) {
-    .card {
-        margin-bottom: 20px; /* Add margin for small screens */
-    }
+  .card {
+    margin-bottom: 20px; /* Add margin for small screens */
+  }
 
-    .image-container {
-        max-width: 100%;
-    }
+  .image-container {
+    max-width: 100%;
+  }
 
-    .quantity-input input[type="number"] {
-        width: 50px;
-    }
+  .quantity-input input[type="number"] {
+    width: 50px;
+  }
 
-    .quantity-input .quantity-btn {
-        width: 20px;
-        height: 20px;
-        font-size: 8px;
-    }
+  .quantity-input .quantity-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 8px;
+  }
 }
