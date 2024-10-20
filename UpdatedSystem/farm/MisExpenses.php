@@ -152,13 +152,13 @@ $misEx = $misEx->read($user_id);
           <input type="text" class="form-control" id="category_description" name="category_description" placeholder="detailed description">
       </div> -->
                     <div class="mb-3">
-                        <label for="category_description" class="form-control">misc_description</label>
+                        <label for="category_description" class="form-control">Misc_description</label>
                         <input type="text" class="form-control" id="misc_description" name="misc_description"
                             placeholder="detailed description">
 
                     </div>
                     <div class="mb-3">
-                        <label for="category_description" class="form-control">payment_method</label>
+                        <label for="category_description" class="form-control">Payment_method</label>
                         <input type="text" class="form-control" id="payment_method" name="payment_method"
                             placeholder="cheque,cash,card">
 

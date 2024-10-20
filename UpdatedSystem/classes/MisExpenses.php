@@ -112,7 +112,32 @@ class MisExpenses {
     //         return false;
     //     }
     // }
+    public function update($category_id) {
+        $query = "UPDATE " . $this->table_name . " SET 
+                  category_id = :category_id, 
+                  expense_name = :expense_name, 
+                  handled_by = :handled_by, 
+                  expense_amount = :expense_amount, 
+                 misc_description = :misc_description,
+                 payment_method=:payment_method,
+                  date=:date
+                  WHERE category_id = :category_id";
+        $stmt = $this->conn->prepare($query);
 
+        //$stmt->bindParam(':category_id', $this->sup_name);
+        $stmt->bindParam(':expense_name', $this->expense_name);
+        $stmt->bindParam(':handled_by', $this->handled_by);
+        $stmt->bindParam(':expense_amount', $this->expense_amount);
+        $stmt->bindParam(': misc_description', $this->misc_description);
+        $stmt->bindParam(': payment_method', $this->payment_method);
+        $stmt->bindParam(': date', $this->date);
+        $stmt->bindParam(':category_id', $category_id);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
     // // Update an existing miscellaneous expense
     // public function update($id) {
     //     try {
@@ -213,7 +238,13 @@ class MisExpenses {
         return $stmt->execute();
     }
     
-    
+    public function readOne($category_id) {
+        $query = "SELECT user_id, category_id, expense_name, handled_by, expense_amount, misc_description, payment_method, date FROM " . $this->table_name . " WHERE category_id = :category_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':category_id',$category_id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function miscellaneousExpensesExists($user_id)
 {
