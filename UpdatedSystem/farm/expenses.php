@@ -84,7 +84,7 @@ $has_data = !empty($all_data);
                                     <th>#</th>
                                     <th>Payment Date</th>
                                     <th>Payment Detail</th>
-                                    <th>Expense Description</th>
+                                    
                                     <th>Amount</th>
                                 </tr>
                             </thead>
@@ -98,7 +98,7 @@ $has_data = !empty($all_data);
                                             <td><?php echo $uid ?></td>
                                             <td><?php echo date('F j, Y', strtotime($data['date'])) ?></td>
                                             <td><?php echo htmlspecialchars($data['detail']) ?></td>
-                                            <td><?php echo htmlspecialchars($data['misc_description']) ?></td>
+                                            
                                             <td class="text-end"><?php echo number_format($data['amount'], 2) ?></td>
                                         </tr>
                                         <?php
@@ -107,7 +107,7 @@ $has_data = !empty($all_data);
                                     ?>
                                     <!-- Total amount row -->
                                     <tr>
-                                        <td colspan="4" ><strong>Total Amount</strong></td>
+                                        <td colspan="3" ><strong>Total Amount</strong></td>
                                         <td class="text-end"><strong><?php echo number_format($total_amount, 2); ?></strong></td>
                                     </tr>
                                 <?php } else { ?>
