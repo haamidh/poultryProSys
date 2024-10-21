@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
 
 // Ensure 'order_details' are set in the session
 if (!isset($_SESSION['order_details'])) {
-  header("Location: ../marketplace.php");
+  header("Location: customer/orders.php");
   exit();
 }
 
@@ -35,7 +35,7 @@ if (!isset($_SESSION['order_created'])) {
   $unit_price = $_SESSION['order_details'][0]['product_price'];
   $total_amount = $_SESSION['order_details'][0]['total'];
 
-  
+
 
   $status = 1;
 
@@ -56,7 +56,7 @@ if (!isset($_SESSION['order_created'])) {
   $order->setTotal($total_amount);
   $order->setStatus($status);
 
-  
+
   $order_details->setOrder_num($order_num);
   $order->setOrder_num($order_num);
   $order_details->setFirst_name($first_name);
@@ -66,8 +66,8 @@ if (!isset($_SESSION['order_created'])) {
   $order_details->setAddress($address);
   $order_details->setCity($city);
 
-  $service_fee = $total_amount * 5/100;
-  $order_details->create($order_num,$phone);
+  $service_fee = $total_amount * 5 / 100;
+  $order_details->create($order_num, $phone);
   $order->addOrderPayments($service_fee, $order_num);
 
   // Create the order in the database
@@ -82,11 +82,11 @@ if (!isset($_SESSION['order_created'])) {
 }
 
 $first_name = $_SESSION['billing_details'][0]['first_name'];
-  $last_name = $_SESSION['billing_details'][0]['last_name'];
-  $email = $_SESSION['billing_details'][0]['email'];
-  $phone = $_SESSION['billing_details'][0]['phone'];
-  $address = $_SESSION['billing_details'][0]['address'];
-  $city = $_SESSION['billing_details'][0]['city'];
+$last_name = $_SESSION['billing_details'][0]['last_name'];
+$email = $_SESSION['billing_details'][0]['email'];
+$phone = $_SESSION['billing_details'][0]['phone'];
+$address = $_SESSION['billing_details'][0]['address'];
+$city = $_SESSION['billing_details'][0]['city'];
 
 
 
@@ -113,15 +113,23 @@ $first_name = $_SESSION['billing_details'][0]['first_name'];
         <!-- Billing Address Section -->
         <div class="border p-3 rounded">
           <h5>Billing address</h5>
-          <p><strong>Name:</strong> <?php echo $first_name.' '.$last_name; ?></p>
-          <p><strong>Address:</strong><?php echo $address.' '.$city; ?></p>
+          <p><strong>Name:</strong> <?php echo $first_name . ' ' . $last_name; ?></p>
+          <p><strong>Address:</strong><?php echo $address . ' ' . $city; ?></p>
           <p><strong>Phone:</strong><?php echo $phone; ?></p>
           <p><strong>Email:</strong> <?php echo $email; ?></p>
-          
+
         </div>
 
         <!-- Track Your Order Button -->
-        <a href="#" class="btn btn-success mt-4">View My Orders</a>
+         <br><br>
+        <a href="customer/orders.php" class="btn btn-success btn-sm">View My Orders</a>
+        <a href="customer/orderReceipt.php?order_num=<?php echo $order_num-1; ?>&action=download" class="btn btn-outline-danger btn-sm">
+          <i class="bi bi-file-earmark-arrow-down-fill"></i> Download Reciept
+        </a>
+
+        <a href="customer/orderReceipt.php?order_num=<?php echo $order_num-1; ?>" class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-eye-fill"></i> View Reciept
+                                            </a>
       </div>
 
       <!-- Right Column (Order Summary) -->
@@ -131,9 +139,9 @@ $first_name = $_SESSION['billing_details'][0]['first_name'];
           <div class="d-flex justify-content-between">
 
             <!-- There is no 'cus_id' in 'order_details', perhaps replace it with farm_id or add it explicitly -->
-            <p><strong>Order Number:</strong> <?php echo $order_num; // You need to update this with actual order number 
+            <p><strong>Order Number:</strong> <?php echo $order_num-1; // You need to update this with actual order number 
                                               ?></p>
-            
+
           </div>
           <hr>
 
@@ -159,7 +167,7 @@ $first_name = $_SESSION['billing_details'][0]['first_name'];
             <p>Shipping</p>
             <p>FREE</p>
           </div>
-          
+
 
           <hr>
 

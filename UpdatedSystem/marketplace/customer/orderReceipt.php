@@ -91,7 +91,7 @@ $html = '
             
             <!-- Paid Stamp -->
             <div class="stamp">
-                <img src="../../images/paidStamp.png" alt="Paid Stamp" style="width: 150px; height: 150px;">
+                <img src="../../images/paid.jpg" alt="Paid Stamp" style="width: 200px; height: 150px;">
             </div>
         </div>
 
