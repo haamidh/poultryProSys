@@ -237,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 const passwordValue = passwordInput.value;
 
                 // Regex for strong password: At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
-                const passwordRegex = /^.{4,}$/;
+                const passwordRegex = /^.{8,}$/;
 
                 if (passwordValue === "") {
                     passwordError.textContent = "Password is required.";
